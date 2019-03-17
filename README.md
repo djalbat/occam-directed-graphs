@@ -1,6 +1,6 @@
-# Directed Graph
+# Directed Graphs
 
-A directed graph comprised of a directed acyclic graph and separate cycles.
+Directed graphs comprised of directed acyclic graphs together with cycles.
 
 ### Contents
 
