@@ -180,6 +180,18 @@ class DirectedGraph {
     this.removeEdge(edge, removeStrandedVertices);
   }
 
+  removeEdgesByTargetVertexName(targetVertexName, removeStrandedVertices = false) {
+    const edges = this.directedAcyclicGraph.getEdgesByTargetVertexName(targetVertexName);
+
+    this.removeEdges(edges, removeStrandedVertices);
+  }
+
+  removeEdgesBySourceVertexName(sourceVertexName, removeStrandedVertices = false) {
+    const edges = this.directedAcyclicGraph.getEdgesBySourceVertexName(sourceVertexName);
+
+    this.removeEdges(edges, removeStrandedVertices);
+  }
+
   removeAllEdgesAndVertices() {
     this.directedAcyclicGraph = DirectedAcyclicGraph.fromNothing();
 
