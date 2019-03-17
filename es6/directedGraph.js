@@ -106,7 +106,7 @@ class DirectedGraph {
       const cyclicEdgesIncludesEdge = checkEdgesIncludesEdge(edge, this.cyclicEdges);
 
       if (!cyclicEdgesIncludesEdge) {
-        const cyclicEdge = edge;
+        const cyclicEdge = edge;  ///
 
         this.cyclicEdges.push(cyclicEdge);
       }
