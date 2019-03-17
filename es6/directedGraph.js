@@ -4,15 +4,16 @@ const kahn = require('occam-kahn'),
       necessary = require('necessary'),
       pearcekelly = require('occam-pearce-kelly');
 
-const Cycle = require('./cycle'),
+const Edge = require('./edge'),
+      Cycle = require('./cycle'),
       PartialCycle = require('./partialCycle'),
       vertexUtilities = require('./utilities/vertex');
 
 const { Graph } = kahn,
       { arrayUtilities } = necessary,
       { DirectedAcyclicGraph } = pearcekelly,
-      { first, filter, prune } = arrayUtilities,
-      { forwardsDepthFirstSearch } = vertexUtilities;
+      { forwardsDepthFirstSearch } = vertexUtilities,
+      { first, second, filter, prune } = arrayUtilities;
 
 const remove = prune;  ///
 
@@ -118,7 +119,7 @@ class DirectedGraph {
       this.addEdge(edge);
     });
   }
-  
+
   removeEdge(edge, removeStrandedVertices = false) {
     const cyclicEdgesIncludesEdge = checkEdgesIncludesEdge(edge, this.cyclicEdges),
           edgeCyclic = cyclicEdgesIncludesEdge, ///
@@ -160,6 +161,18 @@ class DirectedGraph {
     });
   }
 
+  addEdgeByVertexNames(sourceVertexName, targetVertexName) {
+    const edge = Edge.fromSourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
+
+    this.addEdge(edge);
+  }
+
+  removeEdgeByVertexNames(sourceVertexName, targetVertexName, removeStrandedVertices = false) {
+    const edge = Edge.fromSourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
+
+    this.removeEdge(edge, removeStrandedVertices);
+  }
+
   removeAllEdgesAndVertices() {
     this.directedAcyclicGraph = DirectedAcyclicGraph.fromNothing();
 
@@ -183,6 +196,14 @@ class DirectedGraph {
           directedGraph = new DirectedGraph(cyclicEdges, directedAcyclicGraph);
     
     return directedGraph;    
+  }
+
+  static fromVertexLiterals(vertexLiterals) {
+    const vertexNames = vertexNamesFromVertexLiterals(vertexLiterals),
+          edges = edgesFromVertexLiterals(vertexLiterals),
+          directedGraph = DirectedGraph.fromVertexNamesAndEdges(vertexNames, edges);
+
+    return directedGraph;
   }
 
   static fromVertexNamesAndEdges(vertexNames, edges) {
@@ -213,6 +234,57 @@ class DirectedGraph {
 }
 
 module.exports = DirectedGraph;
+
+function vertexNamesFromVertexLiterals(vertexLiterals) {
+  const vertexNameMap = {};
+
+  vertexLiterals.forEach(function(vertexLiteral) {
+    const firstVertexLiteralElement = first(vertexLiteral),
+          vertexName = firstVertexLiteralElement, ///
+          vertexExists = vertexNameMap.hasOwnProperty(vertexName);
+
+    if (!vertexExists) {
+      vertexNameMap[vertexName] = vertexName;
+    }
+
+    const secondVertexLiteralElement = second(vertexLiteral),
+          ancestorVertexNames = secondVertexLiteralElement; ///
+
+    ancestorVertexNames.forEach(function(ancestorVertexName) {
+      const ancestorVertexExists = vertexNameMap.hasOwnProperty(ancestorVertexName);
+
+      if (!ancestorVertexExists) {
+        vertexNameMap[ancestorVertexName] = ancestorVertexName;
+      }
+    });
+  });
+
+  const vertexNameMapKeys = Object.keys(vertexNameMap),
+        vertexNames = vertexNameMapKeys;  ///
+
+  return vertexNames;
+}
+
+function edgesFromVertexLiterals(vertexLiterals) {
+  const edges = [];
+
+  vertexLiterals.forEach(function(vertexLiteral) {
+    const firstVertexLiteralElement = first(vertexLiteral),
+          secondVertexLiteralElement = second(vertexLiteral),
+          ancestorVertexNames = secondVertexLiteralElement, ///
+          vertexName = firstVertexLiteralElement; ///
+
+    ancestorVertexNames.forEach(function(ancestorVertexName) {
+      const sourceVertexName = ancestorVertexName, ///
+            targetVertexName = vertexName,  ///
+            edge = new Edge(sourceVertexName, targetVertexName);
+
+      edges.push(edge);
+    });
+  });
+
+  return edges;
+}
 
 function checkEdgesIncludesEdge(edge, edges) {
   const edge1 = edge, ///
