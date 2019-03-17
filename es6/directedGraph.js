@@ -24,8 +24,15 @@ class DirectedGraph {
   }
   
   areCyclesPresentByVertexName(vertexName) {
-    const firstCycle = this.getFirstCycleByVertexName(vertexName),
-          cyclesPresent = (firstCycle !== null);
+    let cyclesPresent = false;
+
+    const vertexPresent = this.directedAcyclicGraph.isVertexPresentByVertexName(vertexName);
+
+    if (vertexPresent) {
+      const firstCycle = this.getFirstCycleByVertexName(vertexName);
+
+      cyclesPresent = (firstCycle !== null);
+    }
 
     return cyclesPresent;
   }
