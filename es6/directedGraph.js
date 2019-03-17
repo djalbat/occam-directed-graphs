@@ -140,22 +140,22 @@ class DirectedGraph {
       removeEdgeFromEdges(cyclicEdge, this.cyclicEdges);
     } else if (edgePresent) {
       this.directedAcyclicGraph.removeEdge(edge);
-    }
 
-    if (removeStrandedVertices) {
-      const sourceVertexName = edge.getSourceVertexName(),
-            targetVertexName = edge.getTargetVertexName(),
-            sourceVertex = this.directedAcyclicGraph.getVertexByVertexName(sourceVertexName),
-            targetVertex = this.directedAcyclicGraph.getVertexByVertexName(targetVertexName),
-            sourceVertexStranded = sourceVertex.isStranded(),
-            targetVertexStranded = targetVertex.isStranded();
+      if (removeStrandedVertices) {
+        const sourceVertexName = edge.getSourceVertexName(),
+              targetVertexName = edge.getTargetVertexName(),
+              sourceVertex = this.directedAcyclicGraph.getVertexByVertexName(sourceVertexName),
+              targetVertex = this.directedAcyclicGraph.getVertexByVertexName(targetVertexName),
+              sourceVertexStranded = sourceVertex.isStranded(),
+              targetVertexStranded = targetVertex.isStranded();
 
-      if (sourceVertexStranded) {
-        this.directedAcyclicGraph.removeVertexByVertexName(sourceVertexName);
-      }
+        if (sourceVertexStranded) {
+          this.directedAcyclicGraph.removeVertexByVertexName(sourceVertexName);
+        }
 
-      if (targetVertexStranded) {
-        this.directedAcyclicGraph.removeVertexByVertexName(targetVertexName);
+        if (targetVertexStranded) {
+          this.directedAcyclicGraph.removeVertexByVertexName(targetVertexName);
+        }
       }
     }
 
