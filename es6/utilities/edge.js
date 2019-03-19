@@ -56,7 +56,7 @@ function removeEdgeFromEdges(edge, edges) {
 }
 
 function edgesBySourceVertexName(sourceVertexName, edges) {
-  edges = edges.filter(function(edges, edge) {  ///
+  edges = edges.filter(function(edge) {  ///
     const matches = edge.matchSourceVertexName(sourceVertexName);
 
     if (matches) {
@@ -68,7 +68,7 @@ function edgesBySourceVertexName(sourceVertexName, edges) {
 }
 
 function edgesByTargetVertexName(targetVertexName, edges) {
-  edges = edges.filter(function(edges, edge) {  ///
+  edges = edges.filter(function(edge) {  ///
     const matches = edge.matchTargetVertexName(targetVertexName);
 
     if (matches) {
