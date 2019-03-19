@@ -129,8 +129,8 @@ class DirectedGraph {
 
   removeEdge(edge, removeStrandedVertices = false) {
     const cyclicEdgesIncludesEdge = checkEdgesIncludesEdge(edge, this.cyclicEdges),
-          edgeCyclic = cyclicEdgesIncludesEdge, ///
-          edgePresent = this.directedAcyclicGraph.isEdgePresent(edge);
+          edgePresent = this.directedAcyclicGraph.isEdgePresent(edge),
+          edgeCyclic = cyclicEdgesIncludesEdge; ///
 
     if (false) {
       ///
