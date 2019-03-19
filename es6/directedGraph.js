@@ -15,7 +15,7 @@ const { Graph } = kahn,
       { first, filter } = arrayUtilities,
       { DirectedAcyclicGraph } = pearcekelly,
       { vertexNamesFromVertexLiterals, forwardsDepthFirstSearch } = vertexUtilities,
-      { edgesFromVertexLiterals, checkEdgesIncludesEdge, removeEdgeFromEdges, edgesBySourceVertexName } = edgeUtilities;
+      { edgesFromVertexLiterals, checkEdgesIncludesEdge, removeEdgeFromEdges, edgesBySourceVertexName, edgesByTargetVertexName } = edgeUtilities;
 
 class DirectedGraph {
   constructor(cyclicEdges, directedAcyclicGraph) {
@@ -181,7 +181,10 @@ class DirectedGraph {
   }
 
   removeEdgesByTargetVertexName(targetVertexName, removeStrandedVertices = false) {
-    const edges = this.directedAcyclicGraph.getEdgesByTargetVertexName(targetVertexName);
+    const cyclicEdges = edgesByTargetVertexName(targetVertexName, this.cyclicEdges),
+          edges = this.directedAcyclicGraph.getEdgesByTargetVertexName(targetVertexName);
+
+    this.removeEdges(cyclicEdges, removeStrandedVertices);
 
     this.removeEdges(edges, removeStrandedVertices);
   }

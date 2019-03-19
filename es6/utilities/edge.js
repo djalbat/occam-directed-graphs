@@ -67,9 +67,22 @@ function edgesBySourceVertexName(sourceVertexName, edges) {
   return edges;
 }
 
+function edgesByTargetVertexName(targetVertexName, edges) {
+  edges = edges.filter(function(edges, edge) {  ///
+    const matches = edge.matchTargetVertexName(targetVertexName);
+
+    if (matches) {
+      return true;
+    }
+  });
+
+  return edges;
+}
+
 module.exports = {
   edgesFromVertexLiterals,
   checkEdgesIncludesEdge,
   removeEdgeFromEdges,
-  edgesBySourceVertexName
+  edgesBySourceVertexName,
+  edgesByTargetVertexName
 };
