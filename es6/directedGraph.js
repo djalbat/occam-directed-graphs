@@ -7,15 +7,15 @@ const kahn = require('occam-kahn'),
 const Edge = require('./edge'),
       Cycle = require('./cycle'),
       PartialCycle = require('./partialCycle'),
+      edgeUtilities = require('./utilities/edge'),
       vertexUtilities = require('./utilities/vertex');
 
 const { Graph } = kahn,
       { arrayUtilities } = necessary,
+      { first, filter } = arrayUtilities,
       { DirectedAcyclicGraph } = pearcekelly,
-      { forwardsDepthFirstSearch } = vertexUtilities,
-      { first, second, filter, prune } = arrayUtilities;
-
-const remove = prune;  ///
+      { vertexNamesFromVertexLiterals, forwardsDepthFirstSearch } = vertexUtilities,
+      { edgesFromVertexLiterals, checkEdgesIncludesEdge, removeEdgeFromEdges } = edgeUtilities;
 
 class DirectedGraph {
   constructor(cyclicEdges, directedAcyclicGraph) {
@@ -254,80 +254,3 @@ class DirectedGraph {
 
 module.exports = DirectedGraph;
 
-function vertexNamesFromVertexLiterals(vertexLiterals) {
-  const vertexNameMap = {};
-
-  vertexLiterals.forEach(function(vertexLiteral) {
-    const firstVertexLiteralElement = first(vertexLiteral),
-          vertexName = firstVertexLiteralElement, ///
-          vertexExists = vertexNameMap.hasOwnProperty(vertexName);
-
-    if (!vertexExists) {
-      vertexNameMap[vertexName] = vertexName;
-    }
-
-    const secondVertexLiteralElement = second(vertexLiteral),
-          ancestorVertexNames = secondVertexLiteralElement; ///
-
-    ancestorVertexNames.forEach(function(ancestorVertexName) {
-      const ancestorVertexExists = vertexNameMap.hasOwnProperty(ancestorVertexName);
-
-      if (!ancestorVertexExists) {
-        vertexNameMap[ancestorVertexName] = ancestorVertexName;
-      }
-    });
-  });
-
-  const vertexNameMapKeys = Object.keys(vertexNameMap),
-        vertexNames = vertexNameMapKeys;  ///
-
-  return vertexNames;
-}
-
-function edgesFromVertexLiterals(vertexLiterals) {
-  const edges = [];
-
-  vertexLiterals.forEach(function(vertexLiteral) {
-    const firstVertexLiteralElement = first(vertexLiteral),
-          secondVertexLiteralElement = second(vertexLiteral),
-          ancestorVertexNames = secondVertexLiteralElement, ///
-          vertexName = firstVertexLiteralElement; ///
-
-    ancestorVertexNames.forEach(function(ancestorVertexName) {
-      const sourceVertexName = ancestorVertexName, ///
-            targetVertexName = vertexName,  ///
-            edge = new Edge(sourceVertexName, targetVertexName);
-
-      edges.push(edge);
-    });
-  });
-
-  return edges;
-}
-
-function checkEdgesIncludesEdge(edge, edges) {
-  const edge1 = edge, ///
-        edgesIncludesEdge = edges.some(function(edge) {
-          const edge2 = edge, ///
-                matches = edge1.match(edge2);
-
-          if (matches) {
-            return true;
-          }
-        });
-
-  return edgesIncludesEdge;
-}
-
-function removeEdgeFromEdges(edge, edges) {
-  const edge1 = edge; ///
-
-  remove(edges, function(edge) {
-    const edge2 = edge, ///
-          matches = edge1.match(edge2);
-
-    if (!matches) { ///
-      return true;
-    }
-  });
-}

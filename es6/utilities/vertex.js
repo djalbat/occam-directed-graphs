@@ -1,5 +1,40 @@
 'use strict';
 
+const necessary = require('necessary');
+
+const { arrayUtilities } = necessary,
+      { first, second } = arrayUtilities;
+
+function vertexNamesFromVertexLiterals(vertexLiterals) {
+  const vertexNameMap = {};
+
+  vertexLiterals.forEach(function(vertexLiteral) {
+    const firstVertexLiteralElement = first(vertexLiteral),
+          vertexName = firstVertexLiteralElement, ///
+          vertexExists = vertexNameMap.hasOwnProperty(vertexName);
+
+    if (!vertexExists) {
+      vertexNameMap[vertexName] = vertexName;
+    }
+
+      const secondVertexLiteralElement = second(vertexLiteral),
+        ancestorVertexNames = secondVertexLiteralElement; ///
+
+    ancestorVertexNames.forEach(function(ancestorVertexName) {
+      const ancestorVertexExists = vertexNameMap.hasOwnProperty(ancestorVertexName);
+
+      if (!ancestorVertexExists) {
+        vertexNameMap[ancestorVertexName] = ancestorVertexName;
+      }
+    });
+  });
+
+  const vertexNameMapKeys = Object.keys(vertexNameMap),
+        vertexNames = vertexNameMapKeys;  ///
+
+  return vertexNames;
+}
+
 function vertexNamesFromVertices(vertices) {
   const vertexNames = vertices.map(function(vertex) {
     const vertexName = vertex.getName();
@@ -35,6 +70,7 @@ function forwardsDepthFirstSearch(vertex, callback) {
 }
 
 module.exports = {
+  vertexNamesFromVertexLiterals,
   vertexNamesFromVertices,
   forwardsDepthFirstSearch
 };
