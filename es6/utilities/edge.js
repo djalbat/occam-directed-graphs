@@ -12,14 +12,14 @@ function edgesFromVertexLiterals(vertexLiterals) {
 
   vertexLiterals.forEach(function(vertexLiteral) {
     const firstVertexLiteralElement = first(vertexLiteral),
-        secondVertexLiteralElement = second(vertexLiteral),
-        ancestorVertexNames = secondVertexLiteralElement, ///
-        vertexName = firstVertexLiteralElement; ///
+          secondVertexLiteralElement = second(vertexLiteral),
+          ancestorVertexNames = secondVertexLiteralElement, ///
+          vertexName = firstVertexLiteralElement; ///
 
     ancestorVertexNames.forEach(function(ancestorVertexName) {
       const sourceVertexName = ancestorVertexName, ///
-          targetVertexName = vertexName,  ///
-          edge = new Edge(sourceVertexName, targetVertexName);
+            targetVertexName = vertexName,  ///
+            edge = new Edge(sourceVertexName, targetVertexName);
 
       edges.push(edge);
     });
@@ -30,14 +30,14 @@ function edgesFromVertexLiterals(vertexLiterals) {
 
 function checkEdgesIncludesEdge(edge, edges) {
   const edge1 = edge, ///
-      edgesIncludesEdge = edges.some(function(edge) {
-        const edge2 = edge, ///
-            matches = edge1.match(edge2);
+        edgesIncludesEdge = edges.some(function(edge) {
+          const edge2 = edge, ///
+                matches = edge1.match(edge2);
 
-        if (matches) {
-          return true;
-        }
-      });
+          if (matches) {
+            return true;
+          }
+        });
 
   return edgesIncludesEdge;
 }
@@ -47,7 +47,7 @@ function removeEdgeFromEdges(edge, edges) {
 
   remove(edges, function(edge) {
     const edge2 = edge, ///
-        matches = edge1.match(edge2);
+          matches = edge1.match(edge2);
 
     if (!matches) { ///
       return true;
@@ -55,8 +55,21 @@ function removeEdgeFromEdges(edge, edges) {
   });
 }
 
+function edgesBySourceVertexName(sourceVertexName, edges) {
+  edges = edges.filter(function(edges, edge) {  ///
+    const matches = edge.matchSourceVertexName(sourceVertexName);
+
+    if (matches) {
+      return true;
+    }
+  });
+
+  return edges;
+}
+
 module.exports = {
   edgesFromVertexLiterals,
   checkEdgesIncludesEdge,
-  removeEdgeFromEdges
+  removeEdgeFromEdges,
+  edgesBySourceVertexName
 };
