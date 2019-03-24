@@ -101,10 +101,18 @@ class DirectedGraph {
 
   addVertexByVertexName(vertexName) { this.directedAcyclicGraph.addVertexByVertexName(vertexName); }
 
+  addVerticesByVertexNames(vertexNames) {
+    vertexNames.forEach((vertexName) => this.addVertexByVertexName(vertexName));
+  }
+
   removeVertexByVertexName(vertexName) {
     this.directedAcyclicGraph.removeVertexByVertexName(vertexName);
 
     this.filterCyclicEdges();
+  }
+
+  removeVerticesByVertexNames(vertexNames) {
+    vertexNames.forEach((vertexName) => this.removeVertexByVertexName(vertexName));
   }
 
   addEdge(edge) {
@@ -122,9 +130,7 @@ class DirectedGraph {
   }
   
   addEdges(edges) {
-    edges.forEach((edge) => {
-      this.addEdge(edge);
-    });
+    edges.forEach((edge) => this.addEdge(edge));
   }
 
   removeEdge(edge, removeStrandedVertices = false) {
@@ -163,9 +169,7 @@ class DirectedGraph {
   }
 
   removeEdges(edges, removeStrandedVertices = false) {
-    edges.forEach((edge) => {
-      this.removeEdge(edge, removeStrandedVertices);
-    });
+    edges.forEach((edge) => this.removeEdge(edge, removeStrandedVertices));
   }
 
   addEdgeByVertexNames(sourceVertexName, targetVertexName) {
