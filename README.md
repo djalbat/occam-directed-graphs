@@ -101,8 +101,8 @@ if (cyclePresent) {
 As already pointed out in the introduction, if a vertex is part of more than one cycle, any of of them can be given.
 
 You can get a topologically ordered list of vertices at any time.
-Bear in mind, however, that this will gotten from the underlying directed acyclic graph and therefore may not be useful if there are cycles present.
-A method is provided to ascertain whether or not cycles are generally present and it is left up to you to decided whether or not to make use of the topologically ordered list of vertices either way:
+Bear in mind that this will gotten from the underlying directed acyclic graph, however, and therefore may not be useful if there are cycles present.
+A method is also provided to ascertain whether cycles are generally present and it is left up to you to decide whether the topologically ordered list of vertices is useful in the event that they are:
 
 ```js
 const cyclesPresent = directedGraph.areCyclesPresent();
