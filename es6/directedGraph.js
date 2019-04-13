@@ -22,6 +22,8 @@ class DirectedGraph {
     this.cyclicEdges = cyclicEdges;
     this.directedAcyclicGraph = directedAcyclicGraph;
   }
+
+  getTopologicallyOrderedVertexNames() { return this.directedAcyclicGraph.getTopologicallyOrderedVertexNames(); }
   
   areCyclesPresentByVertexName(vertexName) {
     let cyclesPresent = false;
@@ -97,6 +99,13 @@ class DirectedGraph {
     }
 
     return firstCycle;
+  }
+
+  areCyclesPresent() {
+    const cyclicEdgesLength = this.cyclicEdges.length,
+          cyclesPresent = (cyclicEdgesLength > 0);
+
+    return cyclesPresent;
   }
 
   addVertexByVertexName(vertexName) { this.directedAcyclicGraph.addVertexByVertexName(vertexName); }

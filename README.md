@@ -85,7 +85,7 @@ directedGraph.removeEdgeByVertexNames(sourceVertexName, targetVertexName, remove
 
 The default is to leave stranded vertices in place.
 
-Finally, you can detect and recover cycles thus:
+You can detect and recover cycles thus:
 
 ```js
 const vertexName = 'i',
@@ -99,6 +99,22 @@ if (cyclePresent) {
 }
 ```
 As already pointed out in the introduction, if a vertex is part of more than one cycle, any of of them can be given.
+
+You can get a topologically ordered list of vertices at any time.
+Bear in mind, however, that this will gotten from the underlying directed acyclic graph and therefore may not be useful if there are cycles present.
+A method is provided to ascertain whether or not cycles are generally present and it is left up to you to decided whether or not to make use of the topologically ordered list of vertices either way:
+
+```js
+const cyclesPresent = directedGraph.areCyclesPresent();
+
+if (cyclesPresent) {
+  ///
+} else {
+  const topologicallyOrderedVertexNames = directedGraph.getTopologicallyOrderedVertexNames();
+
+  ...
+}
+```
 
 ## Building
 
