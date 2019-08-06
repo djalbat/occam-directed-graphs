@@ -23,6 +23,10 @@ class DirectedGraph {
     this.directedAcyclicGraph = directedAcyclicGraph;
   }
 
+  getPredecessorVertexNamesByVertexName(vertexName) { return this.directedAcyclicGraph.getPredecessorVertexNamesByVertexName(vertexName); }
+
+  getSuccessorVertexNamesByVertexName(vertexName) { return this.directedAcyclicGraph.getSuccessorVertexNamesByVertexName(vertexName); }
+
   getTopologicallyOrderedVertexNames() { return this.directedAcyclicGraph.getTopologicallyOrderedVertexNames(); }
   
   areCyclesPresentByVertexName(vertexName) {
