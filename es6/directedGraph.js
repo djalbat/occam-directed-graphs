@@ -27,8 +27,6 @@ class DirectedGraph {
 
   getSuccessorVertexNamesByVertexName(vertexName) { return this.directedAcyclicGraph.getSuccessorVertexNamesByVertexName(vertexName); }
 
-  getTopologicallyOrderedVertexNames() { return this.directedAcyclicGraph.getTopologicallyOrderedVertexNames(); }
-  
   areCyclesPresentByVertexName(vertexName) {
     let cyclesPresent = false;
 
@@ -42,6 +40,8 @@ class DirectedGraph {
 
     return cyclesPresent;
   }
+
+  isVertexPresentByVertexName(vertexName) { return this.directedAcyclicGraph.isVertexPresentByVertexName(vertexName); }
 
   getFirstCycleByVertexName(vertexName) {
     let firstCycle = null;
@@ -104,6 +104,8 @@ class DirectedGraph {
 
     return firstCycle;
   }
+
+  getTopologicallyOrderedVertexNames() { return this.directedAcyclicGraph.getTopologicallyOrderedVertexNames(); }
 
   areCyclesPresent() {
     const cyclicEdgesLength = this.cyclicEdges.length,
