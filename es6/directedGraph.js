@@ -20,7 +20,16 @@ const { Graph } = kahn,
 class DirectedGraph {
   constructor(cyclicEdges, directedAcyclicGraph) {
     this.cyclicEdges = cyclicEdges;
+
     this.directedAcyclicGraph = directedAcyclicGraph;
+  }
+
+  getCyclicEdges() {
+    return this.cyclicEdges;
+  }
+
+  getDirectedAcyclicGraph() {
+    return this.directedAcyclicGraph;
   }
 
   getPredecessorVertexNamesByVertexName(vertexName) { return this.directedAcyclicGraph.getPredecessorVertexNamesByVertexName(vertexName); }
