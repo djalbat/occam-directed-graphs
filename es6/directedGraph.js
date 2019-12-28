@@ -114,6 +114,16 @@ class DirectedGraph {
     return firstCycle;
   }
 
+  getFirstCycle() {
+    const firstCyclicEdge = first(this.cyclicEdges),
+          cyclicEdge = firstCyclicEdge, ///
+          sourceVertexName = cyclicEdge.getSourceVertexName(),
+          vertexName = sourceVertexName,  ///
+          firstCycle = this.getFirstCycleByVertexName(vertexName);
+
+    return firstCycle;
+  }
+
   getTopologicallyOrderedVertexNames() { return this.directedAcyclicGraph.getTopologicallyOrderedVertexNames(); }
 
   areCyclesPresent() {
