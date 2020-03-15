@@ -24,7 +24,7 @@ You can also clone the repository with [Git](https://git-scm.com/)...
 
     https://github.com/jecs-imperial/occam-directed-graph.git
 
-...and then install the necessary modules with npm from within the project's root directory:
+...and then install the dependencies with npm from within the project's root directory:
 
     npm install
 
