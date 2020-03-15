@@ -30,13 +30,16 @@ You can also clone the repository with [Git](https://git-scm.com/)...
 
 ## Usage
     
-An empty directed graph can be created by calling the `fromNothing()` factory method, after which vertices and edges can be added incrementally:
-
 ```js
 const directedgraphs = require('occam-directed-graphs');
 
 const { DirectedGraph, Edge } = directedgraphs;
 
+...
+```
+An empty directed graph can be created by calling the `fromNothing()` factory method, after which vertices and edges can be added incrementally:
+
+```js
 const directedGraph = DirectedGraph.fromNothing(),
       vertexName = 'i',
       sourceVertexName = 'j',
