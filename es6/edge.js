@@ -2,4 +2,4 @@
 
 import { Edge } from "occam-pearce-kelly";
 
-module.exports = Edge;
+export default Edge;

@@ -1,6 +1,6 @@
 "use strict";
 
-import { DirectedGraph } from "../index";
+import { DirectedGraph } from "./index";
 
 const directedGraph = DirectedGraph.fromNothing(),
       vertexName = "i",

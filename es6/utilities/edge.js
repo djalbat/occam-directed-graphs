@@ -6,7 +6,7 @@ const { prune } = arrayUtilities;
 
 const remove = prune;  ///
 
-function edgesFromVertexLiterals(vertexLiterals) {
+export function edgesFromVertexLiterals(vertexLiterals) {
   const edges = [];
 
   vertexLiterals.forEach(function(vertexLiteral) {
@@ -27,7 +27,7 @@ function edgesFromVertexLiterals(vertexLiterals) {
   return edges;
 }
 
-function checkEdgesIncludesEdge(edge, edges) {
+export function checkEdgesIncludesEdge(edge, edges) {
   const edge1 = edge, ///
         edgesIncludesEdge = edges.some(function(edge) {
           const edge2 = edge, ///
@@ -41,7 +41,7 @@ function checkEdgesIncludesEdge(edge, edges) {
   return edgesIncludesEdge;
 }
 
-function removeEdgeFromEdges(edge, edges) {
+export function removeEdgeFromEdges(edge, edges) {
   const edge1 = edge; ///
 
   remove(edges, function(edge) {
@@ -54,7 +54,7 @@ function removeEdgeFromEdges(edge, edges) {
   });
 }
 
-function edgesBySourceVertexName(sourceVertexName, edges) {
+export function edgesBySourceVertexName(sourceVertexName, edges) {
   edges = edges.filter(function(edge) {  ///
     const matches = edge.matchSourceVertexName(sourceVertexName);
 
@@ -66,7 +66,7 @@ function edgesBySourceVertexName(sourceVertexName, edges) {
   return edges;
 }
 
-function edgesByTargetVertexName(targetVertexName, edges) {
+export function edgesByTargetVertexName(targetVertexName, edges) {
   edges = edges.filter(function(edge) {  ///
     const matches = edge.matchTargetVertexName(targetVertexName);
 
@@ -77,11 +77,3 @@ function edgesByTargetVertexName(targetVertexName, edges) {
 
   return edges;
 }
-
-module.exports = {
-  edgesFromVertexLiterals,
-  checkEdgesIncludesEdge,
-  removeEdgeFromEdges,
-  edgesBySourceVertexName,
-  edgesByTargetVertexName
-};

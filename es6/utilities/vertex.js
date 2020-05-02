@@ -4,7 +4,7 @@ import { arrayUtilities } from "necessary";
 
 const { first, second } = arrayUtilities;
 
-function vertexNamesFromVertexLiterals(vertexLiterals) {
+export function vertexNamesFromVertexLiterals(vertexLiterals) {
   const vertexNameMap = {};
 
   vertexLiterals.forEach(function(vertexLiteral) {
@@ -34,7 +34,7 @@ function vertexNamesFromVertexLiterals(vertexLiterals) {
   return vertexNames;
 }
 
-function vertexNamesFromVertices(vertices) {
+export function vertexNamesFromVertices(vertices) {
   const vertexNames = vertices.map(function(vertex) {
     const vertexName = vertex.getName();
 
@@ -44,7 +44,7 @@ function vertexNamesFromVertices(vertices) {
   return vertexNames;
 }
 
-function forwardsDepthFirstSearch(vertex, callback) {
+export function forwardsDepthFirstSearch(vertex, callback) {
   const visitedVertices = [];
 
   retrieveForwardsVisitedVertices(vertex, function(visitedVertex, getPredecessorVertices) {
@@ -67,12 +67,6 @@ function forwardsDepthFirstSearch(vertex, callback) {
     return predecessorVertices;
   }
 }
-
-module.exports = {
-  vertexNamesFromVertexLiterals,
-  vertexNamesFromVertices,
-  forwardsDepthFirstSearch
-};
 
 function retrieveForwardsVisitedVertices(vertex, callback, getPredecessorVertices) {
   let terminate = false;

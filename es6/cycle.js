@@ -6,7 +6,7 @@ import { vertexNamesFromVertices } from "./utilities/vertex";
 
 const { first } = arrayUtilities;
 
-class Cycle {
+export default class Cycle {
   constructor(vertexNames) {
     this.vertexNames = vertexNames;
   }
@@ -42,5 +42,3 @@ class Cycle {
     return cycle;
   }
 }
-
-module.exports = Cycle;

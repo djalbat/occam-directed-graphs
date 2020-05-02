@@ -4,7 +4,7 @@ import { arrayUtilities } from "necessary";
 
 const { first } = arrayUtilities;
 
-class PartialCycle {
+export default class PartialCycle {
   constructor(predecessorVertices, cyclicEdge) {
     this.predecessorVertices = predecessorVertices;
     this.cyclicEdge = cyclicEdge;
@@ -67,6 +67,3 @@ class PartialCycle {
     return partialCycle;
   }
 }
-
-module.exports = PartialCycle;
-

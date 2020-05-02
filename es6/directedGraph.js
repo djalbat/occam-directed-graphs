@@ -13,7 +13,7 @@ import { edgesFromVertexLiterals, checkEdgesIncludesEdge, removeEdgeFromEdges, e
 
 const { first, filter } = arrayUtilities;
 
-class DirectedGraph {
+export default class DirectedGraph {
   constructor(cyclicEdges, directedAcyclicGraph) {
     this.cyclicEdges = cyclicEdges;
 
@@ -291,6 +291,3 @@ class DirectedGraph {
     return directedGraph;
   }
 }
-
-module.exports = DirectedGraph;
-
