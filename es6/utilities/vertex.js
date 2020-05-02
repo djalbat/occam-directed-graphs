@@ -1,9 +1,8 @@
 "use strict";
 
-const necessary = require("necessary");
+import { arrayUtilities } from "necessary";
 
-const { arrayUtilities } = necessary,
-      { first, second } = arrayUtilities;
+const { first, second } = arrayUtilities;
 
 function vertexNamesFromVertexLiterals(vertexLiterals) {
   const vertexNameMap = {};

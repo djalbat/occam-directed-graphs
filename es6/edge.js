@@ -1,7 +1,5 @@
 "use strict";
 
-const pearcekelly = require("occam-pearce-kelly");
-
-const { Edge } = pearcekelly;
+import { Edge } from "occam-pearce-kelly";
 
 module.exports = Edge;

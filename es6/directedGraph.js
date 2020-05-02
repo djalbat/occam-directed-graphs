@@ -1,21 +1,17 @@
 "use strict";
 
-const kahn = require("occam-kahn"),
-      necessary = require("necessary"),
-      pearcekelly = require("occam-pearce-kelly");
+import { Graph } from "occam-kahn";
+import { arrayUtilities } from "necessary";
+import { DirectedAcyclicGraph } from "occam-pearce-kelly";
 
-const Edge = require("./edge"),
-      Cycle = require("./cycle"),
-      PartialCycle = require("./partialCycle"),
-      edgeUtilities = require("./utilities/edge"),
-      vertexUtilities = require("./utilities/vertex");
+import Edge from "./edge";
+import Cycle from "./cycle";
+import PartialCycle from "./partialCycle";
 
-const { Graph } = kahn,
-      { arrayUtilities } = necessary,
-      { first, filter } = arrayUtilities,
-      { DirectedAcyclicGraph } = pearcekelly,
-      { vertexNamesFromVertexLiterals, forwardsDepthFirstSearch } = vertexUtilities,
-      { edgesFromVertexLiterals, checkEdgesIncludesEdge, removeEdgeFromEdges, edgesBySourceVertexName, edgesByTargetVertexName } = edgeUtilities;
+import { vertexNamesFromVertexLiterals, forwardsDepthFirstSearch } from "./utilities/vertex";
+import { edgesFromVertexLiterals, checkEdgesIncludesEdge, removeEdgeFromEdges, edgesBySourceVertexName, edgesByTargetVertexName } from "./utilities/edge";
+
+const { first, filter } = arrayUtilities;
 
 class DirectedGraph {
   constructor(cyclicEdges, directedAcyclicGraph) {

@@ -1,12 +1,10 @@
 "use strict";
 
-const necessary = require("necessary");
+import { arrayUtilities } from "necessary";
 
-const vertexUtilities = require("./utilities/vertex");
+import { vertexNamesFromVertices } from "./utilities/vertex";
 
-const { arrayUtilities } = necessary,
-      { first } = arrayUtilities,
-      { vertexNamesFromVertices } = vertexUtilities;
+const { first } = arrayUtilities;
 
 class Cycle {
   constructor(vertexNames) {

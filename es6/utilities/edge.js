@@ -1,9 +1,8 @@
 "use strict";
 
-const necessary = require("necessary");
+import { arrayUtilities } from "necessary";
 
-const { arrayUtilities } = necessary,
-      { prune } = arrayUtilities;
+const { prune } = arrayUtilities;
 
 const remove = prune;  ///
 
