@@ -1,6 +1,6 @@
-# Directed Graphs
+# Occam Directed Graphs
 
-Directed graphs comprised of directed acyclic graphs together with cycles.
+Directed graphs comprised of directed acyclic graphs together with cycles for [Occam](https://github.com/jecs-imperial/occam).
 
 ### Contents
 
@@ -30,22 +30,17 @@ You can also clone the repository with [Git](https://git-scm.com/)...
 
 ## Usage
     
-```js
-const directedgraphs = require('occam-directed-graphs');
-
-const { DirectedGraph, Edge } = directedgraphs;
-
-...
-```
 An empty directed graph can be created by calling the `fromNothing()` factory method, after which vertices and edges can be added incrementally:
 
-```js
-const directedGraph = DirectedGraph.fromNothing(),
-      vertexName = 'i',
-      sourceVertexName = 'j',
-      targetVertexName = 'k';
+```
+import { DirectedGraph, Edge } from "occam-directed-graphs";
 
-directedGraph.addVertexByName(vertexName);
+const directedGraph = DirectedGraph.fromNothing(),
+      vertexName = "i",
+      sourceVertexName = "j",
+      targetVertexName = "k";
+
+directedGraph.addVertexByVertexName(vertexName);
 
 directedGraph.addEdgeByVertexNames(sourceVertexName, targetVertexName);
 ```
@@ -54,19 +49,17 @@ Note that there is no need to add vertices explicitly, they will be added whenev
 
 Alternatively, a directed graph can be constructed with the `fromVertexLiterals()` factory method as follows:
 
-```js
-const directedgraphs = require('occam-directed-graphs');
-
-const { DirectedGraph } = directedgraphs;
+```
+import { DirectedGraph } from "occam-directed-graphs";
 
 const graph = Graph.fromVertexLiterals([
 
-  ['a', ['b']],
-  ['b', ['c']],
-  ['d', ['c']],
-  ['e', []],
-  ['f', ['g']],
-  ['h', ['g']]
+  ["a", ["b"]],
+  ["b", ["c"]],
+  ["d", ["c"]],
+  ["e", []],
+  ["f", ["g"]],
+  ["h", ["g"]]
 
 ]);
 ```
@@ -75,10 +68,10 @@ Note that the array of names that is the second element of each literal gives th
 
 You can also remove vertices and edges from the graph. Removing a vertex may of course result in removing edges. When you remove an edge, you can additionally specify that the any stranded vertices that result are also removed:
 
-```js
-const vertexName = 'i',
-      sourceVertexName = 'j',
-      targetVertexName = 'k',
+```
+const vertexName = "i",
+      sourceVertexName = "j",
+      targetVertexName = "k",
       removeStrandedVertices = true;
 
 directedGraph.removeVertexByName(vertexName);
@@ -90,8 +83,8 @@ The default is to leave stranded vertices in place.
 
 You can detect and recover cycles thus:
 
-```js
-const vertexName = 'i',
+```
+const vertexName = "i",
       cyclePresent = directedGraph.isCyclePresentByVertexName(vertexName);
 
 if (cyclePresent) {
@@ -107,7 +100,7 @@ You can get a topologically ordered list of vertices at any time.
 Bear in mind that this will gotten from the underlying directed acyclic graph, however, and therefore may not be useful if there are cycles present.
 A method is also provided to ascertain whether cycles are generally present and it is left up to you to decide whether the topologically ordered list of vertices is useful in the event that they are:
 
-```js
+```
 const cyclesPresent = directedGraph.areCyclesPresent();
 
 if (cyclesPresent) {
