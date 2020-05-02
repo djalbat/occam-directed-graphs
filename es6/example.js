@@ -1,16 +1,16 @@
 "use strict";
 
-import { Graph } from "../index";
+import { DirectedGraph } from "../index";
 
-const graph = Graph.fromVertexLiterals([
+const directedGraph = DirectedGraph.fromNothing(),
+      vertexName = "i",
+      sourceVertexName = "j",
+      targetVertexName = "k";
 
-  ["a", ["b", "c"]],
-  ["b", ["b", "d"]],
-  ["c", ["a"]],
-  ["d", []]
+directedGraph.addVertexByVertexName(vertexName);
 
-]);
+directedGraph.addEdgeByVertexNames(sourceVertexName, targetVertexName);
 
-const cycles = graph.getCycles(),
-      vertices = graph.getVertices(),
-      stronglyConnectedComponents = graph.getStronglyConnectedComponents();
+const topologicallyOrderedVertexNames = directedGraph.getTopologicallyOrderedVertexNames();
+
+debugger

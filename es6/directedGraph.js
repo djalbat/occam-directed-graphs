@@ -1,14 +1,14 @@
-'use strict';
+"use strict";
 
-const kahn = require('occam-kahn'),
-      necessary = require('necessary'),
-      pearcekelly = require('occam-pearce-kelly');
+const kahn = require("occam-kahn"),
+      necessary = require("necessary"),
+      pearcekelly = require("occam-pearce-kelly");
 
-const Edge = require('./edge'),
-      Cycle = require('./cycle'),
-      PartialCycle = require('./partialCycle'),
-      edgeUtilities = require('./utilities/edge'),
-      vertexUtilities = require('./utilities/vertex');
+const Edge = require("./edge"),
+      Cycle = require("./cycle"),
+      PartialCycle = require("./partialCycle"),
+      edgeUtilities = require("./utilities/edge"),
+      vertexUtilities = require("./utilities/vertex");
 
 const { Graph } = kahn,
       { arrayUtilities } = necessary,

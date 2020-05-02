@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 
-const necessary = require('necessary');
+const necessary = require("necessary");
 
-const vertexUtilities = require('./utilities/vertex');
+const vertexUtilities = require("./utilities/vertex");
 
 const { arrayUtilities } = necessary,
       { first } = arrayUtilities,

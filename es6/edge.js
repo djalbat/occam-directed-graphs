@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-const pearcekelly = require('occam-pearce-kelly');
+const pearcekelly = require("occam-pearce-kelly");
 
 const { Edge } = pearcekelly;
 
