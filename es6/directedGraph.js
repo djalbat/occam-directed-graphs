@@ -56,11 +56,11 @@ export default class DirectedGraph {
           partialCycles = [],
           cycles = [];
 
-    forwardsDepthFirstSearch(vertex, function(visitedVertex, getPredecessorVertices) {
+    forwardsDepthFirstSearch(vertex, (visitedVertex, getPredecessorVertices) => {
       const visitedVertexName = visitedVertex.getName(),
             sourceVertexName = visitedVertexName; ///
 
-      filter(cyclicEdges, function(cyclicEdge) {
+      filter(cyclicEdges, (cyclicEdge) => {
         const matches = cyclicEdge.matchSourceVertexName(sourceVertexName);
 
         if (matches) {
@@ -83,7 +83,7 @@ export default class DirectedGraph {
       const targetVertexName = partialCycle.getTargetVertexName(),
             targetVertex = this.directedAcyclicGraph.getVertexByVertexName(targetVertexName);
 
-      forwardsDepthFirstSearch(targetVertex, function(visitedVertex, getPredecessorVertices) {
+      forwardsDepthFirstSearch(targetVertex, (visitedVertex, getPredecessorVertices) => {
         const visitedVertexName = visitedVertex.getName();
 
         if (visitedVertexName === vertexName) {
@@ -277,9 +277,7 @@ export default class DirectedGraph {
 
       directedGraph = new DirectedGraph(cyclicEdges, directedAcyclicGraph);
 
-      edges.forEach(function(edge) {
-        directedGraph.addEdge(edge);
-      });
+      edges.forEach((edge) => directedGraph.addEdge(edge));
     } else {
       const topologicallyOrderedVertices = graph.getTopologicallyOrderedVertices(),
             cyclicEdges = [],

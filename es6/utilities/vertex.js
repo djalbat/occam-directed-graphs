@@ -7,7 +7,7 @@ const { first, second } = arrayUtilities;
 export function vertexNamesFromVertexLiterals(vertexLiterals) {
   const vertexNameMap = {};
 
-  vertexLiterals.forEach(function(vertexLiteral) {
+  vertexLiterals.forEach((vertexLiteral) => {
     const firstVertexLiteralElement = first(vertexLiteral),
           vertexName = firstVertexLiteralElement, ///
           vertexExists = vertexNameMap.hasOwnProperty(vertexName);
@@ -17,9 +17,9 @@ export function vertexNamesFromVertexLiterals(vertexLiterals) {
     }
 
       const secondVertexLiteralElement = second(vertexLiteral),
-        ancestorVertexNames = secondVertexLiteralElement; ///
+            ancestorVertexNames = secondVertexLiteralElement; ///
 
-    ancestorVertexNames.forEach(function(ancestorVertexName) {
+    ancestorVertexNames.forEach((ancestorVertexName) => {
       const ancestorVertexExists = vertexNameMap.hasOwnProperty(ancestorVertexName);
 
       if (!ancestorVertexExists) {
@@ -35,7 +35,7 @@ export function vertexNamesFromVertexLiterals(vertexLiterals) {
 }
 
 export function vertexNamesFromVertices(vertices) {
-  const vertexNames = vertices.map(function(vertex) {
+  const vertexNames = vertices.map((vertex) => {
     const vertexName = vertex.getName();
 
     return vertexName;
@@ -47,7 +47,7 @@ export function vertexNamesFromVertices(vertices) {
 export function forwardsDepthFirstSearch(vertex, callback) {
   const visitedVertices = [];
 
-  retrieveForwardsVisitedVertices(vertex, function(visitedVertex, getPredecessorVertices) {
+  retrieveForwardsVisitedVertices(vertex, (visitedVertex, getPredecessorVertices) => {
     const terminate = callback(visitedVertex, getPredecessorVertices);  ///
 
     visitedVertices.push(visitedVertex);
@@ -55,9 +55,7 @@ export function forwardsDepthFirstSearch(vertex, callback) {
     return terminate;
   }, getPredecessorVertices);
 
-  visitedVertices.forEach(function(visitedVertex) {
-    visitedVertex.resetVisited();
-  });
+  visitedVertices.forEach((visitedVertex) => visitedVertex.resetVisited());
 
   return visitedVertices;
 
@@ -79,8 +77,8 @@ function retrieveForwardsVisitedVertices(vertex, callback, getPredecessorVertice
     terminate = callback(visitedVertex, getPredecessorVertices);
 
     if (terminate !== true) {
-      visitedVertex.someImmediateSuccessorVertex(function(immediateSuccessorVertex) {
-        terminate = retrieveForwardsVisitedVertices(immediateSuccessorVertex, callback, function() {
+      visitedVertex.someImmediateSuccessorVertex((immediateSuccessorVertex) => {
+        terminate = retrieveForwardsVisitedVertices(immediateSuccessorVertex, callback, () => {
           let predecessorVertices = getPredecessorVertices();
 
           const immediatePredecessorVertex = vertex,  ///

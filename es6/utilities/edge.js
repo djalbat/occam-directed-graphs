@@ -9,13 +9,13 @@ const remove = prune;  ///
 export function edgesFromVertexLiterals(vertexLiterals) {
   const edges = [];
 
-  vertexLiterals.forEach(function(vertexLiteral) {
+  vertexLiterals.forEach((vertexLiteral) => {
     const firstVertexLiteralElement = first(vertexLiteral),
           secondVertexLiteralElement = second(vertexLiteral),
           ancestorVertexNames = secondVertexLiteralElement, ///
           vertexName = firstVertexLiteralElement; ///
 
-    ancestorVertexNames.forEach(function(ancestorVertexName) {
+    ancestorVertexNames.forEach((ancestorVertexName) => {
       const sourceVertexName = ancestorVertexName, ///
             targetVertexName = vertexName,  ///
             edge = new Edge(sourceVertexName, targetVertexName);
@@ -29,7 +29,7 @@ export function edgesFromVertexLiterals(vertexLiterals) {
 
 export function checkEdgesIncludesEdge(edge, edges) {
   const edge1 = edge, ///
-        edgesIncludesEdge = edges.some(function(edge) {
+        edgesIncludesEdge = edges.some((edge) => {
           const edge2 = edge, ///
                 matches = edge1.match(edge2);
 
@@ -44,7 +44,7 @@ export function checkEdgesIncludesEdge(edge, edges) {
 export function removeEdgeFromEdges(edge, edges) {
   const edge1 = edge; ///
 
-  remove(edges, function(edge) {
+  remove(edges, (edge) => {
     const edge2 = edge, ///
           matches = edge1.match(edge2);
 
@@ -55,7 +55,7 @@ export function removeEdgeFromEdges(edge, edges) {
 }
 
 export function edgesBySourceVertexName(sourceVertexName, edges) {
-  edges = edges.filter(function(edge) {  ///
+  edges = edges.filter((edge) => {  ///
     const matches = edge.matchSourceVertexName(sourceVertexName);
 
     if (matches) {
@@ -67,7 +67,7 @@ export function edgesBySourceVertexName(sourceVertexName, edges) {
 }
 
 export function edgesByTargetVertexName(targetVertexName, edges) {
-  edges = edges.filter(function(edge) {  ///
+  edges = edges.filter((edge) => {  ///
     const matches = edge.matchTargetVertexName(targetVertexName);
 
     if (matches) {

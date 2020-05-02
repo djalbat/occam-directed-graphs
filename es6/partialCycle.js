@@ -26,7 +26,7 @@ export default class PartialCycle {
   }
   
   getPredecessorVertexNames() {
-    const predecessorVertexNames = this.predecessorVertices.map(function(predecessorVertex) {
+    const predecessorVertexNames = this.predecessorVertices.map((predecessorVertex) => {
       const predecessorVertexName = predecessorVertex.getName();
 
       return predecessorVertexName;
