@@ -28,6 +28,10 @@ export default class DirectedGraph {
     return this.directedAcyclicGraph;
   }
 
+  getImmediatePredecessorVertexNamesByVertexName(vertexName) { return this.directedAcyclicGraph.getImmediatePredecessorVertexNamesByVertexName(vertexName); }
+
+  getImmediateSuccessorVertexNamesByVertexName(vertexName) { return this.directedAcyclicGraph.getImmediateSuccessorVertexNamesByVertexName(vertexName); }
+
   getPredecessorVertexNamesByVertexName(vertexName) { return this.directedAcyclicGraph.getPredecessorVertexNamesByVertexName(vertexName); }
 
   getSuccessorVertexNamesByVertexName(vertexName) { return this.directedAcyclicGraph.getSuccessorVertexNamesByVertexName(vertexName); }
