@@ -28,9 +28,43 @@ export default class DirectedGraph {
     return this.directedAcyclicGraph;
   }
 
-  getImmediatePredecessorVertexNamesByVertexName(vertexName) { return this.directedAcyclicGraph.getImmediatePredecessorVertexNamesByVertexName(vertexName); }
+  getImmediatePredecessorVertexNamesByVertexName(vertexName, includeCycles = false) {
+    const immediatePredecessorVertexNames = this.directedAcyclicGraph.getImmediatePredecessorVertexNamesByVertexName(vertexName);
 
-  getImmediateSuccessorVertexNamesByVertexName(vertexName) { return this.directedAcyclicGraph.getImmediateSuccessorVertexNamesByVertexName(vertexName); }
+    if (includeCycles) {
+      this.cyclicEdges.forEach((cyclicEdge) => {
+        const cyclicEdgeTargetVertexName = cyclicEdge.getTargetVertexName();
+
+        if (cyclicEdgeTargetVertexName === vertexName) {
+          const cyclicEdgeSourceVertexName = cyclicEdge.getSourceVertexName(),
+                immediatePredecessorVertexName = cyclicEdgeSourceVertexName;  ///
+
+          immediatePredecessorVertexNames.push(immediatePredecessorVertexName);
+        }
+      });
+    }
+
+    return immediatePredecessorVertexNames;
+  }
+
+  getImmediateSuccessorVertexNamesByVertexName(vertexName, includeCycles = false) {
+    const immediateSuccessorVertexNames = this.directedAcyclicGraph.getImmediateSuccessorVertexNamesByVertexName(vertexName);
+
+    if (includeCycles) {
+      this.cyclicEdges.forEach((cyclicEdge) => {
+        const cyclicEdgeSourceVertexName = cyclicEdge.getSourceVertexName();
+
+        if (cyclicEdgeSourceVertexName === vertexName) {
+          const cyclicEdgeTargetVertexName = cyclicEdge.getTargetVertexName(),
+                immediateSuccessorVertexName = cyclicEdgeTargetVertexName;  ///
+
+          immediateSuccessorVertexNames.push(immediateSuccessorVertexName);
+        }
+      });
+    }
+
+    return immediateSuccessorVertexNames;
+  }
 
   getPredecessorVertexNamesByVertexName(vertexName) { return this.directedAcyclicGraph.getPredecessorVertexNamesByVertexName(vertexName); }
 
