@@ -28,10 +28,10 @@ export default class DirectedGraph {
     return this.directedAcyclicGraph;
   }
 
-  getImmediatePredecessorVertexNamesByVertexName(vertexName, includeCycles = false) {
+  getImmediatePredecessorVertexNamesByVertexName(vertexName, includeCyclicEdges = false) {
     const immediatePredecessorVertexNames = this.directedAcyclicGraph.getImmediatePredecessorVertexNamesByVertexName(vertexName);
 
-    if (includeCycles) {
+    if (includeCyclicEdges) {
       this.cyclicEdges.forEach((cyclicEdge) => {
         const cyclicEdgeTargetVertexName = cyclicEdge.getTargetVertexName();
 
@@ -47,10 +47,10 @@ export default class DirectedGraph {
     return immediatePredecessorVertexNames;
   }
 
-  getImmediateSuccessorVertexNamesByVertexName(vertexName, includeCycles = false) {
+  getImmediateSuccessorVertexNamesByVertexName(vertexName, includeCyclicEdges = false) {
     const immediateSuccessorVertexNames = this.directedAcyclicGraph.getImmediateSuccessorVertexNamesByVertexName(vertexName);
 
-    if (includeCycles) {
+    if (includeCyclicEdges) {
       this.cyclicEdges.forEach((cyclicEdge) => {
         const cyclicEdgeSourceVertexName = cyclicEdge.getSourceVertexName();
 
