@@ -278,6 +278,17 @@ export default class DirectedGraph {
 
   filterCyclicEdges() {
     filter(this.cyclicEdges, (cyclicEdge) => {
+      const sourceVertexName = cyclicEdge.getSourceVertexName(),
+            targetVertexName = cyclicEdge.getTargetVertexName(),
+            sourceVertexPresent = this.isVertexPresentByVertexName(sourceVertexName),
+            targetVertexPresent = this.isVertexPresentByVertexName(targetVertexName);
+
+      if (sourceVertexPresent && targetVertexPresent) {
+        return true;
+      }
+    });
+
+    filter(this.cyclicEdges, (cyclicEdge) => {
       const edge = cyclicEdge,  ///
             success = this.directedAcyclicGraph.addEdge(edge);
 

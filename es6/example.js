@@ -2,15 +2,19 @@
 
 import { DirectedGraph } from "./index";  ///
 
-const directedGraph = DirectedGraph.fromNothing(),
-      vertexName = "i",
-      sourceVertexName = "j",
-      targetVertexName = "k";
+const directedGraph = DirectedGraph.fromNothing();
 
-directedGraph.addVertexByVertexName(vertexName);
+directedGraph.addVerticesByVertexNames([
+  "./easy-layout",
+  "./easy-with-style",
+  "./occam-lexers",
+  "./with-style"
+]);
 
-directedGraph.addEdgeByVertexNames(sourceVertexName, targetVertexName);
+directedGraph.addEdgeByVertexNames("./easy-with-style", "./easy-layout");
+directedGraph.addEdgeByVertexNames("./with-style", "./easy-with-style");
+directedGraph.addEdgeByVertexNames("./easy-layout", "./occam-lexers");
+directedGraph.addEdgeByVertexNames("./easy-with-style", "./easy-layout");
+directedGraph.addEdgeByVertexNames("./occam-lexers", "./with-style");
 
-const topologicallyOrderedVertexNames = directedGraph.getTopologicallyOrderedVertexNames();
-
-debugger
+directedGraph.removeVertexByVertexName("./occam-lexers");
