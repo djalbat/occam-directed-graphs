@@ -158,7 +158,7 @@ export default class DirectedGraph {
     return firstCycle;
   }
 
-  getTopologicallyOrderedVertexNames() { return this.directedAcyclicGraph.getTopologicallyOrderedVertexNames(); }
+  getOrderedVertexNames() { return this.directedAcyclicGraph.getOrderedVertexNames(); }
 
   areCyclesPresent() {
     const cyclicEdgesLength = this.cyclicEdges.length,
@@ -328,9 +328,9 @@ export default class DirectedGraph {
 
       edges.forEach((edge) => directedGraph.addEdge(edge));
     } else {
-      const topologicallyOrderedVertices = graph.getTopologicallyOrderedVertices(),
+      const orderedVertices = graph.getOrderedVertices(),
             cyclicEdges = [],
-            directedAcyclicGraph = DirectedAcyclicGraph.fromTopologicallyOrderedVertices(topologicallyOrderedVertices);
+            directedAcyclicGraph = DirectedAcyclicGraph.fromOrderedVertices(orderedVertices);
 
       directedGraph = new DirectedGraph(cyclicEdges, directedAcyclicGraph);
     }

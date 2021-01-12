@@ -106,7 +106,7 @@ const cyclesPresent = directedGraph.areCyclesPresent();
 if (cyclesPresent) {
   ///
 } else {
-  const topologicallyOrderedVertexNames = directedGraph.getTopologicallyOrderedVertexNames();
+  const orderedVertexNames = directedGraph.getOrderedVertexNames();
 
   ...
 }

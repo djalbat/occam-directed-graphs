@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Occam Directed Graphs example</title>
+    <meta charset="utf-8" />
+  </head>
+  <body>
+    <script src="example.js"> </script>
+
+    <script>
+
+      var xmlHttpRequest = new XMLHttpRequest();
+
+      xmlHttpRequest.onreadystatechange = function() {
+        if (xmlHttpRequest.readyState == 4) {
+          if (xmlHttpRequest.status == 200) {
+            location.reload();
+          }
+        }
+      };
+
+      xmlHttpRequest.open("GET", "/reload");
+
+      xmlHttpRequest.send();
+
+    </script>
+
+  </body>
+</html>
