@@ -1,6 +1,6 @@
 # Occam Directed Graphs
 
-Directed graphs comprised of directed acyclic graphs together with cycles for [Occam](https://github.com/jecs-imperial/occam).
+Directed graphs comprised of directed acyclic graphs together with cycles for [Occam](https://github.com/djalbat/occam).
 
 ### Contents
 
@@ -22,7 +22,7 @@ With [npm](https://www.npmjs.com/):
 
 You can also clone the repository with [Git](https://git-scm.com/)...
 
-    https://github.com/jecs-imperial/occam-directed-graph.git
+    https://github.com/djalbat/occam-directed-graph.git
 
 ...and then install the dependencies with npm from within the project's root directory:
 
