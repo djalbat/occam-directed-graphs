@@ -18,3 +18,5 @@ directedGraph.addEdgeByVertexNames("./easy-with-style", "./easy-layout");
 directedGraph.addEdgeByVertexNames("./occam-lexers", "./with-style");
 
 directedGraph.removeVertexByVertexName("./occam-lexers");
+
+debugger
