@@ -1,7 +1,7 @@
 {
   "name": "occam-directed-graphs",
   "author": "James Smith",
-  "version": "3.0.10",
+  "version": "3.0.11",
   "license": "MIT, Anti-996",
   "homepage": "https://github.com/djalbat/occam-directed-graphs",
   "description": "Directed graphs comprised of directed acyclic graphs together with cycles.",
@@ -10,15 +10,15 @@
     "url": "https://github.com/djalbat/occam-directed-graphs"
   },
   "dependencies": {
-    "necessary": "^7.1.10",
-    "occam-kahn": "^4.0.7",
-    "occam-pearce-kelly": "^4.0.4"
+    "necessary": "^8.0.3",
+    "occam-kahn": "^4.0.14",
+    "occam-pearce-kelly": "^4.0.11"
   },
   "devDependencies": {
     "@swc/core": "^1.2.50",
     "esbuild": "^0.9.6",
     "express": "^4.17.1",
-    "lively-cli": "^2.0.14",
+    "lively-cli": "^2.0.17",
     "watchful-cli": "^1.7.10"
   },
   "scripts": {
