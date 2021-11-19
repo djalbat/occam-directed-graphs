@@ -158,6 +158,8 @@ export default class DirectedGraph {
     return firstCycle;
   }
 
+  getVertexNames() { return this.directedAcyclicGraph.getVertexNames(); }
+
   getOrderedVertexNames() { return this.directedAcyclicGraph.getOrderedVertexNames(); }
 
   areCyclesPresent() {
