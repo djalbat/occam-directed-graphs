@@ -86,6 +86,8 @@ export default class DirectedGraph {
 
   isVertexPresentByVertexName(vertexName) { return this.directedAcyclicGraph.isVertexPresentByVertexName(vertexName); }
 
+  isEdgePresentByVertexNames(sourceVertexName, targetVertexName) { return this.directedAcyclicGraph.isEdgePresentByVertexNames(sourceVertexName, targetVertexName); }
+
   getFirstCycleByVertexName(vertexName) {
     let firstCycle = null;
     
