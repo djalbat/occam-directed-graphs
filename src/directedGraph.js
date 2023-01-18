@@ -28,6 +28,20 @@ export default class DirectedGraph {
     return this.directedAcyclicGraph;
   }
 
+  getVertexNames() { return this.directedAcyclicGraph.getVertexNames(); }
+
+  getOrderedVertexNames() { return this.directedAcyclicGraph.getOrderedVertexNames(); }
+
+  addVertexByVertexName(vertexName) { this.directedAcyclicGraph.addVertexByVertexName(vertexName); }
+
+  isEdgePresentByVertexNames(sourceVertexName, targetVertexName) { return this.directedAcyclicGraph.isEdgePresentByVertexNames(sourceVertexName, targetVertexName); }
+
+  isVertexPresentByVertexName(vertexName) { return this.directedAcyclicGraph.isVertexPresentByVertexName(vertexName); }
+
+  getSuccessorVertexNamesByVertexName(vertexName) { return this.directedAcyclicGraph.getSuccessorVertexNamesByVertexName(vertexName); }
+
+  getPredecessorVertexNamesByVertexName(vertexName) { return this.directedAcyclicGraph.getPredecessorVertexNamesByVertexName(vertexName); }
+
   getImmediatePredecessorVertexNamesByVertexName(vertexName, includeCyclicEdges = false) {
     const immediatePredecessorVertexNames = this.directedAcyclicGraph.getImmediatePredecessorVertexNamesByVertexName(vertexName);
 
@@ -66,10 +80,6 @@ export default class DirectedGraph {
     return immediateSuccessorVertexNames;
   }
 
-  getPredecessorVertexNamesByVertexName(vertexName) { return this.directedAcyclicGraph.getPredecessorVertexNamesByVertexName(vertexName); }
-
-  getSuccessorVertexNamesByVertexName(vertexName) { return this.directedAcyclicGraph.getSuccessorVertexNamesByVertexName(vertexName); }
-
   areCyclesPresentByVertexName(vertexName) {
     let cyclesPresent = false;
 
@@ -83,10 +93,6 @@ export default class DirectedGraph {
 
     return cyclesPresent;
   }
-
-  isVertexPresentByVertexName(vertexName) { return this.directedAcyclicGraph.isVertexPresentByVertexName(vertexName); }
-
-  isEdgePresentByVertexNames(sourceVertexName, targetVertexName) { return this.directedAcyclicGraph.isEdgePresentByVertexNames(sourceVertexName, targetVertexName); }
 
   getFirstCycleByVertexName(vertexName) {
     let firstCycle = null;
@@ -160,18 +166,12 @@ export default class DirectedGraph {
     return firstCycle;
   }
 
-  getVertexNames() { return this.directedAcyclicGraph.getVertexNames(); }
-
-  getOrderedVertexNames() { return this.directedAcyclicGraph.getOrderedVertexNames(); }
-
   areCyclesPresent() {
     const cyclicEdgesLength = this.cyclicEdges.length,
           cyclesPresent = (cyclicEdgesLength > 0);
 
     return cyclesPresent;
   }
-
-  addVertexByVertexName(vertexName) { this.directedAcyclicGraph.addVertexByVertexName(vertexName); }
 
   addVerticesByVertexNames(vertexNames) {
     vertexNames.forEach((vertexName) => this.addVertexByVertexName(vertexName));
