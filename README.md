@@ -121,4 +121,5 @@ Automation is done with [npm scripts](https://docs.npmjs.com/misc/scripts), have
 
 ## Contact
 
-* james.smith@openmathematics.org
+* james.smith@djalbat.com
+
