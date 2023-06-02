@@ -1,6 +1,6 @@
 # Occam Directed Graphs
 
-Directed graphs comprised of directed acyclic graphs together with cycles for [Occam](https://github.com/djalbat/occam).
+Occam's directed graphs.
 
 ### Contents
 

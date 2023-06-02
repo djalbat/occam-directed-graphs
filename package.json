@@ -1,10 +1,10 @@
 {
   "name": "occam-directed-graphs",
   "author": "James Smith",
-  "version": "3.0.36",
+  "version": "3.0.37",
   "license": "MIT, Anti-996",
   "homepage": "https://github.com/djalbat/occam-directed-graphs",
-  "description": "Directed graphs comprised of directed acyclic graphs together with cycles.",
+  "description": "Occam's directed graphs.",
   "repository": {
     "type": "git",
     "url": "https://github.com/djalbat/occam-directed-graphs"
