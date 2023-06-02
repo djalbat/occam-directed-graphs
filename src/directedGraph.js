@@ -1,15 +1,14 @@
 "use strict";
 
-import { Graph } from "occam-kahn";
 import { arrayUtilities } from "necessary";
-import { DirectedAcyclicGraph } from "occam-pearce-kelly";
 
 import Edge from "./edge";
 import Cycle from "./cycle";
 import PartialCycle from "./partialCycle";
+import DirectedAcyclicGraph from "./directedAcyclicGraph";
 
-import { vertexNamesFromVertexLiterals, forwardsDepthFirstSearch } from "./utilities/vertex";
-import { edgesFromVertexLiterals, checkEdgesIncludesEdge, removeEdgeFromEdges, edgesBySourceVertexName, edgesByTargetVertexName } from "./utilities/edge";
+import { forwardsDepthFirstSearch } from "./utilities/vertex";
+import { checkEdgesIncludesEdge, removeEdgeFromEdges, edgesBySourceVertexName, edgesByTargetVertexName } from "./utilities/edge";
 
 const { first, filter } = arrayUtilities;
 
@@ -308,37 +307,5 @@ export default class DirectedGraph {
           directedGraph = new DirectedGraph(cyclicEdges, directedAcyclicGraph);
     
     return directedGraph;    
-  }
-
-  static fromVertexLiterals(vertexLiterals) {
-    const vertexNames = vertexNamesFromVertexLiterals(vertexLiterals),
-          edges = edgesFromVertexLiterals(vertexLiterals),
-          directedGraph = DirectedGraph.fromVertexNamesAndEdges(vertexNames, edges);
-
-    return directedGraph;
-  }
-
-  static fromVertexNamesAndEdges(vertexNames, edges) {
-    let directedGraph;
-
-    const graph = Graph.fromVertexNamesAndEdges(vertexNames, edges),
-          cyclesPresent = graph.areCyclesPresent();
-
-    if (cyclesPresent) {
-      const cyclicEdges = [],
-            directedAcyclicGraph = DirectedAcyclicGraph.fromVertexNames(vertexNames);
-
-      directedGraph = new DirectedGraph(cyclicEdges, directedAcyclicGraph);
-
-      edges.forEach((edge) => directedGraph.addEdge(edge));
-    } else {
-      const orderedVertices = graph.getOrderedVertices(),
-            cyclicEdges = [],
-            directedAcyclicGraph = DirectedAcyclicGraph.fromOrderedVertices(orderedVertices);
-
-      directedGraph = new DirectedGraph(cyclicEdges, directedAcyclicGraph);
-    }
-
-    return directedGraph;
   }
 }

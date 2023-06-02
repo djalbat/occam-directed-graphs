@@ -6,27 +6,6 @@ const { prune } = arrayUtilities;
 
 const remove = prune;  ///
 
-export function edgesFromVertexLiterals(vertexLiterals) {
-  const edges = [];
-
-  vertexLiterals.forEach((vertexLiteral) => {
-    const firstVertexLiteralElement = first(vertexLiteral),
-          secondVertexLiteralElement = second(vertexLiteral),
-          ancestorVertexNames = secondVertexLiteralElement, ///
-          vertexName = firstVertexLiteralElement; ///
-
-    ancestorVertexNames.forEach((ancestorVertexName) => {
-      const sourceVertexName = ancestorVertexName, ///
-            targetVertexName = vertexName,  ///
-            edge = new Edge(sourceVertexName, targetVertexName);
-
-      edges.push(edge);
-    });
-  });
-
-  return edges;
-}
-
 export function checkEdgesIncludesEdge(edge, edges) {
   const edge1 = edge, ///
         edgesIncludesEdge = edges.some((edge) => {

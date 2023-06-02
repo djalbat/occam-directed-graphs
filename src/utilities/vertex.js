@@ -1,37 +1,22 @@
 "use strict";
 
-import { arrayUtilities } from "necessary";
+export function orderVertices(vertices) {  ///
+  vertices.sort((firstVertex, secondVertex) => {
+    const firstVertexIndex = firstVertex.getIndex(),
+          secondVertexIndex = secondVertex.getIndex();
 
-const { first, second } = arrayUtilities;
-
-export function vertexNamesFromVertexLiterals(vertexLiterals) {
-  const vertexNameMap = {};
-
-  vertexLiterals.forEach((vertexLiteral) => {
-    const firstVertexLiteralElement = first(vertexLiteral),
-          vertexName = firstVertexLiteralElement, ///
-          vertexExists = vertexNameMap.hasOwnProperty(vertexName);
-
-    if (!vertexExists) {
-      vertexNameMap[vertexName] = vertexName;
+    if (false) {
+      ///
+    } else if (firstVertexIndex < secondVertexIndex) {
+      return -1;
+    } else  if (firstVertexIndex > secondVertexIndex) {
+      return +1;
     }
-
-      const secondVertexLiteralElement = second(vertexLiteral),
-            ancestorVertexNames = secondVertexLiteralElement; ///
-
-    ancestorVertexNames.forEach((ancestorVertexName) => {
-      const ancestorVertexExists = vertexNameMap.hasOwnProperty(ancestorVertexName);
-
-      if (!ancestorVertexExists) {
-        vertexNameMap[ancestorVertexName] = ancestorVertexName;
-      }
-    });
   });
 
-  const vertexNameMapKeys = Object.keys(vertexNameMap),
-        vertexNames = vertexNameMapKeys;  ///
+  const orderedVertices = vertices;  ///
 
-  return vertexNames;
+  return orderedVertices;
 }
 
 export function vertexNamesFromVertices(vertices) {

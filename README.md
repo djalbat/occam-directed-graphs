@@ -8,6 +8,7 @@ Directed graphs comprised of directed acyclic graphs together with cycles for [O
 - [Installation](#installation)
 - [Usage](#usage)
 - [Building](#building)
+- [References](#references)
 - [Contact](#contact)
 
 ## Introduction
@@ -118,6 +119,12 @@ Automation is done with [npm scripts](https://docs.npmjs.com/misc/scripts), have
 
     npm run build-debug
     npm run watch-debug
+
+## References
+
+This implementation is based on the Pearce-Kelly algorithm:
+
+* [A Dynamic Topological Sort Algorithm for Directed Acyclic Graphs](https://www.doc.ic.ac.uk/~phjk/Publications/DynamicTopoSortAlg-JEA-07.pdf) by David J. Pearce and Paul H.J. Kelly.
 
 ## Contact
 
