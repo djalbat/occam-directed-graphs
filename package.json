@@ -1,7 +1,7 @@
 {
   "name": "occam-directed-graphs",
   "author": "James Smith",
-  "version": "3.0.35",
+  "version": "3.0.36",
   "license": "MIT, Anti-996",
   "homepage": "https://github.com/djalbat/occam-directed-graphs",
   "description": "Directed graphs comprised of directed acyclic graphs together with cycles.",
