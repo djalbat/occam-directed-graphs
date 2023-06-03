@@ -58,8 +58,12 @@ export function forwardsDepthFirstSearch(vertex, callback) {
 function retrieveForwardsVisitedVertices(vertex, callback, getPredecessorVertices) {
   let terminate = false;
 
-  if (vertex.visited === false) {
-    vertex.visited = true;
+  const visited = vertex.isVisited();
+
+  if (visited === false) {
+    const visited = true;
+
+    vertex.setVisited(visited);
 
     const visitedVertex = vertex;  ///
 
