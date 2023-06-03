@@ -8,7 +8,7 @@ import PartialCycle from "./partialCycle";
 import DirectedAcyclicGraph from "./directedAcyclicGraph";
 
 import { forwardsDepthFirstSearch } from "./utilities/vertex";
-import { checkEdgesIncludesEdge, removeEdgeFromEdges, edgesBySourceVertexName, edgesByTargetVertexName } from "./utilities/edge";
+import { removeEdgeFromEdges, checkEdgesIncludesEdge, edgesBySourceVertexName, edgesByTargetVertexName } from "./utilities/edge";
 
 const { first, filter } = arrayUtilities;
 

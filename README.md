@@ -48,25 +48,6 @@ directedGraph.addEdgeByVertexNames(sourceVertexName, targetVertexName);
 
 Note that there is no need to add vertices explicitly, they will be added whenever necessary when edges that reference them are added.
 
-Alternatively, a directed graph can be constructed with the `fromVertexLiterals()` factory method as follows:
-
-```
-import { DirectedGraph } from "occam-directed-graphs";
-
-const graph = Graph.fromVertexLiterals([
-
-  ["a", ["b"]],
-  ["b", ["c"]],
-  ["d", ["c"]],
-  ["e", []],
-  ["f", ["g"]],
-  ["h", ["g"]]
-
-]);
-```
-
-Note that the array of names that is the second element of each literal gives the *ancestors* of the vertex and not its descendants.
-
 You can also remove vertices and edges from the graph. Removing a vertex may of course result in removing edges. When you remove an edge, you can additionally specify that the any stranded vertices that result are also removed:
 
 ```

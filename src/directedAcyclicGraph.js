@@ -5,7 +5,7 @@ import { arrayUtilities } from "necessary";
 import Edge from "./edge";
 import Vertex from "./vertex";
 
-import { vertexNamesFromVertices, orderVertices } from "./utilities/vertex";
+import { orderVertices, vertexNamesFromVertices } from "./utilities/vertex";
 
 const { last } = arrayUtilities;
 
@@ -322,24 +322,6 @@ export default class DirectedAcyclicGraph {
 
     return directedAcyclicGraph;
   }
-  
-  static fromVertexNames(vertexNames) {
-    const vertexMap = vertexMapFromVertexNames(vertexNames);
-
-    const directedAcyclicGraph = new DirectedAcyclicGraph(vertexMap);
-
-    return directedAcyclicGraph;
-  }
-
-  static fromOrderedVertices(orderedVertices) {
-    const vertexMap = vertexMapFromOrderedVertices(orderedVertices);
-    
-    addEdgesToVertices(orderedVertices, vertexMap);
-    
-    const directedAcyclicGraph = new DirectedAcyclicGraph(vertexMap);
-    
-    return directedAcyclicGraph;
-  }
 }
 
 function addInvalidatingEdgeByVertices(sourceVertex, targetVertex) {
@@ -375,48 +357,4 @@ function addInvalidatingEdgeByVertices(sourceVertex, targetVertex) {
   }
 
   return success;
-}
-
-function vertexMapFromVertexNames(vertexNames) {
-  const vertexMap = {};
-  
-  vertexNames.forEach((vertexName, index) => {
-    const name = vertexName,  ///
-          vertex = Vertex.fromNameAndIndex(name, index);
-
-    vertexMap[vertexName] = vertex;
-  });
-  
-  return vertexMap;
-}
-
-function vertexMapFromOrderedVertices(orderedVertices) {
-  const vertexMap = {};
-  
-  orderedVertices.forEach((orderedVertex, index) => {
-    const name = orderedVertex.getName(),
-          vertex = Vertex.fromNameAndIndex(name, index),
-          vertexName = name;  ///
-
-    vertexMap[vertexName] = vertex;
-  });
-
-  return vertexMap;
-}
-
-function addEdgesToVertices(orderedVertices, vertexMap) {
-  orderedVertices.forEach((orderedVertex) => {
-    orderedVertex.forEachOutgoingEdge((outgoingEdge) => {
-      const sourceVertexName = outgoingEdge.getSourceVertexName(),
-            targetVertexName = outgoingEdge.getTargetVertexName(),
-            immediatePredecessorVertexName = sourceVertexName,  ///
-            immediateSuccessorVertexName = targetVertexName,
-            immediatePredecessorVertex = vertexMap[immediatePredecessorVertexName], ///
-            immediateSuccessorVertex = vertexMap[immediateSuccessorVertexName]; ///
-
-      immediatePredecessorVertex.addImmediateSuccessorVertex(immediateSuccessorVertex);
-
-      immediateSuccessorVertex.addImmediatePredecessorVertex(immediatePredecessorVertex);
-    });
-  });
 }
