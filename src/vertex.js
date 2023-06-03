@@ -227,7 +227,9 @@ export default class Vertex {
   removeIncomingEdges() {
     const immediateSuccessorVertex = this; ///
     
-    this.immediatePredecessorVertices.forEach((immediatePredecessorVertex) => immediatePredecessorVertex.removeImmediateSuccessorVertex(immediateSuccessorVertex));
+    this.immediatePredecessorVertices.forEach((immediatePredecessorVertex) => {
+      immediatePredecessorVertex.removeImmediateSuccessorVertex(immediateSuccessorVertex);
+    });
 
     this.immediatePredecessorVertices = [];
   }
@@ -235,7 +237,9 @@ export default class Vertex {
   removeOutgoingEdges() {
     const immediatePredecessorVertex = this; ///
 
-    this.immediateSuccessorVertices.forEach((immediateSuccessorVertex) => immediateSuccessorVertex.removeImmediateSuccessorVertex(immediatePredecessorVertex));
+    this.immediateSuccessorVertices.forEach((immediateSuccessorVertex) => {
+      immediateSuccessorVertex.removeImmediateSuccessorVertex(immediatePredecessorVertex);
+    });
 
     this.immediateSuccessorVertices = [];
   }
@@ -259,7 +263,9 @@ export default class Vertex {
       return terminate;
     });
 
-    visitedVertices.forEach((visitedVertex) => visitedVertex.resetVisited());
+    visitedVertices.forEach((visitedVertex) => {
+      visitedVertex.resetVisited();
+    });
 
     return visitedVertices;
   }
@@ -275,7 +281,9 @@ export default class Vertex {
       return terminate;
     });
 
-    visitedVertices.forEach((visitedVertex) => visitedVertex.resetVisited());
+    visitedVertices.forEach((visitedVertex) => {
+      visitedVertex.resetVisited();
+    });
 
     return visitedVertices;
   }

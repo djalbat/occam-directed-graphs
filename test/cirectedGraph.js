@@ -1,7 +1,7 @@
 "use strict";
 
 const { assert } = require("chai"),
-      { Cycle, DirectedGraph } = require("../lib/index"); ///
+      { Edge, Cycle, DirectedGraph } = require("../lib/index"); ///
 
 describe("DirectedGraph", () => {
   describe("getFirstCycle", () => {
@@ -13,7 +13,8 @@ describe("DirectedGraph", () => {
       });
 
       before(() => {
-        let sourceVertexName,
+        let edge,
+            sourceVertexName,
             targetVertexName;
 
         const vertexNameA = "a",
@@ -22,12 +23,16 @@ describe("DirectedGraph", () => {
         sourceVertexName = vertexNameA; ///
         targetVertexName = vertexNameB; ///
 
-        directedGraph.addEdgeBySourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
+        edge = Edge.fromSourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
+
+        directedGraph.addEdge(edge);
 
         sourceVertexName = vertexNameB; ///
         targetVertexName = vertexNameA; ///
 
-        directedGraph.addEdgeBySourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
+        edge = Edge.fromSourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
+
+        directedGraph.addEdge(edge);
       });
 
       it("returns a cycle", () => {
@@ -61,7 +66,8 @@ describe("DirectedGraph", () => {
       });
 
       before(() => {
-        let sourceVertexName,
+        let edge,
+            sourceVertexName,
             targetVertexName;
 
         const vertexNameA = "a",
@@ -70,12 +76,16 @@ describe("DirectedGraph", () => {
         sourceVertexName = vertexNameA; ///
         targetVertexName = vertexNameB; ///
 
-        directedGraph.addEdgeBySourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
+        edge = Edge.fromSourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
+
+        directedGraph.addEdge(edge);
 
         sourceVertexName = vertexNameB; ///
         targetVertexName = vertexNameA; ///
 
-        directedGraph.addEdgeBySourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
+        edge = Edge.fromSourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
+
+        directedGraph.addEdge(edge);
       });
 
       it("returns true", () => {
@@ -96,25 +106,31 @@ describe("DirectedGraph", () => {
             vertexNameB = "b";
 
       before(() => {
-        let sourceVertexName,
+        let edge,
+            sourceVertexName,
             targetVertexName;
 
         sourceVertexName = vertexNameA; ///
         targetVertexName = vertexNameB; ///
 
-        directedGraph.addEdgeBySourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
+        edge = Edge.fromSourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
+
+        directedGraph.addEdge(edge);
 
         sourceVertexName = vertexNameB; ///
         targetVertexName = vertexNameA; ///
 
-        directedGraph.addEdgeBySourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
+        edge = Edge.fromSourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
+
+        directedGraph.addEdge(edge);
       });
 
       before(() => {
         const sourceVertexName = vertexNameA, ///
-              targetVertexName = vertexNameB; ////
+              targetVertexName = vertexNameB, ////
+              edge = Edge.fromSourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
 
-        directedGraph.removeEdgeBySourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
+        directedGraph.removeEdge(edge);
       });
 
       it("returns false", () => {
@@ -135,18 +151,23 @@ describe("DirectedGraph", () => {
             vertexNameB = "b";
 
       before(() => {
-        let sourceVertexName,
+        let edge,
+            sourceVertexName,
             targetVertexName;
 
         sourceVertexName = vertexNameA; ///
         targetVertexName = vertexNameB; ///
 
-        directedGraph.addEdgeBySourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
+        edge = Edge.fromSourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
+
+        directedGraph.addEdge(edge);
 
         sourceVertexName = vertexNameB; ///
         targetVertexName = vertexNameA; ///
 
-        directedGraph.addEdgeBySourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
+        edge = Edge.fromSourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
+
+        directedGraph.addEdge(edge);
       });
 
       before(() => {
@@ -210,9 +231,10 @@ describe("DirectedGraph", () => {
 
       before(() => {
         const sourceVertexName = vertexNameA, ///
-              targetVertexName = vertexNameB; ///
+              targetVertexName = vertexNameB, ///
+              edge = Edge.fromSourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
 
-        directedGraph.addEdgeBySourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
+        directedGraph.addEdge(edge);
       });
 
       it("returns an array with the ordered vertex names", () => {
@@ -234,18 +256,23 @@ describe("DirectedGraph", () => {
       });
 
       before(() => {
-        let sourceVertexName,
+        let edge,
+            sourceVertexName,
             targetVertexName;
 
         sourceVertexName = vertexNameA; ///
         targetVertexName = vertexNameB; ///
 
-        directedGraph.addEdgeBySourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
+        edge = Edge.fromSourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
+
+        directedGraph.addEdge(edge);
 
         sourceVertexName = vertexNameB; ///
         targetVertexName = vertexNameC; ///
 
-        directedGraph.addEdgeBySourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
+        edge = Edge.fromSourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
+
+        directedGraph.addEdge(edge);
       });
 
       it("returns an array with the ordered vertex names", () => {

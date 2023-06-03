@@ -40,7 +40,9 @@ export function forwardsDepthFirstSearch(vertex, callback) {
     return terminate;
   }, getPredecessorVertices);
 
-  visitedVertices.forEach((visitedVertex) => visitedVertex.resetVisited());
+  visitedVertices.forEach((visitedVertex) => {
+    visitedVertex.resetVisited();
+  });
 
   return visitedVertices;
 
