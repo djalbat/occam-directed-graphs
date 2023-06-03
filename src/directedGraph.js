@@ -522,7 +522,17 @@ function addInvalidatingEdgeByVertices(sourceVertex, targetVertex) {
             return affectedVertexIndex;
           });
 
-    affectedVertexIndices.sort((indexA, indexB) => (indexA - indexB));
+    affectedVertexIndices.sort((indexA, indexB) => {
+      if (false) {
+        ///
+      } else if (indexA < indexB) {
+        return -1;
+      } else if (indexA > indexB) {
+        return +1;
+      } else {
+        return 0;
+      }
+    });
 
     affectedVertices.forEach((affectedVertex, index) => {
       const affectedVertexIndex = affectedVertexIndices[index];

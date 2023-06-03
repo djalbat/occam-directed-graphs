@@ -11,6 +11,8 @@ export function orderVertices(vertices) {  ///
       return -1;
     } else  if (firstVertexIndex > secondVertexIndex) {
       return +1;
+    } else {
+      return 0;
     }
   });
 
