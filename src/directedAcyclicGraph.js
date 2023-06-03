@@ -120,12 +120,12 @@ export default class DirectedAcyclicGraph {
   isEdgePresent(edge) {
     const sourceVertexName = edge.getSourceVertexName(),
           targetVertexName = edge.getTargetVertexName(),
-          edgePresent = this.isEdgePresentByVertexNames(sourceVertexName, targetVertexName);
+          edgePresent = this.isEdgePresentBySourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
     
     return edgePresent;
   }
 
-  isEdgePresentByVertexNames(sourceVertexName, targetVertexName) {
+  isEdgePresentBySourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName) {
     let edgePresent = false;
 
     const sourceVertex = this.getVertexByVertexName(sourceVertexName),
@@ -161,81 +161,9 @@ export default class DirectedAcyclicGraph {
   addEdge(edge) {
     const sourceVertexName = edge.getSourceVertexName(),
           targetVertexName = edge.getTargetVertexName(),
-          success = this.addEdgeByVertexNames(sourceVertexName, targetVertexName);
+          success = this.addEdgeBySourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
 
     return success;
-  }
-
-  removeEdge(edge) {
-    const sourceVertexName = edge.getSourceVertexName(),
-          targetVertexName = edge.getTargetVertexName();
-
-    this.removeEdgeByVertexNames(sourceVertexName, targetVertexName);
-  }
-
-  addEdgeByVertexNames(sourceVertexName, targetVertexName) {
-    let success = false;
-
-    if (sourceVertexName !== targetVertexName) {
-      const sourceVertex = this.addVertexByVertexName(sourceVertexName),
-            targetVertex = this.addVertexByVertexName(targetVertexName),
-            edgePresent = sourceVertex.isEdgePresentByTargetVertex(targetVertex);
-      
-      if (edgePresent) {
-        success = true;
-      } else {
-        const sourceVertexIndex = sourceVertex.getIndex(),
-              targetVertexIndex = targetVertex.getIndex(),
-              invalidatingEdge = (sourceVertexIndex > targetVertexIndex);
-
-        success = invalidatingEdge ?
-                    addInvalidatingEdgeByVertices(sourceVertex, targetVertex) :
-                      true;
-
-        if (success) {
-          const immediatePredecessorVertex = sourceVertex, ///
-                immediateSuccessorVertex = targetVertex; ///
-
-          immediatePredecessorVertex.addImmediateSuccessorVertex(immediateSuccessorVertex);
-
-          immediateSuccessorVertex.addImmediatePredecessorVertex(immediatePredecessorVertex);
-        }
-      }
-    }
-    
-    return success;
-  }
-
-  removeEdgeByVertexNames(sourceVertexName, targetVertexName) {
-    const edgePresent = this.isEdgePresentByVertexNames(sourceVertexName, targetVertexName);
-
-    if (edgePresent) {
-      const sourceVertex = this.getVertexByVertexName(sourceVertexName),
-            targetVertex = this.getVertexByVertexName(targetVertexName);
-
-      sourceVertex.removeImmediateSuccessorVertex(targetVertex);
-      targetVertex.removeImmediatePredecessorVertex(sourceVertex);
-    }
-  }
-
-  removeEdgesBySourceVertexName(sourceVertexName) {
-    const sourceVertexPresent = this.isVertexPresentByVertexName(sourceVertexName);
-
-    if (sourceVertexPresent) {
-      const sourceVertex = this.getVertexByVertexName(sourceVertexName);
-
-      sourceVertex.removeOutgoingEdges();
-    }
-  }
-
-  removeEdgesByTargetVertexName(targetVertexName) {
-    const targetVertexPresent = this.isVertexPresentByVertexName(targetVertexName);
-
-    if (targetVertexPresent) {
-      const targetVertex = this.getVertexByVertexName(targetVertexName);
-
-      targetVertex.removeIncomingEdges();
-    }
   }
 
   addVertexByVertexName(vertexName) {
@@ -254,6 +182,46 @@ export default class DirectedAcyclicGraph {
     const vertex = this.getVertexByVertexName(vertexName);
 
     return vertex;
+  }
+
+  addEdgeBySourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName) {
+    let success = false;
+
+    if (sourceVertexName !== targetVertexName) {
+      const sourceVertex = this.addVertexByVertexName(sourceVertexName),
+            targetVertex = this.addVertexByVertexName(targetVertexName),
+            edgePresent = sourceVertex.isEdgePresentByTargetVertex(targetVertex);
+
+      if (edgePresent) {
+        success = true;
+      } else {
+        const sourceVertexIndex = sourceVertex.getIndex(),
+              targetVertexIndex = targetVertex.getIndex(),
+              invalidatingEdge = (sourceVertexIndex > targetVertexIndex);
+
+        success = invalidatingEdge ?
+          addInvalidatingEdgeByVertices(sourceVertex, targetVertex) :
+          true;
+
+        if (success) {
+          const immediatePredecessorVertex = sourceVertex, ///
+                immediateSuccessorVertex = targetVertex; ///
+
+          immediatePredecessorVertex.addImmediateSuccessorVertex(immediateSuccessorVertex);
+
+          immediateSuccessorVertex.addImmediatePredecessorVertex(immediatePredecessorVertex);
+        }
+      }
+    }
+
+    return success;
+  }
+
+  removeEdge(edge) {
+    const sourceVertexName = edge.getSourceVertexName(),
+          targetVertexName = edge.getTargetVertexName();
+
+    this.removeEdgeBySourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
   }
 
   removeVertexByVertexName(vertexName) {
@@ -314,6 +282,39 @@ export default class DirectedAcyclicGraph {
     }
 
     return removedEdges;
+  }
+
+  removeEdgesBySourceVertexName(sourceVertexName) {
+    const sourceVertexPresent = this.isVertexPresentByVertexName(sourceVertexName);
+
+    if (sourceVertexPresent) {
+      const sourceVertex = this.getVertexByVertexName(sourceVertexName);
+
+      sourceVertex.removeOutgoingEdges();
+    }
+  }
+
+  removeEdgesByTargetVertexName(targetVertexName) {
+    const targetVertexPresent = this.isVertexPresentByVertexName(targetVertexName);
+
+    if (targetVertexPresent) {
+      const targetVertex = this.getVertexByVertexName(targetVertexName);
+
+      targetVertex.removeIncomingEdges();
+    }
+  }
+
+  removeEdgeBySourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName) {
+    const edgePresent = this.isEdgePresentBySourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
+
+    if (edgePresent) {
+      const sourceVertex = this.getVertexByVertexName(sourceVertexName),
+            targetVertex = this.getVertexByVertexName(targetVertexName);
+
+      sourceVertex.removeImmediateSuccessorVertex(targetVertex);
+
+      targetVertex.removeImmediatePredecessorVertex(sourceVertex);
+    }
   }
 
   static fromNothing() {

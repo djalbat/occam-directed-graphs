@@ -33,13 +33,13 @@ export default class DirectedGraph {
 
   addVertexByVertexName(vertexName) { this.directedAcyclicGraph.addVertexByVertexName(vertexName); }
 
-  isEdgePresentByVertexNames(sourceVertexName, targetVertexName) { return this.directedAcyclicGraph.isEdgePresentByVertexNames(sourceVertexName, targetVertexName); }
-
   isVertexPresentByVertexName(vertexName) { return this.directedAcyclicGraph.isVertexPresentByVertexName(vertexName); }
 
   getSuccessorVertexNamesByVertexName(vertexName) { return this.directedAcyclicGraph.getSuccessorVertexNamesByVertexName(vertexName); }
 
   getPredecessorVertexNamesByVertexName(vertexName) { return this.directedAcyclicGraph.getPredecessorVertexNamesByVertexName(vertexName); }
+
+  isEdgePresentBySourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName) { return this.directedAcyclicGraph.isEdgePresentBySourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName); }
 
   getImmediatePredecessorVertexNamesByVertexName(vertexName, includeCyclicEdges = false) {
     const immediatePredecessorVertexNames = this.directedAcyclicGraph.getImmediatePredecessorVertexNamesByVertexName(vertexName);
@@ -182,10 +182,6 @@ export default class DirectedGraph {
     this.filterCyclicEdges();
   }
 
-  removeVerticesByVertexNames(vertexNames) {
-    vertexNames.forEach((vertexName) => this.removeVertexByVertexName(vertexName));
-  }
-
   addEdge(edge) {
     const success = this.directedAcyclicGraph.addEdge(edge);
     
@@ -243,16 +239,10 @@ export default class DirectedGraph {
     edges.forEach((edge) => this.removeEdge(edge, removeStrandedVertices));
   }
 
-  addEdgeByVertexNames(sourceVertexName, targetVertexName) {
+  addEdgeBySourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName) {
     const edge = Edge.fromSourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
 
     this.addEdge(edge);
-  }
-
-  removeEdgeByVertexNames(sourceVertexName, targetVertexName, removeStrandedVertices = false) {
-    const edge = Edge.fromSourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
-
-    this.removeEdge(edge, removeStrandedVertices);
   }
 
   removeEdgesByTargetVertexName(targetVertexName, removeStrandedVertices = false) {
@@ -271,6 +261,12 @@ export default class DirectedGraph {
     this.removeEdges(cyclicEdges, removeStrandedVertices);
 
     this.removeEdges(edges, removeStrandedVertices);
+  }
+
+  removeEdgeBySourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName, removeStrandedVertices = false) {
+    const edge = Edge.fromSourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
+
+    this.removeEdge(edge, removeStrandedVertices);
   }
 
   removeAllEdgesAndVertices() {
