@@ -5,9 +5,7 @@ import { arrayUtilities } from "necessary";
 import Edge from "./edge";
 import Cycle from "./cycle";
 import Vertex from "./vertex";
-import PartialCycle from "./partialCycle";
 
-import { forwardsDepthFirstSearch } from "./utilities/search";
 import { orderVertexes, vertexNamesFromVertexes } from "./utilities/vertex";
 import { removeEdgeFromEdges, checkEdgesIncludesEdge, edgesBySourceVertexName, edgesByTargetVertexName } from "./utilities/edge";
 
@@ -61,66 +59,6 @@ export default class DirectedGraph {
     return vertex;
   }
 
-  getFirstCycleByVertexName(vertexName) {
-    let firstCycle = null;
-
-    const vertex = this.getVertexByVertexName(vertexName),
-          cyclicEdges = this.cyclicEdges.slice(), ///
-          partialCycles = [],
-          cycles = [];
-
-    forwardsDepthFirstSearch(vertex, (visitedVertex, predecessorVertexes) => {
-      const visitedVertexName = visitedVertex.getName(),
-            sourceVertexName = visitedVertexName; ///
-
-      filter(cyclicEdges, (cyclicEdge) => {
-        const matches = cyclicEdge.matchSourceVertexName(sourceVertexName);
-
-        if (matches) {
-          const partialCycle =  PartialCycle.fromCyclicEdgeAndPredecessorVertexes(cyclicEdge, predecessorVertexes);
-
-          partialCycles.push(partialCycle);
-        } else {
-          return true;
-        }
-      });
-
-      const cyclicEdgesLength = cyclicEdges.length,
-            terminate = (cyclicEdgesLength === 0);
-
-      return terminate;
-    });
-
-    partialCycles.some((partialCycle) => {
-      const targetVertexName = partialCycle.getTargetVertexName(),
-            targetVertex = this.getVertexByVertexName(targetVertexName);
-
-      forwardsDepthFirstSearch(targetVertex, (visitedVertex, predecessorVertexes) => {
-        const visitedVertexName = visitedVertex.getName();
-
-        if (visitedVertexName === vertexName) {
-          const successorVertexes = predecessorVertexes,  ///
-                cycle = Cycle.fromVertexNamePartialCycleAndSuccessorVertexes(vertexName, partialCycle, successorVertexes);
-
-          cycles.push(cycle);
-        }
-
-        const cyclesLength = cycles.length,
-              terminate = (cyclesLength > 0);
-
-        return terminate;
-      });
-    });
-
-    const cyclesLength = cycles.length;
-
-    if (cyclesLength > 0) {
-      firstCycle = first(cycles);
-    }
-
-    return firstCycle;
-  }
-
   getEdgesBySourceVertexName(sourceVertexName) {
     const edges = [],
           sourceVertex = this.getVertexByVertexName(sourceVertexName);
@@ -158,11 +96,27 @@ export default class DirectedGraph {
   }
 
   getFirstCycle() {
+    let firstCycle;
+
     const firstCyclicEdge = first(this.cyclicEdges),
-          cyclicEdge = firstCyclicEdge, ///
-          sourceVertexName = cyclicEdge.getSourceVertexName(),
-          vertexName = sourceVertexName,  ///
-          firstCycle = this.getFirstCycleByVertexName(vertexName);
+          sourceVertexName = firstCyclicEdge.getSourceVertexName(), ///
+          targetVertexName = firstCyclicEdge.getTargetVertexName(), ///
+          sourceVertex = this.getVertexByVertexName(sourceVertexName),
+          targetVertex = this.getVertexByVertexName(targetVertexName);
+
+    targetVertex.forwardsDepthFirstSearch((visitedVertex, predecessorVertexes) => {
+      let terminate = false;
+
+      if (visitedVertex === sourceVertex) {
+        terminate = true;
+
+        const cycle = Cycle.fromSourceVertexAndPredecessorVertexes(sourceVertex, predecessorVertexes);  ///
+
+        firstCycle = cycle; ///
+      }
+
+      return terminate;
+    });
 
     return firstCycle;
   }
@@ -188,48 +142,6 @@ export default class DirectedGraph {
           vertexPresent = vertexNamesIncludesVertexName;  ///
 
     return vertexPresent;
-  }
-
-  areCyclesPresentByVertexName(vertexName) {
-    let cyclesPresent = false;
-
-    const vertexPresent = this.isVertexPresentByVertexName(vertexName);
-
-    if (vertexPresent) {
-      const firstCycle = this.getFirstCycleByVertexName(vertexName);
-
-      cyclesPresent = (firstCycle !== null);
-    }
-
-    return cyclesPresent;
-  }
-
-  getSuccessorVertexNamesByVertexName(vertexName) {
-    const vertex = this.getVertexByVertexName(vertexName),
-          successorVertexNames = vertex.getSuccessorVertexNames();
-
-    return successorVertexNames;
-  }
-
-  getPredecessorVertexNamesByVertexName(vertexName) {
-    const vertex = this.getVertexByVertexName(vertexName),
-          predecessorVertexNames = vertex.getPredecessorVertexNames();
-
-    return predecessorVertexNames;
-  }
-
-  getImmediateSuccessorVertexNamesByVertexName(vertexName) {
-    const vertex = this.getVertexByVertexName(vertexName),
-          immediateSuccessorVertexNames = vertex.getImmediateSuccessorVertexNames();
-
-    return immediateSuccessorVertexNames;
-  }
-
-  getImmediatePredecessorVertexNamesByVertexName(vertexName) {
-    const vertex = this.getVertexByVertexName(vertexName),
-          immediatePredecessorVertexNames = vertex.getImmediatePredecessorVertexNames();
-
-    return immediatePredecessorVertexNames;
   }
 
   addEdge(edge) {

@@ -18,7 +18,8 @@ describe("DirectedGraph", () => {
             targetVertexName;
 
         const vertexNameA = "a",
-              vertexNameB = "b";
+              vertexNameB = "b",
+              vertexNameC = "c";
 
         sourceVertexName = vertexNameA; ///
         targetVertexName = vertexNameB; ///
@@ -28,6 +29,13 @@ describe("DirectedGraph", () => {
         directedGraph.addEdge(edge);
 
         sourceVertexName = vertexNameB; ///
+        targetVertexName = vertexNameC; ///
+
+        edge = Edge.fromSourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
+
+        directedGraph.addEdge(edge);
+
+        sourceVertexName = vertexNameC; ///
         targetVertexName = vertexNameA; ///
 
         edge = Edge.fromSourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
