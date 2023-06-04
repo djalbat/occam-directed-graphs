@@ -14,7 +14,7 @@ Occam's directed graphs.
 
 ## Introduction
 
-This implementation extends an incremental algorithm for directed graphs, one that returns a topological ordering for the graph. If a cyclic edge is encountered, the extended algorithm handles it gracefully rather than throwing an error. In these cases a cycle can be requested rather than a topological ordering. If all cyclic edges are removed thereafter then the algorithm recovers and a topological ordering can be returned again. 
+This implementation extends an incremental algorithm for directed graphs, one that returns a topological ordering for the graph. If one or more cyclic edges are added then the extended algorithm handles it gracefully rather than throwing an error. In these cases a cycle can be returned rather than a topological ordering. If all cyclic edges are removed thereafter then the algorithm recovers and a topological ordering can be returned again. 
 
 ## Installation
 
