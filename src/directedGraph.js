@@ -7,7 +7,8 @@ import Cycle from "./cycle";
 import Vertex from "./vertex";
 import PartialCycle from "./partialCycle";
 
-import { forwardsDepthFirstSearch, orderVertices, vertexNamesFromVertices } from "./utilities/vertex";
+import { forwardsDepthFirstSearch } from "./utilities/search";
+import { orderVertexes, vertexNamesFromVertexes } from "./utilities/vertex";
 import { removeEdgeFromEdges, checkEdgesIncludesEdge, edgesBySourceVertexName, edgesByTargetVertexName } from "./utilities/edge";
 
 const { last, first, filter } = arrayUtilities;
@@ -26,11 +27,11 @@ export default class DirectedGraph {
     return this.cyclicEdges;
   }
 
-  getVertices() {
+  getVertexes() {
     const vertexMapValues = Object.values(this.vertexMap),
-          vertices = vertexMapValues; ///
+          vertexes = vertexMapValues; ///
 
-    return vertices;
+    return vertexes;
   }
 
   getVertexNames() {
@@ -41,12 +42,12 @@ export default class DirectedGraph {
   }
 
   getOrderedVertexNames() {
-    const vertices = this.getVertices();
+    const vertexes = this.getVertexes();
 
-    orderVertices(vertices);
+    orderVertexes(vertexes);
 
-    const orderedVertices = vertices, ///
-          orderedVertexNames = vertexNamesFromVertices(orderedVertices);
+    const orderedVertexes = vertexes, ///
+          orderedVertexNames = vertexNamesFromVertexes(orderedVertexes);
 
     return orderedVertexNames;
   }
@@ -68,7 +69,7 @@ export default class DirectedGraph {
           partialCycles = [],
           cycles = [];
 
-    forwardsDepthFirstSearch(vertex, (visitedVertex, getPredecessorVertices) => {
+    forwardsDepthFirstSearch(vertex, (visitedVertex, predecessorVertexes) => {
       const visitedVertexName = visitedVertex.getName(),
             sourceVertexName = visitedVertexName; ///
 
@@ -76,8 +77,7 @@ export default class DirectedGraph {
         const matches = cyclicEdge.matchSourceVertexName(sourceVertexName);
 
         if (matches) {
-          const predecessorVertices = getPredecessorVertices(),
-                partialCycle =  PartialCycle.fromCyclicEdgeAndPredecessorVertices(cyclicEdge, predecessorVertices);
+          const partialCycle =  PartialCycle.fromCyclicEdgeAndPredecessorVertexes(cyclicEdge, predecessorVertexes);
 
           partialCycles.push(partialCycle);
         } else {
@@ -95,13 +95,12 @@ export default class DirectedGraph {
       const targetVertexName = partialCycle.getTargetVertexName(),
             targetVertex = this.getVertexByVertexName(targetVertexName);
 
-      forwardsDepthFirstSearch(targetVertex, (visitedVertex, getPredecessorVertices) => {
+      forwardsDepthFirstSearch(targetVertex, (visitedVertex, predecessorVertexes) => {
         const visitedVertexName = visitedVertex.getName();
 
         if (visitedVertexName === vertexName) {
-          const predecessorVertices = getPredecessorVertices(),
-                successorVertices = predecessorVertices,  ///
-                cycle = Cycle.fromVertexNamePartialCycleAndSuccessorVertices(vertexName, partialCycle, successorVertices);
+          const successorVertexes = predecessorVertexes,  ///
+                cycle = Cycle.fromVertexNamePartialCycleAndSuccessorVertexes(vertexName, partialCycle, successorVertexes);
 
           cycles.push(cycle);
         }
@@ -315,21 +314,21 @@ export default class DirectedGraph {
 
       const deletedVertex = vertex, ///
             deletedVertexIndex = deletedVertex.getIndex(),
-            vertices = this.getVertices(),
-            affectedVertices = vertices.reduce((affectedVertices, vertex) => {
+            vertexes = this.getVertexes(),
+            affectedVertexes = vertexes.reduce((affectedVertexes, vertex) => {
               const vertexIndex = vertex.getIndex(),
                     vertexAffected = (vertexIndex > deletedVertexIndex);
 
               if (vertexAffected) {
                 const affectedVertex = vertex;  ///
 
-                affectedVertices.push(affectedVertex);
+                affectedVertexes.push(affectedVertex);
               }
 
-              return affectedVertices;
+              return affectedVertexes;
             }, []);
 
-      affectedVertices.forEach((affectedVertex) => {
+      affectedVertexes.forEach((affectedVertex) => {
         affectedVertex.decrementIndex();
       });
     }
@@ -339,7 +338,7 @@ export default class DirectedGraph {
     return removedEdges;
   }
 
-  removeEdge(edge, removeStrandedVertices = false) {
+  removeEdge(edge, removeStrandedVertexes = false) {
     const cyclicEdgesIncludesEdge = checkEdgesIncludesEdge(edge, this.cyclicEdges);
 
     if (cyclicEdgesIncludesEdge) {
@@ -358,7 +357,7 @@ export default class DirectedGraph {
 
       this.removeEdgeBySourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
 
-      if (removeStrandedVertices) {
+      if (removeStrandedVertexes) {
         const sourceVertex = this.getVertexByVertexName(sourceVertexName),
               targetVertex = this.getVertexByVertexName(targetVertexName),
               sourceVertexStranded = sourceVertex.isStranded(),
@@ -377,33 +376,33 @@ export default class DirectedGraph {
     }
   }
 
-  removeEdges(edges, removeStrandedVertices = false) {
+  removeEdges(edges, removeStrandedVertexes = false) {
     edges.forEach((edge) => {
-      this.removeEdge(edge, removeStrandedVertices);
+      this.removeEdge(edge, removeStrandedVertexes);
     });
   }
 
-  removeAllEdgesAndVertices() {
+  removeAllEdgesAndVertexes() {
     this.vertexMap = {};
     this.cyclicEdges = [];
   }
 
-  removeEdgesBySourceVertexName(sourceVertexName, removeStrandedVertices = false) {
+  removeEdgesBySourceVertexName(sourceVertexName, removeStrandedVertexes = false) {
     const cyclicEdges = edgesBySourceVertexName(sourceVertexName, this.cyclicEdges),
           edges = this.getEdgesBySourceVertexName(sourceVertexName);
 
-    this.removeEdges(cyclicEdges, removeStrandedVertices);
+    this.removeEdges(cyclicEdges, removeStrandedVertexes);
 
-    this.removeEdges(edges, removeStrandedVertices);
+    this.removeEdges(edges, removeStrandedVertexes);
   }
 
-  removeEdgesByTargetVertexName(targetVertexName, removeStrandedVertices = false) {
+  removeEdgesByTargetVertexName(targetVertexName, removeStrandedVertexes = false) {
     const cyclicEdges = edgesByTargetVertexName(targetVertexName, this.cyclicEdges),
           edges = this.getEdgesByTargetVertexName(targetVertexName);
 
-    this.removeEdges(cyclicEdges, removeStrandedVertices);
+    this.removeEdges(cyclicEdges, removeStrandedVertexes);
 
-    this.removeEdges(edges, removeStrandedVertices);
+    this.removeEdges(edges, removeStrandedVertexes);
   }
 
   addEdgeBySourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName) {
@@ -422,7 +421,7 @@ export default class DirectedGraph {
               invalidatingEdge = (sourceVertexIndex > targetVertexIndex);
 
         success = invalidatingEdge ?
-                    addInvalidatingEdgeByVertices(sourceVertex, targetVertex) :
+                    addInvalidatingEdgeByVertexes(sourceVertex, targetVertex) :
                       true;
 
         if (success) {
@@ -501,22 +500,22 @@ export default class DirectedGraph {
   }
 }
 
-function addInvalidatingEdgeByVertices(sourceVertex, targetVertex) {
+function addInvalidatingEdgeByVertexes(sourceVertex, targetVertex) {
   let success = false;
 
-  const forwardsAffectedVertices = targetVertex.retrieveForwardsAffectedVertices(sourceVertex),
-        lastForwardsAffectedVertex = last(forwardsAffectedVertices),
+  const forwardsAffectedVertexes = targetVertex.retrieveForwardsAffectedVertexes(sourceVertex),
+        lastForwardsAffectedVertex = last(forwardsAffectedVertexes),
         resultsInCycle = (lastForwardsAffectedVertex === sourceVertex);
 
   if (!resultsInCycle) {
-    const backwardsAffectedVertices = sourceVertex.retrieveBackwardsAffectedVertices();
+    const backwardsAffectedVertexes = sourceVertex.retrieveBackwardsAffectedVertexes();
 
-    orderVertices(backwardsAffectedVertices);
+    orderVertexes(backwardsAffectedVertexes);
 
-    orderVertices(forwardsAffectedVertices);
+    orderVertexes(forwardsAffectedVertexes);
 
-    const affectedVertices = [].concat(backwardsAffectedVertices).concat(forwardsAffectedVertices),
-          affectedVertexIndices = affectedVertices.map((affectedVertex) => {
+    const affectedVertexes = [].concat(backwardsAffectedVertexes).concat(forwardsAffectedVertexes),
+          affectedVertexIndices = affectedVertexes.map((affectedVertex) => {
             const affectedVertexIndex = affectedVertex.getIndex();
 
             return affectedVertexIndex;
@@ -534,7 +533,7 @@ function addInvalidatingEdgeByVertices(sourceVertex, targetVertex) {
       }
     });
 
-    affectedVertices.forEach((affectedVertex, index) => {
+    affectedVertexes.forEach((affectedVertex, index) => {
       const affectedVertexIndex = affectedVertexIndices[index];
 
       affectedVertex.setIndex(affectedVertexIndex);

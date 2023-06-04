@@ -1,14 +1,15 @@
 "use strict";
 
-import { vertexNamesFromVertices, orderVertices } from "./utilities/vertex";
+import { orderVertexes, vertexNamesFromVertexes } from "./utilities/vertex";
+import { forwardsDepthFirstSearch, backwardsDepthFirstSearch } from "./utilities/search";
 
 export default class Vertex {
-  constructor(name, index, visited, immediatePredecessorVertices, immediateSuccessorVertices) {
+  constructor(name, index, visited, immediateSuccessorVertexes, immediatePredecessorVertexes) {
     this.name = name;
     this.index = index;
     this.visited = visited;
-    this.immediatePredecessorVertices = immediatePredecessorVertices;
-    this.immediateSuccessorVertices = immediateSuccessorVertices;
+    this.immediateSuccessorVertexes = immediateSuccessorVertexes;
+    this.immediatePredecessorVertexes = immediatePredecessorVertexes;
   }
 
   getName() {
@@ -23,53 +24,20 @@ export default class Vertex {
     return this.visited;
   }
 
+  getImmediateSuccessorVertexes() {
+    return this.immediateSuccessorVertexes;
+  }
+
+  getImmediatePredecessorVertexes() {
+    return this.immediatePredecessorVertexes;
+  }
+
   isStranded() {
-    const immediatePredecessorVerticesLength = this.immediatePredecessorVertices.length,
-          immediateSuccessorVerticesLength = this.immediateSuccessorVertices.length,
-          stranded = ((immediatePredecessorVerticesLength === 0) && (immediateSuccessorVerticesLength === 0));
+    const immediateSuccessorVertexesLength = this.immediateSuccessorVertexes.length,
+          immediatePredecessorVertexesLength = this.immediatePredecessorVertexes.length,
+          stranded = ((immediateSuccessorVertexesLength === 0) && (immediatePredecessorVertexesLength === 0));
 
     return stranded;
-  }
-
-  getImmediatePredecessorVertexNames() {
-    const immediatePredecessorVertexNames = this.immediatePredecessorVertices.map((immediatePredecessorVertex) => {
-      const immediatePredecessorVertexName = immediatePredecessorVertex.getName();
-
-      return immediatePredecessorVertexName;
-    });
-
-    return immediatePredecessorVertexNames;
-  }
-
-  getImmediateSuccessorVertexNames() {
-    const immediateSuccessorVertexNames = this.immediateSuccessorVertices.map((immediateSuccessorVertex) => {
-      const immediateSuccessorVertexName = immediateSuccessorVertex.getName();
-
-      return immediateSuccessorVertexName;
-    });
-
-    return immediateSuccessorVertexNames;
-  }
-
-  getImmediatePredecessorVertices() {
-    return this.immediatePredecessorVertices;
-  }
-
-  getImmediateSuccessorVertices() {
-    return this.immediateSuccessorVertices;
-  }
-
-  getPredecessorVertexMap(predecessorVertexMap = {}) {
-    this.forEachImmediatePredecessorVertex((immediatePredecessorVertex) => {
-      const predecessorVertex = immediatePredecessorVertex, ///
-            predecessorVertexName = predecessorVertex.getName();
-
-      predecessorVertexMap[predecessorVertexName] = predecessorVertex;
-
-      predecessorVertex.getPredecessorVertexMap(predecessorVertexMap);
-    });
-
-    return predecessorVertexMap;
   }
 
   getSuccessorVertexMap(successorVertexMap = {}) {
@@ -85,9 +53,57 @@ export default class Vertex {
     return successorVertexMap;
   }
 
+  getPredecessorVertexMap(predecessorVertexMap = {}) {
+    this.forEachImmediatePredecessorVertex((immediatePredecessorVertex) => {
+      const predecessorVertex = immediatePredecessorVertex, ///
+            predecessorVertexName = predecessorVertex.getName();
+
+      predecessorVertexMap[predecessorVertexName] = predecessorVertex;
+
+      predecessorVertex.getPredecessorVertexMap(predecessorVertexMap);
+    });
+
+    return predecessorVertexMap;
+  }
+
+  getSuccessorVertexes() {
+    const successorVertexMap = this.getSuccessorVertexMap(),
+          successorVertexNames = Object.keys(successorVertexMap),
+          successorVertexes = successorVertexNames.map((successorVertexName) => {
+            const successorVertex = successorVertexMap[successorVertexName];
+
+            return successorVertex;
+          });
+
+    return successorVertexes;
+  }
+
+  getPredecessorVertexes() {
+    const predecessorVertexMap = this.getPredecessorVertexMap(),
+          predecessorVertexNames = Object.keys(predecessorVertexMap),
+          predecessorVertexes = predecessorVertexNames.map((predecessorVertexName) => {
+            const predecessorVertex = predecessorVertexMap[predecessorVertexName];
+
+            return predecessorVertex;
+          });
+
+    return predecessorVertexes;
+  }
+
+  getSuccessorVertexNames() {
+    const successorVertexes = this.getSuccessorVertexes(),
+          successorVertexNames = successorVertexes.map((successorVertex) => {
+        const successorVertexName = successorVertex.getName();
+
+        return successorVertexName;
+      });
+
+    return successorVertexNames;
+  }
+
   getPredecessorVertexNames() {
-    const predecessorVertices = this.getPredecessorVertices(),
-          predecessorVertexNames = predecessorVertices.map((predecessorVertex) => {
+    const predecessorVertexes = this.getPredecessorVertexes(),
+          predecessorVertexNames = predecessorVertexes.map((predecessorVertex) => {
             const predecessorVertexName = predecessorVertex.getName();
 
             return predecessorVertexName;
@@ -96,86 +112,35 @@ export default class Vertex {
     return predecessorVertexNames;
   }
 
-  getSuccessorVertexNames() {
-    const successorVertices = this.getSuccessorVertices(),
-          successorVertexNames = successorVertices.map((successorVertex) => {
-            const successorVertexName = successorVertex.getName();
-
-            return successorVertexName;
-          });
-
-    return successorVertexNames;
-  }
-
-  getPredecessorVertices() {
-    const predecessorVertexMap = this.getPredecessorVertexMap(),
-          predecessorVertexNames = Object.keys(predecessorVertexMap),
-          predecessorVertices = predecessorVertexNames.map((predecessorVertexName) => {
-            const predecessorVertex = predecessorVertexMap[predecessorVertexName];
-
-            return predecessorVertex;
-          });
-
-    return predecessorVertices;
-  }
-
-  getSuccessorVertices() {
-    const successorVertexMap = this.getSuccessorVertexMap(),
-          successorVertexNames = Object.keys(successorVertexMap),
-          successorVertices = successorVertexNames.map((successorVertexName) => {
-            const successorVertex = successorVertexMap[successorVertexName];
-  
-            return successorVertex;
-          });
-
-    return successorVertices;
-  }
-
   getOrderedPredecessorVertexNames() {
-    const predecessorVertices = this.getPredecessorVertices();
+    const predecessorVertexes = this.getPredecessorVertexes();
 
-    orderVertices(predecessorVertices);
+    orderVertexes(predecessorVertexes);
 
-    const orderedPredecessorVertices = predecessorVertices,  ///
-          orderedPredecessorVertexNames = vertexNamesFromVertices(orderedPredecessorVertices);
+    const orderedPredecessorVertexes = predecessorVertexes,  ///
+          orderedPredecessorVertexNames = vertexNamesFromVertexes(orderedPredecessorVertexes);
 
     return orderedPredecessorVertexNames;
   }
-  
-  retrieveForwardsAffectedVertices(sourceVertex) {
-    const forwardsAffectedVertices = this.forwardsDepthFirstSearch((visitedVertex) => {
-      const terminate = (visitedVertex === sourceVertex);
-      
-      if (terminate) {
-        return true;
-      }
+
+  getImmediateSuccessorVertexNames() {
+    const immediateSuccessorVertexNames = this.immediateSuccessorVertexes.map((immediateSuccessorVertex) => {
+      const immediateSuccessorVertexName = immediateSuccessorVertex.getName();
+
+      return immediateSuccessorVertexName;
     });
-    
-    return forwardsAffectedVertices;
+
+    return immediateSuccessorVertexNames;
   }
 
-  retrieveBackwardsAffectedVertices() {
-    const backwardsAffectedVertices = this.backwardsDepthFirstSearch((visitedVertex) => {
-      const terminate = false;
+  getImmediatePredecessorVertexNames() {
+    const immediatePredecessorVertexNames = this.immediatePredecessorVertexes.map((immediatePredecessorVertex) => {
+      const immediatePredecessorVertexName = immediatePredecessorVertex.getName();
 
-      if (terminate) {
-        return true;
-      }
+      return immediatePredecessorVertexName;
     });
-    
-    return backwardsAffectedVertices;
-  }
-  
-  isVertexImmediatePredecessorVertex(vertex) {
-    const vertexImmediatePredecessorVertex = this.immediatePredecessorVertices.includes(vertex);
 
-    return vertexImmediatePredecessorVertex;
-  }
-
-  isVertexImmediateSuccessorVertex(vertex) {
-    const vertexImmediateSuccessorVertex = this.immediateSuccessorVertices.includes(vertex);
-
-    return vertexImmediateSuccessorVertex;
+    return immediatePredecessorVertexNames;
   }
 
   isEdgePresentBySourceVertex(sourceVertex) {
@@ -192,6 +157,44 @@ export default class Vertex {
     return edgePresent;
   }
 
+  isVertexImmediateSuccessorVertex(vertex) {
+    const vertexImmediateSuccessorVertex = this.immediateSuccessorVertexes.includes(vertex);
+
+    return vertexImmediateSuccessorVertex;
+  }
+
+  isVertexImmediatePredecessorVertex(vertex) {
+    const vertexImmediatePredecessorVertex = this.immediatePredecessorVertexes.includes(vertex);
+
+    return vertexImmediatePredecessorVertex;
+  }
+
+  retrieveForwardsAffectedVertexes(sourceVertex) {
+    const visitedVertexes = this.forwardsDepthFirstSearch((visitedVertex) => {
+            const terminate = (visitedVertex === sourceVertex);
+
+            if (terminate) {
+              return true;
+            }
+          }),
+          forwardsAffectedVertexes = visitedVertexes; ///
+
+    return forwardsAffectedVertexes;
+  }
+
+  retrieveBackwardsAffectedVertexes() {
+    const visitedVertexes = this.backwardsDepthFirstSearch((visitedVertex) => {
+            const terminate = false;
+
+            if (terminate) {
+              return true;
+            }
+          }),
+          backwardsAffectedVertexes = visitedVertexes;  ///
+
+    return backwardsAffectedVertexes;
+  }
+
   setName(name) {
     this.name = name;
   }
@@ -204,152 +207,90 @@ export default class Vertex {
     this.visited = visited;
   }
 
+  setImmediateSuccessorVertexes(immediateSuccessorVertexes) {
+    this.immediateSuccessorVertexes = immediateSuccessorVertexes;
+  }
+
+  setImmediatePredecessorVertexes(immediatePredecessorVertexes) {
+    this.immediatePredecessorVertexes = immediatePredecessorVertexes;
+  }
+
   decrementIndex() {
     this.index--;
   }
 
-  removeImmediatePredecessorVertex(immediatePredecessorVertex) {
-    const index = this.immediatePredecessorVertices.indexOf(immediatePredecessorVertex),
-          start = index,  ///
-          deleteCount = 1;
-
-    this.immediatePredecessorVertices.splice(start, deleteCount);
-  }
-
-  removeImmediateSuccessorVertex(immediateSuccessorVertex) {
-    const index = this.immediateSuccessorVertices.indexOf(immediateSuccessorVertex),
-          start = index,  ///
-          deleteCount = 1;
-
-    this.immediateSuccessorVertices.splice(start, deleteCount);
-  }
-  
   removeIncomingEdges() {
     const immediateSuccessorVertex = this; ///
-    
-    this.immediatePredecessorVertices.forEach((immediatePredecessorVertex) => {
+
+    this.immediatePredecessorVertexes.forEach((immediatePredecessorVertex) => {
       immediatePredecessorVertex.removeImmediateSuccessorVertex(immediateSuccessorVertex);
     });
 
-    this.immediatePredecessorVertices = [];
+    this.immediatePredecessorVertexes = [];
   }
 
   removeOutgoingEdges() {
     const immediatePredecessorVertex = this; ///
 
-    this.immediateSuccessorVertices.forEach((immediateSuccessorVertex) => {
+    this.immediateSuccessorVertexes.forEach((immediateSuccessorVertex) => {
       immediateSuccessorVertex.removeImmediateSuccessorVertex(immediatePredecessorVertex);
     });
 
-    this.immediateSuccessorVertices = [];
-  }
-
-  addImmediatePredecessorVertex(immediatePredecessorVertex) {
-    this.immediatePredecessorVertices.push(immediatePredecessorVertex);
+    this.immediateSuccessorVertexes = [];
   }
 
   addImmediateSuccessorVertex(immediateSuccessorVertex) {
-    this.immediateSuccessorVertices.push(immediateSuccessorVertex);
+    this.immediateSuccessorVertexes.push(immediateSuccessorVertex);
+  }
+
+  addImmediatePredecessorVertex(immediatePredecessorVertex) {
+    this.immediatePredecessorVertexes.push(immediatePredecessorVertex);
+  }
+
+  removeImmediateSuccessorVertex(immediateSuccessorVertex) {
+    const index = this.immediateSuccessorVertexes.indexOf(immediateSuccessorVertex),
+          start = index,  ///
+          deleteCount = 1;
+
+    this.immediateSuccessorVertexes.splice(start, deleteCount);
+  }
+
+  removeImmediatePredecessorVertex(immediatePredecessorVertex) {
+    const index = this.immediatePredecessorVertexes.indexOf(immediatePredecessorVertex),
+          start = index,  ///
+          deleteCount = 1;
+
+    this.immediatePredecessorVertexes.splice(start, deleteCount);
   }
 
   forwardsDepthFirstSearch(callback) {
-    const visitedVertices = [];
+    const vertex = this,  ///
+          visitedVertexes = forwardsDepthFirstSearch(vertex, callback);
 
-    this.retrieveForwardsVisitedVertices((visitedVertex) => {
-      const terminate = callback(visitedVertex);  ///
-
-      visitedVertices.push(visitedVertex);
-
-      return terminate;
-    });
-
-    visitedVertices.forEach((visitedVertex) => {
-      visitedVertex.resetVisited();
-    });
-
-    return visitedVertices;
+    return visitedVertexes;
   }
 
   backwardsDepthFirstSearch(callback) {
-    const visitedVertices = [];
+    const vertex = this,  ///
+          visitedVertexes = backwardsDepthFirstSearch(vertex, callback);
 
-    this.retrieveBackwardsVisitedVertices((visitedVertex) => {
-      const terminate = callback(visitedVertex);  ///
-
-      visitedVertices.push(visitedVertex);
-
-      return terminate;
-    });
-
-    visitedVertices.forEach((visitedVertex) => {
-      visitedVertex.resetVisited();
-    });
-
-    return visitedVertices;
-  }
-
-  retrieveForwardsVisitedVertices(callback) {
-    let terminate = false;
-
-    if (this.visited === false) {
-      this.visited = true;
-
-      const visitedVertex = this;  ///
-
-      terminate = callback(visitedVertex);
-
-      if (terminate !== true) {
-        visitedVertex.someImmediateSuccessorVertex((immediateSuccessorVertex) => {
-          terminate = immediateSuccessorVertex.retrieveForwardsVisitedVertices(callback);
-
-          if (terminate) {
-            return true;
-          }
-        });
-      }
-    }
-
-    return terminate;
-  }
-
-  retrieveBackwardsVisitedVertices(callback) {
-    let terminate = false;
-
-    if (this.visited === false) {
-      this.visited = true;
-
-      const visitedVertex = this;  ///
-
-      terminate = callback(visitedVertex);
-
-      if (terminate !== true) {
-        visitedVertex.someImmediatePredecessorVertex((immediatePredecessorVertex) => {
-          terminate = immediatePredecessorVertex.retrieveBackwardsVisitedVertices(callback);
-
-          if (terminate) {
-            return true;
-          }
-        });
-      }
-    }
-
-    return terminate;
-  }
-
-  forEachImmediatePredecessorVertex(callback) {
-    this.immediatePredecessorVertices.forEach(callback);
-  }
-
-  forEachImmediateSuccessorVertex(callback) {
-    this.immediateSuccessorVertices.forEach(callback);
-  }
-
-  someImmediatePredecessorVertex(callback) {
-    this.immediatePredecessorVertices.some(callback);
+    return visitedVertexes;
   }
 
   someImmediateSuccessorVertex(callback) {
-    this.immediateSuccessorVertices.some(callback);
+    this.immediateSuccessorVertexes.some(callback);
+  }
+
+  someImmediatePredecessorVertex(callback) {
+    this.immediatePredecessorVertexes.some(callback);
+  }
+
+  forEachImmediateSuccessorVertex(callback) {
+    this.immediateSuccessorVertexes.forEach(callback);
+  }
+
+  forEachImmediatePredecessorVertex(callback) {
+    this.immediatePredecessorVertexes.forEach(callback);
   }
 
   resetVisited() {
@@ -358,9 +299,9 @@ export default class Vertex {
 
   static fromNameAndIndex(name, index) {
     const visited = false,  ///
-          immediatePredecessorVertices = [],
-          immediateSuccessorVertices = [],
-          dependencyVertex = new Vertex(name, index, visited, immediatePredecessorVertices, immediateSuccessorVertices);
+          immediateSuccessorVertexes = [],
+          immediatePredecessorVertexes = [],
+          dependencyVertex = new Vertex(name, index, visited, immediateSuccessorVertexes, immediatePredecessorVertexes);
 
     return dependencyVertex;
   }

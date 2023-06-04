@@ -5,13 +5,13 @@ import { arrayUtilities } from "necessary";
 const { first } = arrayUtilities;
 
 export default class PartialCycle {
-  constructor(predecessorVertices, cyclicEdge) {
-    this.predecessorVertices = predecessorVertices;
+  constructor(predecessorVertexes, cyclicEdge) {
+    this.predecessorVertexes = predecessorVertexes;
     this.cyclicEdge = cyclicEdge;
   }
   
-  getPredecessorVertices() {
-    return this.predecessorVertices;
+  getPredecessorVertexes() {
+    return this.predecessorVertexes;
   }
 
   getCyclicEdge() {
@@ -26,7 +26,7 @@ export default class PartialCycle {
   }
   
   getPredecessorVertexNames() {
-    const predecessorVertexNames = this.predecessorVertices.map((predecessorVertex) => {
+    const predecessorVertexNames = this.predecessorVertexes.map((predecessorVertex) => {
       const predecessorVertexName = predecessorVertex.getName();
 
       return predecessorVertexName;
@@ -47,22 +47,22 @@ export default class PartialCycle {
     return cyclicEdgeTargetVertexName;
   }
   
-  static fromCyclicEdgeAndPredecessorVertices(cyclicEdge, predecessorVertices) {
-    predecessorVertices = predecessorVertices.slice();  ///
+  static fromCyclicEdgeAndPredecessorVertexes(cyclicEdge, predecessorVertexes) {
+    predecessorVertexes = predecessorVertexes.slice();  ///
     
-    const predecessorVerticesLength = predecessorVertices.length;
+    const predecessorVertexesLength = predecessorVertexes.length;
 
-    if (predecessorVerticesLength > 0) {
-      const firstPredecessorVertex = first(predecessorVertices),
+    if (predecessorVertexesLength > 0) {
+      const firstPredecessorVertex = first(predecessorVertexes),
             firstPredecessorVertexName = firstPredecessorVertex.getName(),
             cyclicEdgeTargetVertexName = cyclicEdge.getTargetVertexName();
 
       if (firstPredecessorVertexName === cyclicEdgeTargetVertexName) {
-        predecessorVertices.shift();
+        predecessorVertexes.shift();
       }
     }
 
-    const partialCycle = new PartialCycle(predecessorVertices, cyclicEdge);
+    const partialCycle = new PartialCycle(predecessorVertexes, cyclicEdge);
     
     return partialCycle;
   }

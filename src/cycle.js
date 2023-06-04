@@ -2,7 +2,7 @@
 
 import { arrayUtilities } from "necessary";
 
-import { vertexNamesFromVertices } from "./utilities/vertex";
+import { vertexNamesFromVertexes } from "./utilities/vertex";
 
 const { first } = arrayUtilities;
 
@@ -15,25 +15,25 @@ export default class Cycle {
     return this.vertexNames;
   }
 
-  static fromVertexNamePartialCycleAndSuccessorVertices(vertexName, partialCycle, successorVertices) {
-    successorVertices = successorVertices.slice();  ///
+  static fromVertexNamePartialCycleAndSuccessorVertexes(vertexName, partialCycle, successorVertexes) {
+    successorVertexes = successorVertexes.slice();  ///
     
-    const successorVerticesLength = successorVertices.length;
+    const successorVertexesLength = successorVertexes.length;
     
-    if (successorVerticesLength > 0) {
-      const firstSuccessorVertex = first(successorVertices),
+    if (successorVertexesLength > 0) {
+      const firstSuccessorVertex = first(successorVertexes),
             firstSuccessorVertexName = firstSuccessorVertex.getName(),
             cyclicEdgeTargetVertexName = partialCycle.getTargetVertexName();
       
       if (firstSuccessorVertexName === cyclicEdgeTargetVertexName) {
-        successorVertices.shift();
+        successorVertexes.shift();
       }
     }
 
     const cyclicEdgeSourceVertexName = partialCycle.getCyclicEdgeSourceVertexName(),
           cyclicEdgeTargetVertexName = partialCycle.getCyclicEdgeTargetVertexName(),
           predecessorVertexNames = partialCycle.getPredecessorVertexNames(),
-          successorVertexNames = vertexNamesFromVertices(successorVertices),
+          successorVertexNames = vertexNamesFromVertexes(successorVertexes),
           vertexNames = (vertexName === cyclicEdgeTargetVertexName) ?
                           [].concat(cyclicEdgeTargetVertexName).concat(predecessorVertexNames).concat(cyclicEdgeSourceVertexName) :
                             [].concat(predecessorVertexNames).concat(cyclicEdgeSourceVertexName).concat(cyclicEdgeTargetVertexName).concat(successorVertexNames),
