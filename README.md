@@ -1,6 +1,6 @@
 # Occam Directed Graphs
 
-Occam's directed graphs.
+[Occam](https://github.com/djalbat/occam)'s directed graphs.
 
 ### Contents
 
