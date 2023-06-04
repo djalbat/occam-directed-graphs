@@ -8,6 +8,7 @@ Occam's directed graphs.
 - [Installation](#installation)
 - [Usage](#usage)
 - [Building](#building)
+- [Running the tests](#running-the-tests)
 - [References](#references)
 - [Contact](#contact)
 
@@ -34,7 +35,7 @@ You can also clone the repository with [Git](https://git-scm.com/)...
 An empty directed graph can be created by calling the `fromNothing()` factory method, after which vertices and edges can be added incrementally:
 
 ```
-import { DirectedGraph } from "occam-directed-graphs";
+import { Edge, DirectedGraph } from "occam-directed-graphs";
 
 const directedGraph = DirectedGraph.fromNothing(),
       vertexName = "i",
@@ -43,7 +44,9 @@ const directedGraph = DirectedGraph.fromNothing(),
 
 directedGraph.addVertexByVertexName(vertexName);
 
-directedGraph.addEdgeByVertexNames(sourceVertexName, targetVertexName);
+const edge = Edge.fromSourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
+
+directedGraph.addEdge(edge);
 ```
 
 Note that there is no need to add vertices explicitly, they will be added whenever necessary when edges that reference them are added.
@@ -58,7 +61,9 @@ const vertexName = "i",
 
 directedGraph.removeVertexByName(vertexName);
 
-directedGraph.removeEdgeByVertexNames(sourceVertexName, targetVertexName, removeStrandedVertices);
+const edge = Edge.fromSourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
+
+directedGraph.removeEdge(edge, removeStrandedVertices);
 ```
 
 The default is to leave stranded vertices in place.
@@ -100,6 +105,12 @@ Automation is done with [npm scripts](https://docs.npmjs.com/misc/scripts), have
 
     npm run build-debug
     npm run watch-debug
+
+## Running the tests
+
+Assuming that the packages are installed:
+
+    npm test
 
 ## References
 
