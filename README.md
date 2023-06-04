@@ -14,7 +14,7 @@ Occam's directed graphs.
 
 ## Introduction
 
-The reason for not simply implementing a directed graph trivially is to keep track of cycles and recover them quickly. Given the name of any vertex, the implementation will report whether or not it is part of a cycle. If it is, you can retrieve a cycle of which it is part, but bear in mind that a vertex may be the part of more than one cycle, any one of which can be returned.
+This implementation extends an incremental algorithm for directed graphs, one that returns a topological ordering for the graph. If a cyclic edge is encountered, the extended algorithm handles it gracefully rather than throwing an error. In these cases a cycle can be requested rather than a topological ordering. If all cyclic edges are removed thereafter then the algorithm recovers and a topological ordering can be returned again. 
 
 ## Installation
 
@@ -58,9 +58,11 @@ directedGraph.addEdge(edge);
 
 Note that there is no need to add vertices explicitly, they will be added whenever necessary when edges that reference them are added.
 
-You can also remove vertices and edges from the graph. Removing a vertex may of course result in removing edges. When you remove an edge, you can additionally specify that the any stranded vertices that result are also removed:
+You can also remove vertices and edges. Removing a vertex could result in removing edges. When you remove an edge, you can additionally specify that the any stranded vertices that result are also removed:
 
 ```
+import { Edge } from "occam-directed-graphs";
+
 const vertexName = "i";
 
 directedGraph.removeVertexByName(vertexName);
@@ -83,8 +85,8 @@ const vertexName = "i",
       cyclePresent = directedGraph.isCyclePresentByVertexName(vertexName);
 
 if (cyclePresent) {
-  const cycle = directedGraph.getFirstCycleByVertexName(vertexName),
-        cycleVertexNames = cycle.getVertexNames();
+  const firstCycle= directedGraph.getFirstCycle(vertexName),
+        firstCycleertexNames = firstCyclegetVertexNames();
 
   ...
 }
