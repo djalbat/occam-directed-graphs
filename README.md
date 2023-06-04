@@ -32,19 +32,26 @@ You can also clone the repository with [Git](https://git-scm.com/)...
 
 ## Usage
     
-An empty directed graph can be created by calling the `fromNothing()` factory method, after which vertices and edges can be added incrementally:
+An empty directed graph can be created by calling the `fromNothing()` factory method:
 
 ```
-import { Edge, DirectedGraph } from "occam-directed-graphs";
+import { DirectedGraph } from "occam-directed-graphs";
 
-const directedGraph = DirectedGraph.fromNothing(),
-      vertexName = "i",
-      sourceVertexName = "j",
-      targetVertexName = "k";
+const directedGraph = DirectedGraph.fromNothing();
+```
+
+After instantiation, vertices and edges can be added incrementally:
+
+```
+import { Edge } from "occam-directed-graphs";
+
+const vertexName = "i";
 
 directedGraph.addVertexByVertexName(vertexName);
 
-const edge = Edge.fromSourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
+const sourceVertexName = "j",
+      targetVertexName = "k",
+      edge = Edge.fromSourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
 
 directedGraph.addEdge(edge);
 ```
@@ -54,14 +61,15 @@ Note that there is no need to add vertices explicitly, they will be added whenev
 You can also remove vertices and edges from the graph. Removing a vertex may of course result in removing edges. When you remove an edge, you can additionally specify that the any stranded vertices that result are also removed:
 
 ```
-const vertexName = "i",
-      sourceVertexName = "j",
-      targetVertexName = "k",
-      removeStrandedVertices = true;
+const vertexName = "i";
 
 directedGraph.removeVertexByName(vertexName);
 
-const edge = Edge.fromSourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
+const vertexName = "i",
+      sourceVertexName = "j",
+      targetVertexName = "k",
+      removeStrandedVertices = true,
+      edge = Edge.fromSourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
 
 directedGraph.removeEdge(edge, removeStrandedVertices);
 ```
