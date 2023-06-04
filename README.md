@@ -67,8 +67,7 @@ const vertexName = "i";
 
 directedGraph.removeVertexByName(vertexName);
 
-const vertexName = "i",
-      sourceVertexName = "j",
+const sourceVertexName = "j",
       targetVertexName = "k",
       removeStrandedVertices = true,
       edge = Edge.fromSourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
@@ -81,33 +80,17 @@ The default is to leave stranded vertices in place.
 You can detect and recover cycles thus:
 
 ```
-const vertexName = "i",
-      cyclePresent = directedGraph.isCyclePresentByVertexName(vertexName);
+const cyclePresent = directedGraph.isCyclePresent();
 
 if (cyclePresent) {
-  const firstCycle= directedGraph.getFirstCycle(vertexName),
-        firstCycleertexNames = firstCyclegetVertexNames();
+  const firstCycle = directedGraph.getFirstCycle(),
+        firstCycleVertexNames = firstCycle.getVertexNames();
 
   ...
 }
 ```
-As already pointed out in the introduction, if a vertex is part of more than one cycle, any of of them can be given.
-
 You can get a topologically ordered list of vertices at any time.
-Bear in mind that this will gotten from the underlying directed acyclic graph, however, and therefore may not be useful if there are cycles present.
-A method is also provided to ascertain whether cycles are generally present and it is left up to you to decide whether the topologically ordered list of vertices is useful in the event that they are:
-
-```
-const cyclesPresent = directedGraph.areCyclesPresent();
-
-if (cyclesPresent) {
-  ///
-} else {
-  const orderedVertexNames = directedGraph.getOrderedVertexNames();
-
-  ...
-}
-```
+Bear in mind that this is useless information when cycles are present.
 
 ## Building
 
