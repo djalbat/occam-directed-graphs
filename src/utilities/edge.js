@@ -6,6 +6,19 @@ const { prune } = arrayUtilities;
 
 const remove = prune;  ///
 
+export function removeEdgeFromEdges(edge, edges) {
+  const edgeA = edge; ///
+
+  remove(edges, (edge) => {
+    const edgeB = edge, ///
+          matches = edgeA.match(edgeB);
+
+    if (!matches) { ///
+      return true;
+    }
+  });
+}
+
 export function checkEdgesIncludesEdge(edges, edge) {
   const edgeA = edge, ///
         edgesIncludesEdge = edges.some((edge) => {
@@ -20,20 +33,7 @@ export function checkEdgesIncludesEdge(edges, edge) {
   return edgesIncludesEdge;
 }
 
-export function removeEdgeFromEdges(edge, edges) {
-  const edgeA = edge; ///
-
-  remove(edges, (edge) => {
-    const edgeB = edge, ///
-          matches = edgeA.match(edgeB);
-
-    if (!matches) { ///
-      return true;
-    }
-  });
-}
-
-export function edgesBySourceVertexName(sourceVertexName, edges) {
+export function filterEdgesBySourceVertexName(sourceVertexName, edges) {
   edges = edges.filter((edge) => {  ///
     const matches = edge.matchSourceVertexName(sourceVertexName);
 
@@ -45,7 +45,7 @@ export function edgesBySourceVertexName(sourceVertexName, edges) {
   return edges;
 }
 
-export function edgesByTargetVertexName(targetVertexName, edges) {
+export function filterEdgesByTargetVertexName(targetVertexName, edges) {
   edges = edges.filter((edge) => {  ///
     const matches = edge.matchTargetVertexName(targetVertexName);
 
