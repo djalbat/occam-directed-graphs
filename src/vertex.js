@@ -4,10 +4,9 @@ import { orderVertexes, vertexNamesFromVertexes } from "./utilities/vertex";
 import { forwardsDepthFirstSearch, backwardsDepthFirstSearch } from "./utilities/search";
 
 export default class Vertex {
-  constructor(name, index, visited, immediateSuccessorVertexes, immediatePredecessorVertexes) {
+  constructor(name, index, immediateSuccessorVertexes, immediatePredecessorVertexes) {
     this.name = name;
     this.index = index;
-    this.visited = visited;
     this.immediateSuccessorVertexes = immediateSuccessorVertexes;
     this.immediatePredecessorVertexes = immediatePredecessorVertexes;
   }
@@ -18,10 +17,6 @@ export default class Vertex {
 
   getIndex() {
     return this.index;
-  }
-
-  isVisited() {
-    return this.visited;
   }
 
   getImmediateSuccessorVertexes() {
@@ -170,8 +165,8 @@ export default class Vertex {
   }
 
   retrieveForwardsAffectedVertexes(sourceVertex) {
-    const visitedVertexes = this.forwardsDepthFirstSearch((visitedVertex) => {
-            const terminate = (visitedVertex === sourceVertex);
+    const visitedVertexes = this.forwardsDepthFirstSearch((vertex) => {
+            const terminate = (vertex === sourceVertex);
 
             if (terminate) {
               return true;
@@ -183,7 +178,7 @@ export default class Vertex {
   }
 
   retrieveBackwardsAffectedVertexes() {
-    const visitedVertexes = this.backwardsDepthFirstSearch((visitedVertex) => {
+    const visitedVertexes = this.backwardsDepthFirstSearch((vertex) => {
             const terminate = false;
 
             if (terminate) {
@@ -201,10 +196,6 @@ export default class Vertex {
 
   setIndex(index) {
     this.index = index;
-  }
-
-  setVisited(visited) {
-    this.visited = visited;
   }
 
   setImmediateSuccessorVertexes(immediateSuccessorVertexes) {
@@ -265,24 +256,28 @@ export default class Vertex {
 
   forwardsDepthFirstSearch(callback) {
     const vertex = this,  ///
-          visitedVertexes = forwardsDepthFirstSearch(vertex, callback);
+          visitedVertexes = [];
+
+    forwardsDepthFirstSearch(vertex, callback, visitedVertexes);
 
     return visitedVertexes;
   }
 
   backwardsDepthFirstSearch(callback) {
     const vertex = this,  ///
-          visitedVertexes = backwardsDepthFirstSearch(vertex, callback);
+          visitedVertexes = [];
+
+    backwardsDepthFirstSearch(vertex, callback, visitedVertexes);
 
     return visitedVertexes;
   }
 
   someImmediateSuccessorVertex(callback) {
-    this.immediateSuccessorVertexes.some(callback);
+    return this.immediateSuccessorVertexes.some(callback);
   }
 
   someImmediatePredecessorVertex(callback) {
-    this.immediatePredecessorVertexes.some(callback);
+    return this.immediatePredecessorVertexes.some(callback);
   }
 
   forEachImmediateSuccessorVertex(callback) {
@@ -293,15 +288,10 @@ export default class Vertex {
     this.immediatePredecessorVertexes.forEach(callback);
   }
 
-  resetVisited() {
-    this.visited = false;
-  }
-
   static fromNameAndIndex(name, index) {
-    const visited = false,  ///
-          immediateSuccessorVertexes = [],
+    const immediateSuccessorVertexes = [],
           immediatePredecessorVertexes = [],
-          dependencyVertex = new Vertex(name, index, visited, immediateSuccessorVertexes, immediatePredecessorVertexes);
+          dependencyVertex = new Vertex(name, index, immediateSuccessorVertexes, immediatePredecessorVertexes);
 
     return dependencyVertex;
   }

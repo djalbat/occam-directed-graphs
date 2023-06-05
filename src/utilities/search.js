@@ -1,67 +1,32 @@
 "use strict";
 
-export function forwardsDepthFirstSearch(vertex, callback) {
-  const visitedVertexes = [];
+export function forwardsDepthFirstSearch(vertex, callback, visitedVertexes, predecessorVertexes = []) {
+  let terminate = true;
 
-  retrieveForwardsVisitedVertexes(vertex, (visitedVertex, predecessorVertexes) => {
-    const terminate = callback(visitedVertex, predecessorVertexes);  ///
+  const visitedVertexesIncludesVertex = visitedVertexes.includes(vertex);
 
-    visitedVertexes.push(visitedVertex);
-
-    return terminate;
-  });
-
-  visitedVertexes.forEach((visitedVertex) => {
-    visitedVertex.resetVisited();
-  });
-
-  return visitedVertexes;
-}
-
-export function backwardsDepthFirstSearch(vertex, callback) {
-  const visitedVertexes = [];
-
-  retrieveBackwardsVisitedVertexes(vertex, (visitedVertex, successorVertexes) => {
-    const terminate = callback(visitedVertex, successorVertexes);  ///
+  if (!visitedVertexesIncludesVertex) {
+    const visitedVertex = vertex; ///
 
     visitedVertexes.push(visitedVertex);
 
-    return terminate;
-  });
+    terminate = callback(vertex, predecessorVertexes);
 
-  visitedVertexes.forEach((visitedVertex) => {
-    visitedVertex.resetVisited();
-  });
+    if (!terminate) {
+      const predecessorVertex = vertex;  ///
 
-  return visitedVertexes;
-}
+      predecessorVertexes = [ ///
+        ...predecessorVertexes,
+        predecessorVertex
+      ];
 
-function retrieveForwardsVisitedVertexes(vertex, callback, predecessorVertexes = []) {
-  let terminate = false;
+      terminate = vertex.someImmediateSuccessorVertex((immediateSuccessorVertex) => {
+        const vertex = immediateSuccessorVertex,  ///
+              terminate = forwardsDepthFirstSearch(vertex, callback, visitedVertexes, predecessorVertexes);
 
-  const visited = vertex.isVisited();
-
-  if (visited === false) {
-    const visited = true;
-
-    vertex.setVisited(visited);
-
-    const visitedVertex = vertex;  ///
-
-    terminate = callback(visitedVertex, predecessorVertexes);
-
-    if (terminate !== true) {
-      visitedVertex.someImmediateSuccessorVertex((immediateSuccessorVertex) => {
-        const predecessorVertex = vertex;  ///
-
-        predecessorVertexes = [ ///
-          ...predecessorVertexes,
-          predecessorVertex
-        ];
-
-        terminate = retrieveForwardsVisitedVertexes(immediateSuccessorVertex, callback, predecessorVertexes);
-
-        return terminate;
+        if (terminate) {
+          return true;
+        }
       });
     }
   }
@@ -69,32 +34,33 @@ function retrieveForwardsVisitedVertexes(vertex, callback, predecessorVertexes =
   return terminate;
 }
 
-function retrieveBackwardsVisitedVertexes(vertex, callback, successorVertexes = []) {
-  let terminate = false;
+export function backwardsDepthFirstSearch(vertex, callback, visitedVertexes, successorVertexes = []) {
+  let terminate = true;
 
-  const visited = vertex.isVisited();
+  const visitedVertexesIncludesVertex = visitedVertexes.includes(vertex);
 
-  if (visited === false) {
-    const visited = true;
+  if (!visitedVertexesIncludesVertex) {
+    const visitedVertex = vertex; ///
 
-    vertex.setVisited(visited);
+    visitedVertexes.push(visitedVertex);
 
-    const visitedVertex = vertex;  ///
+    terminate = callback(vertex, successorVertexes);
 
-    terminate = callback(visitedVertex, successorVertexes);
+    if (!terminate) {
+      const successorVertex = vertex;  ///
 
-    if (terminate !== true) {
-      visitedVertex.someImmediatePredecessorVertex((immediatePredecessorVertex) => {
-        const successorVertex = vertex;  ///
+      successorVertexes = [ ///
+        ...successorVertexes,
+        successorVertex
+      ];
 
-        successorVertexes = [ ///
-          ...successorVertexes,
-          successorVertex
-        ];
+      terminate = vertex.someImmediatePredecessorVertex((immediatePredecessorVertex) => {
+        const vertex = immediatePredecessorVertex,  ///
+              terminate = backwardsDepthFirstSearch(vertex, callback, visitedVertexes, successorVertexes);
 
-        terminate = retrieveForwardsVisitedVertexes(immediatePredecessorVertex, callback, successorVertexes);
-
-        return terminate;
+        if (terminate) {
+          return true;
+        }
       });
     }
   }

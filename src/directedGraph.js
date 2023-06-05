@@ -96,27 +96,31 @@ export default class DirectedGraph {
   }
 
   getFirstCycle() {
-    let firstCycle;
+    let firstCycle = null;
 
-    const firstCyclicEdge = first(this.cyclicEdges),
-          sourceVertexName = firstCyclicEdge.getSourceVertexName(), ///
-          targetVertexName = firstCyclicEdge.getTargetVertexName(), ///
-          sourceVertex = this.getVertexByVertexName(sourceVertexName),
-          targetVertex = this.getVertexByVertexName(targetVertexName);
+    const cyclicEdgesLength = this.cyclicEdges.length;
 
-    targetVertex.forwardsDepthFirstSearch((visitedVertex, predecessorVertexes) => {
-      let terminate = false;
+    if (cyclicEdgesLength > 0) {
+      const firstCyclicEdge = first(this.cyclicEdges),
+            sourceVertexName = firstCyclicEdge.getSourceVertexName(), ///
+            targetVertexName = firstCyclicEdge.getTargetVertexName(), ///
+            sourceVertex = this.getVertexByVertexName(sourceVertexName),
+            targetVertex = this.getVertexByVertexName(targetVertexName);
 
-      if (visitedVertex === sourceVertex) {
-        terminate = true;
+      targetVertex.forwardsDepthFirstSearch((vertex, predecessorVertexes) => {
+        let terminate = false;
 
-        const cycle = Cycle.fromSourceVertexAndPredecessorVertexes(sourceVertex, predecessorVertexes);  ///
+        if (vertex === sourceVertex) {
+          terminate = true;
 
-        firstCycle = cycle; ///
-      }
+          const cycle = Cycle.fromSourceVertexAndPredecessorVertexes(sourceVertex, predecessorVertexes);  ///
 
-      return terminate;
-    });
+          firstCycle = cycle; ///
+        }
+
+        return terminate;
+      });
+    }
 
     return firstCycle;
   }

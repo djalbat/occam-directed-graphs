@@ -8,17 +8,36 @@ const { first, second } = arrayUtilities;
 
 describe("DirectedGraph", () => {
   describe("getFirstCycle", () => {
-    describe("if there is a cycle present", () => {
+    describe("if there are no cycles", () => {
       let directedGraph;
 
       before(() => {
-        const vertexNameA = "a",
-              vertexNameB = "b",
-              vertexNameC = "c",
-              vertexNamesArray = [
+        directedGraph = DirectedGraph.fromNothing();
+      });
+
+      it("returns null", () => {
+        const firstCycle = directedGraph.getFirstCycle();
+
+        assert.isNull(firstCycle);
+      });
+    });
+
+    describe("if there is a cycle present", () => {
+      let directedGraph;
+
+      const vertexNameA = "a",
+            vertexNameB = "b",
+            vertexNameC = "c",
+            vertexNameD = "d",
+            vertexNameE = "e";
+
+      before(() => {
+        const vertexNamesArray = [
                 [ vertexNameA, vertexNameB ],
                 [ vertexNameB, vertexNameC ],
-                [ vertexNameC, vertexNameA ]
+                [ vertexNameC, vertexNameD ],
+                [ vertexNameD, vertexNameE ],
+                [ vertexNameE, vertexNameB ]
               ];
 
         directedGraph = directedGraphFromVertexNamesArray(vertexNamesArray);
@@ -28,6 +47,15 @@ describe("DirectedGraph", () => {
         const firstCycle = directedGraph.getFirstCycle();
 
         assert.instanceOf(firstCycle, Cycle);
+
+        const vertexNames = firstCycle.getVertexNames();
+
+        assert.deepEqual(vertexNames, [
+          vertexNameB,
+          vertexNameC,
+          vertexNameD,
+          vertexNameE
+        ]);
       });
     });
   });
