@@ -7,10 +7,10 @@ const { prune } = arrayUtilities;
 const remove = prune;  ///
 
 export function checkEdgesIncludesEdge(edges, edge) {
-  const edge1 = edge, ///
+  const edgeA = edge, ///
         edgesIncludesEdge = edges.some((edge) => {
-          const edge2 = edge, ///
-                matches = edge1.match(edge2);
+          const edgeB = edge, ///
+                matches = edgeA.match(edgeB);
 
           if (matches) {
             return true;
@@ -21,11 +21,11 @@ export function checkEdgesIncludesEdge(edges, edge) {
 }
 
 export function removeEdgeFromEdges(edge, edges) {
-  const edge1 = edge; ///
+  const edgeA = edge; ///
 
   remove(edges, (edge) => {
-    const edge2 = edge, ///
-          matches = edge1.match(edge2);
+    const edgeB = edge, ///
+          matches = edgeA.match(edgeB);
 
     if (!matches) { ///
       return true;

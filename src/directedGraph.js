@@ -125,19 +125,26 @@ export default class DirectedGraph {
     return firstCycle;
   }
 
-  isEdgePresent(edge) {
-    const sourceVertexName = edge.getSourceVertexName(),
-          targetVertexName = edge.getTargetVertexName(),
-          edgePresent = this.isEdgePresentBySourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
-
-    return edgePresent;
-  }
-
   areCyclesPresent() {
     const cyclicEdgesLength = this.cyclicEdges.length,
           cyclesPresent = (cyclicEdgesLength > 0);
 
     return cyclesPresent;
+  }
+
+  isCyclicEdgePresent(edge) {
+    const cyclicEdgesIncludesEdge = checkEdgesIncludesEdge(this.cyclicEdges, edge),
+          cyclicEdgePresent = cyclicEdgesIncludesEdge;  ///
+
+    return cyclicEdgePresent;
+  }
+
+  isNonCyclicEdgePresent(edge) {
+    const sourceVertexName = edge.getSourceVertexName(),
+          targetVertexName = edge.getTargetVertexName(),
+          nonCyclicEdgePresent = this.isEdgePresentBySourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
+
+    return nonCyclicEdgePresent;
   }
 
   isVertexPresentByVertexName(vertexName) {
@@ -146,6 +153,20 @@ export default class DirectedGraph {
           vertexPresent = vertexNamesIncludesVertexName;  ///
 
     return vertexPresent;
+  }
+
+  isEdgePresentBySourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName) {
+    let edgePresent = false;
+
+    const sourceVertex = this.getVertexByVertexName(sourceVertexName),
+          targetVertex = this.getVertexByVertexName(targetVertexName),
+          sourceVertexAndTargetVertexPresent = (sourceVertex !== null) && (targetVertex !== null);
+
+    if (sourceVertexAndTargetVertexPresent) {
+      edgePresent = sourceVertex.isEdgePresentByTargetVertex(targetVertex);
+    }
+
+    return edgePresent;
   }
 
   addEdge(edge) {
@@ -259,40 +280,22 @@ export default class DirectedGraph {
   }
 
   removeEdge(edge, removeStrandedVertexes = false) {
-    const cyclicEdgesIncludesEdge = checkEdgesIncludesEdge(this.cyclicEdges, edge);
+    const cyclicEdgePresent = this.isCyclicEdgePresent(edge);
 
-    if (cyclicEdgesIncludesEdge) {
+    if (cyclicEdgePresent) {
       const cyclicEdge = edge;  ///
 
-      removeEdgeFromEdges(cyclicEdge, this.cyclicEdges);
+      this.removeCyclicEdge(cyclicEdge);
 
       return;
     }
 
-    const edgePresent = this.isEdgePresent(edge);
+    const nonCyclicEdgePresent = this.isNonCyclicEdgePresent(edge);
 
-    if (edgePresent) {
-      const sourceVertexName = edge.getSourceVertexName(),
-            targetVertexName = edge.getTargetVertexName();
+    if (nonCyclicEdgePresent) {
+      const nonCyclicEdge = edge; ///
 
-      this.removeEdgeBySourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
-
-      if (removeStrandedVertexes) {
-        const sourceVertex = this.getVertexByVertexName(sourceVertexName),
-              targetVertex = this.getVertexByVertexName(targetVertexName),
-              sourceVertexStranded = sourceVertex.isStranded(),
-              targetVertexStranded = targetVertex.isStranded();
-
-        if (sourceVertexStranded) {
-          this.removeVertexByVertexName(sourceVertexName);
-        }
-
-        if (targetVertexStranded) {
-          this.removeVertexByVertexName(targetVertexName);
-        }
-      }
-
-      this.filterCyclicEdges();
+      this.removeNonCyclicEdge(nonCyclicEdge, removeStrandedVertexes);
     }
   }
 
@@ -300,6 +303,35 @@ export default class DirectedGraph {
     edges.forEach((edge) => {
       this.removeEdge(edge, removeStrandedVertexes);
     });
+  }
+
+  removeCyclicEdge(cyclicEdge) {
+    removeEdgeFromEdges(cyclicEdge, this.cyclicEdges);
+  }
+
+  removeNonCyclicEdge(nonCyclicEdge, removeStrandedVertexes) {
+    const sourceVertexName = nonCyclicEdge.getSourceVertexName(),
+          targetVertexName = nonCyclicEdge.getTargetVertexName();
+
+    this.removeEdgeBySourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
+
+    if (removeStrandedVertexes) {
+      const sourceVertex = this.getVertexByVertexName(sourceVertexName),
+            targetVertex = this.getVertexByVertexName(targetVertexName),
+            sourceVertexStranded = sourceVertex.isStranded(),
+            targetVertexStranded = targetVertex.isStranded();
+
+      if (sourceVertexStranded) {
+        this.removeVertexByVertexName(sourceVertexName);
+      }
+
+      if (targetVertexStranded) {
+        this.removeVertexByVertexName(targetVertexName);
+      }
+    }
+
+    this.filterCyclicEdges();
+
   }
 
   removeAllEdgesAndVertexes() {
@@ -365,20 +397,6 @@ export default class DirectedGraph {
     sourceVertex.removeImmediateSuccessorVertex(targetVertex);
 
     targetVertex.removeImmediatePredecessorVertex(sourceVertex);
-  }
-
-  isEdgePresentBySourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName) {
-    let edgePresent = false;
-
-    const sourceVertex = this.getVertexByVertexName(sourceVertexName),
-          targetVertex = this.getVertexByVertexName(targetVertexName),
-          sourceVertexAndTargetVertexPresent = (sourceVertex !== null) && (targetVertex !== null);
-
-    if (sourceVertexAndTargetVertexPresent) {
-      edgePresent = sourceVertex.isEdgePresentByTargetVertex(targetVertex);
-    }
-
-    return edgePresent;
   }
 
   filterCyclicEdges() {
