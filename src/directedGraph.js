@@ -98,9 +98,9 @@ export default class DirectedGraph {
   getFirstCycle() {
     let firstCycle = null;
 
-    const cyclicEdgesLength = this.cyclicEdges.length;
+    const cyclesPresent = this.areCyclesPresent();
 
-    if (cyclicEdgesLength > 0) {
+    if (cyclesPresent) {
       const firstCyclicEdge = first(this.cyclicEdges),
             sourceVertexName = firstCyclicEdge.getSourceVertexName(), ///
             targetVertexName = firstCyclicEdge.getTargetVertexName(), ///
@@ -154,13 +154,9 @@ export default class DirectedGraph {
           success = this.addEdgeBySourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
 
     if (!success) {
-      const cyclicEdgesIncludesEdge = checkEdgesIncludesEdge(edge, this.cyclicEdges);
+      const cyclicEdge = edge;  ///
 
-      if (!cyclicEdgesIncludesEdge) {
-        const cyclicEdge = edge;  ///
-
-        this.cyclicEdges.push(cyclicEdge);
-      }
+      this.addCyclicEdge(cyclicEdge);
     }
 
     return success;
@@ -170,6 +166,14 @@ export default class DirectedGraph {
     edges.forEach((edge) => {
       this.addEdge(edge);
     });
+  }
+
+  addCyclicEdge(cyclicEdge) {
+    const cyclicEdgesIncludesCyclicEdge = checkEdgesIncludesEdge(this.cyclicEdges, cyclicEdge);
+
+    if (!cyclicEdgesIncludesCyclicEdge) {
+      this.cyclicEdges.push(cyclicEdge);
+    }
   }
 
   addVertexByVertexName(vertexName) {
@@ -255,7 +259,7 @@ export default class DirectedGraph {
   }
 
   removeEdge(edge, removeStrandedVertexes = false) {
-    const cyclicEdgesIncludesEdge = checkEdgesIncludesEdge(edge, this.cyclicEdges);
+    const cyclicEdgesIncludesEdge = checkEdgesIncludesEdge(this.cyclicEdges, edge);
 
     if (cyclicEdgesIncludesEdge) {
       const cyclicEdge = edge;  ///

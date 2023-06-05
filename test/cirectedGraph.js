@@ -7,6 +7,60 @@ const { assert } = require("chai"),
 const { first, second } = arrayUtilities;
 
 describe("DirectedGraph", () => {
+  const vertexNameA = "a",
+        vertexNameB = "b",
+        vertexNameC = "c",
+        vertexNameD = "d",
+        vertexNameE = "e";
+
+  describe("addEdge", () => {
+    describe("the edge is not cyclic", () => {
+      let directedGraph;
+
+      before(() => {
+        directedGraph = DirectedGraph.fromNothing();
+      });
+
+      it("returns true and does not the edge to the cyclic edges", () => {
+        const sourceVertexName = vertexNameA, ///
+              targetVertexName = vertexNameB, ///
+              edge = Edge.fromSourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName),
+              success = directedGraph.addEdge(edge);
+
+        assert.isTrue(success);
+
+        const firstCycle = directedGraph.getFirstCycle();
+
+        assert.isNull(firstCycle);
+      });
+    });
+
+    describe("the edge is cyclic", () => {
+      let directedGraph;
+
+      before(() => {
+        const vertexNameArray = [
+          [ vertexNameB, vertexNameA ]
+        ];
+
+        directedGraph = directedGraphFromVertexNamesArray(vertexNameArray);
+      });
+
+      it("returns false and does not the edge to the cyclic edges", () => {
+        const sourceVertexName = vertexNameA, ///
+              targetVertexName = vertexNameB, ///
+              edge = Edge.fromSourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName),
+              success = directedGraph.addEdge(edge);
+
+        assert.isFalse(success);
+
+        const firstCycle = directedGraph.getFirstCycle();
+
+        assert.isNotNull(firstCycle);
+      });
+    });
+  });
+
   describe("getFirstCycle", () => {
     describe("if there are no cycles", () => {
       let directedGraph;
@@ -25,20 +79,14 @@ describe("DirectedGraph", () => {
     describe("if there is a cycle present", () => {
       let directedGraph;
 
-      const vertexNameA = "a",
-            vertexNameB = "b",
-            vertexNameC = "c",
-            vertexNameD = "d",
-            vertexNameE = "e";
-
       before(() => {
         const vertexNamesArray = [
-                [ vertexNameA, vertexNameB ],
-                [ vertexNameB, vertexNameC ],
-                [ vertexNameC, vertexNameD ],
-                [ vertexNameD, vertexNameE ],
-                [ vertexNameE, vertexNameB ]
-              ];
+          [ vertexNameA, vertexNameB ],
+          [ vertexNameB, vertexNameC ],
+          [ vertexNameC, vertexNameD ],
+          [ vertexNameD, vertexNameE ],
+          [ vertexNameE, vertexNameB ]
+        ];
 
         directedGraph = directedGraphFromVertexNamesArray(vertexNamesArray);
       });
@@ -79,12 +127,10 @@ describe("DirectedGraph", () => {
       let directedGraph;
 
       before(() => {
-        const vertexNameA = "a",
-              vertexNameB = "b",
-              vertexNamesArray = [
-                [ vertexNameA, vertexNameB ],
-                [ vertexNameB, vertexNameB ]
-              ];
+        const vertexNamesArray = [
+          [ vertexNameA, vertexNameB ],
+          [ vertexNameB, vertexNameB ]
+        ];
 
         directedGraph = directedGraphFromVertexNamesArray(vertexNamesArray);
       });
@@ -99,14 +145,11 @@ describe("DirectedGraph", () => {
     describe("if there is a cycle one edge of which is subsequently removed", () => {
       let directedGraph;
 
-      const vertexNameA = "a",
-            vertexNameB = "b";
-
       before(() => {
         const vertexNamesArray = [
-                [ vertexNameA, vertexNameB ],
-                [ vertexNameB, vertexNameA ]
-              ];
+          [ vertexNameA, vertexNameB ],
+          [ vertexNameB, vertexNameA ]
+        ];
 
         directedGraph = directedGraphFromVertexNamesArray(vertexNamesArray);
       });
@@ -129,14 +172,11 @@ describe("DirectedGraph", () => {
     describe("if there is a cycle one vertex of which is subsequently removed", () => {
       let directedGraph;
 
-      const vertexNameA = "a",
-            vertexNameB = "b";
-
       before(() => {
         const vertexNamesArray = [
-                [ vertexNameA, vertexNameB ],
-                [ vertexNameB, vertexNameA ]
-              ];
+          [ vertexNameA, vertexNameB ],
+          [ vertexNameB, vertexNameA ]
+        ];
 
         directedGraph = directedGraphFromVertexNamesArray(vertexNamesArray);
       });
@@ -173,8 +213,6 @@ describe("DirectedGraph", () => {
     describe("a single vertex is present", () => {
       let directedGraph;
 
-      const vertexNameA = "a";
-
       before(() => {
         directedGraph = DirectedGraph.fromNothing();
       });
@@ -193,13 +231,10 @@ describe("DirectedGraph", () => {
     describe("a single edge is present", () => {
       let directedGraph;
 
-      const vertexNameA = "a",
-            vertexNameB = "b";
-
       before(() => {
         const vertexNamesArray = [
-                [ vertexNameA, vertexNameB ]
-              ];
+          [ vertexNameA, vertexNameB ]
+        ];
 
         directedGraph = directedGraphFromVertexNamesArray(vertexNamesArray);
       });
@@ -214,15 +249,11 @@ describe("DirectedGraph", () => {
     describe("two edges are present", () => {
       let directedGraph;
 
-      const vertexNameA = "a",
-            vertexNameB = "b",
-            vertexNameC = "c";
-
       before(() => {
         const vertexNamesArray = [
-                [ vertexNameA, vertexNameB ],
-                [ vertexNameB, vertexNameC ]
-              ];
+          [ vertexNameA, vertexNameB ],
+          [ vertexNameB, vertexNameC ]
+        ];
 
         directedGraph = directedGraphFromVertexNamesArray(vertexNamesArray);
       });

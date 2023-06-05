@@ -6,7 +6,7 @@ const { prune } = arrayUtilities;
 
 const remove = prune;  ///
 
-export function checkEdgesIncludesEdge(edge, edges) {
+export function checkEdgesIncludesEdge(edges, edge) {
   const edge1 = edge, ///
         edgesIncludesEdge = edges.some((edge) => {
           const edge2 = edge, ///
