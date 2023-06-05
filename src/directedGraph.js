@@ -132,17 +132,45 @@ export default class DirectedGraph {
     return cyclesPresent;
   }
 
-  isCyclicEdgePresent(edge) {
-    const cyclicEdgesIncludesEdge = checkEdgesIncludesEdge(this.cyclicEdges, edge),
+  isEdgePresent(edge) {
+    let edgePresent = false;
+
+    if (!edgePresent) {
+      const cyclicEdge = edge,  ///
+            cyclicEdgePresent = this.isCyclicEdgePresent(cyclicEdge);
+
+      edgePresent = cyclicEdgePresent;  ///
+    }
+
+    if (!edgePresent) {
+      const nonCyclicEdge = edge, ///
+            nonCyclicEdgePresent = this.isNonCyclicEdgePresent(nonCyclicEdge);
+
+      edgePresent = nonCyclicEdgePresent; ///
+    }
+
+    return edgePresent;
+  }
+
+  isCyclicEdgePresent(cyclicEdge) {
+    const cyclicEdgesIncludesEdge = checkEdgesIncludesEdge(this.cyclicEdges, cyclicEdge),
           cyclicEdgePresent = cyclicEdgesIncludesEdge;  ///
 
     return cyclicEdgePresent;
   }
 
   isNonCyclicEdgePresent(edge) {
+    let nonCyclicEdgePresent = false;
+
     const sourceVertexName = edge.getSourceVertexName(),
           targetVertexName = edge.getTargetVertexName(),
-          nonCyclicEdgePresent = this.isEdgePresentBySourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
+          sourceVertex = this.getVertexByVertexName(sourceVertexName),
+          targetVertex = this.getVertexByVertexName(targetVertexName),
+          sourceVertexAndTargetVertexPresent = (sourceVertex !== null) && (targetVertex !== null);
+
+    if (sourceVertexAndTargetVertexPresent) {
+      nonCyclicEdgePresent = sourceVertex.isEdgePresentByTargetVertex(targetVertex);
+    }
 
     return nonCyclicEdgePresent;
   }
@@ -155,24 +183,9 @@ export default class DirectedGraph {
     return vertexPresent;
   }
 
-  isEdgePresentBySourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName) {
-    let edgePresent = false;
-
-    const sourceVertex = this.getVertexByVertexName(sourceVertexName),
-          targetVertex = this.getVertexByVertexName(targetVertexName),
-          sourceVertexAndTargetVertexPresent = (sourceVertex !== null) && (targetVertex !== null);
-
-    if (sourceVertexAndTargetVertexPresent) {
-      edgePresent = sourceVertex.isEdgePresentByTargetVertex(targetVertex);
-    }
-
-    return edgePresent;
-  }
-
   addEdge(edge) {
-    const sourceVertexName = edge.getSourceVertexName(),
-          targetVertexName = edge.getTargetVertexName(),
-          success = this.addEdgeBySourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
+    const nonCyclicEdge = edge, ///
+          success = this.addNonCyclicEdge(nonCyclicEdge);
 
     if (!success) {
       const cyclicEdge = edge;  ///
@@ -280,21 +293,19 @@ export default class DirectedGraph {
   }
 
   removeEdge(edge, removeStrandedVertexes = false) {
-    const cyclicEdgePresent = this.isCyclicEdgePresent(edge);
+    const cyclicEdge = edge,  ///
+          cyclicEdgePresent = this.isCyclicEdgePresent(cyclicEdge);
 
     if (cyclicEdgePresent) {
-      const cyclicEdge = edge;  ///
-
       this.removeCyclicEdge(cyclicEdge);
 
       return;
     }
 
-    const nonCyclicEdgePresent = this.isNonCyclicEdgePresent(edge);
+    const nonCyclicEdge = edge, ///
+          nonCyclicEdgePresent = this.isNonCyclicEdgePresent(nonCyclicEdge);
 
     if (nonCyclicEdgePresent) {
-      const nonCyclicEdge = edge; ///
-
       this.removeNonCyclicEdge(nonCyclicEdge, removeStrandedVertexes);
     }
   }
@@ -331,7 +342,6 @@ export default class DirectedGraph {
     }
 
     this.filterCyclicEdges();
-
   }
 
   removeAllEdgesAndVertexes() {
@@ -357,8 +367,11 @@ export default class DirectedGraph {
     this.removeEdges(edges, removeStrandedVertexes);
   }
 
-  addEdgeBySourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName) {
+  addNonCyclicEdge(nonCyclicEdge) {
     let success = false;
+
+    const sourceVertexName = nonCyclicEdge.getSourceVertexName(),
+          targetVertexName = nonCyclicEdge.getTargetVertexName();
 
     if (sourceVertexName !== targetVertexName) {
       const sourceVertex = this.addVertexByVertexName(sourceVertexName),
