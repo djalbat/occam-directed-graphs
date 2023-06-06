@@ -377,6 +377,87 @@ describe("DirectedGraph", () => {
       });
     });
   });
+
+  describe("removeVertexByVertexName", () => {
+    describe("the vertex has one immediate predecessor", () => {
+      let directedGraph;
+
+      before(() => {
+        const vertexNamesArray = [
+          [ vertexNameA, vertexNameB ]
+        ];
+
+        directedGraph = directedGraphFromVertexNamesArray(vertexNamesArray);
+      });
+
+      it("removes itself from the immediate predecessor vertex's immediate successor vertexes", () => {
+        const vertexName = vertexNameB; ///
+
+        directedGraph.removeVertexByVertexName(vertexName);
+
+        const immediatePredecessorVertexName = vertexNameA, ///
+              immediatePredecessorVertex = directedGraph.getVertexByVertexName(immediatePredecessorVertexName),
+              immediateSuccessorVertexes = immediatePredecessorVertex.getImmediateSuccessorVertexes();
+
+        assert.isEmpty(immediateSuccessorVertexes);
+      });
+    });
+
+    describe("the vertex has one immediate successor", () => {
+      let directedGraph;
+
+      before(() => {
+        const vertexNamesArray = [
+          [ vertexNameA, vertexNameB ]
+        ];
+
+        directedGraph = directedGraphFromVertexNamesArray(vertexNamesArray);
+      });
+
+      it("removes itself from the immediate successor vertex's immediate predecessor vertexes and decrements its index", () => {
+        const vertexName = vertexNameA; ///
+
+        directedGraph.removeVertexByVertexName(vertexName);
+
+        const immediateSuccessorVertexName = vertexNameB, ///
+              immediateSuccessorVertex = directedGraph.getVertexByVertexName(immediateSuccessorVertexName),
+              immediatePredecessorVertexes = immediateSuccessorVertex.getImmediatePredecessorVertexes();
+
+        assert.isEmpty(immediatePredecessorVertexes);
+
+        const immediateSuccessorVertexIndex = immediateSuccessorVertex.getIndex();
+
+        assert.equal(immediateSuccessorVertexIndex, 0);
+      });
+    });
+
+    describe("the vertex is part of a cycle of length two", () => {
+      let directedGraph;
+
+      before(() => {
+        const vertexNamesArray = [
+          [ vertexNameA, vertexNameB ],
+          [ vertexNameB, vertexNameA ]
+        ];
+
+        directedGraph = directedGraphFromVertexNamesArray(vertexNamesArray);
+      });
+
+      it("removes itself andd the cyclic edge", () => {
+        const vertexName = vertexNameA; ///
+
+        directedGraph.removeVertexByVertexName(vertexName);
+
+        const vertex = directedGraph.getVertexByVertexName(vertexName);
+
+        assert.isNull(vertex);
+
+        const cyclicEdges = directedGraph.getCyclicEdges();
+
+        assert.isEmpty(cyclicEdges);
+      });
+    });
+  });
 });
 
 function directedGraphFromVertexNamesArray(vertexNamesArray) {

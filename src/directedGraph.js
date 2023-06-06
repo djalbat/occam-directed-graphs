@@ -163,13 +163,17 @@ export default class DirectedGraph {
     let nonCyclicEdgePresent = false;
 
     const sourceVertexName = edge.getSourceVertexName(),
-          targetVertexName = edge.getTargetVertexName(),
-          sourceVertex = this.getVertexByVertexName(sourceVertexName),
-          targetVertex = this.getVertexByVertexName(targetVertexName),
-          sourceVertexAndTargetVertexPresent = (sourceVertex !== null) && (targetVertex !== null);
+          sourceVertex = this.getVertexByVertexName(sourceVertexName);
 
-    if (sourceVertexAndTargetVertexPresent) {
-      nonCyclicEdgePresent = sourceVertex.isEdgePresentByTargetVertex(targetVertex);
+    if (sourceVertex !== null) {
+      const targetVertexName = edge.getTargetVertexName(),
+            targetVertex = this.getVertexByVertexName(targetVertexName);
+
+      if (targetVertex !== null) {
+        const edgePresent = sourceVertex.isEdgePresentByTargetVertex(targetVertex);
+
+        nonCyclicEdgePresent = edgePresent; ///
+      }
     }
 
     return nonCyclicEdgePresent;
@@ -229,67 +233,41 @@ export default class DirectedGraph {
   }
 
   removeVertexByVertexName(vertexName) {
-    let removedEdges = null;
-
     const vertexPresent = this.isVertexPresentByVertexName(vertexName);
 
-    if (vertexPresent) {
-      removedEdges = [];
-
-      const vertex = this.getVertexByVertexName(vertexName);
-
-      vertex.forEachImmediateSuccessorVertex((immediateSuccessVertex) => {
-        const immediatePredecessorVertex = vertex,  ///
-              immediatePredecessorVertexName = immediatePredecessorVertex.getName(),
-              immediateSuccessVertexName = immediateSuccessVertex.getName(),
-              removedEdgeSourceVertexName = immediatePredecessorVertexName, ///
-              removedEdgeTargetVertexName = immediateSuccessVertexName, ///
-              removedEdge = new Edge(removedEdgeSourceVertexName, removedEdgeTargetVertexName);
-
-        removedEdges.push(removedEdge);
-
-        immediateSuccessVertex.removeImmediatePredecessorVertex(immediatePredecessorVertex);
-      });
-
-      vertex.forEachImmediatePredecessorVertex((immediatePredecessorVertex) => {
-        const immediateSuccessVertex = vertex,  ///
-              immediatePredecessorVertexName = immediatePredecessorVertex.getName(),
-              immediateSuccessVertexName = immediateSuccessVertex.getName(),  ///
-              removedEdgeSourceVertexName = immediatePredecessorVertexName, ///
-              removedEdgeTargetVertexName = immediateSuccessVertexName, ///
-              removedEdge = new Edge(removedEdgeSourceVertexName, removedEdgeTargetVertexName);
-
-        removedEdges.push(removedEdge);
-
-        immediatePredecessorVertex.removeImmediateSuccessorVertex(immediateSuccessVertex);
-      });
-
-      this.deleteVertexByVertexName(vertexName);
-
-      const deletedVertex = vertex, ///
-            deletedVertexIndex = deletedVertex.getIndex(),
-            vertexes = this.getVertexes(),
-            affectedVertexes = vertexes.reduce((affectedVertexes, vertex) => {
-              const vertexIndex = vertex.getIndex(),
-                    vertexAffected = (vertexIndex > deletedVertexIndex);
-
-              if (vertexAffected) {
-                const affectedVertex = vertex;  ///
-
-                affectedVertexes.push(affectedVertex);
-              }
-
-              return affectedVertexes;
-            }, []);
-
-      affectedVertexes.forEach((affectedVertex) => {
-        affectedVertex.decrementIndex();
-      });
+    if (!vertexPresent) {
+      return;
     }
 
-    this.filterCyclicEdges();
+    const vertex = this.getVertexByVertexName(vertexName);
 
-    return removedEdges;
+    vertex.forEachImmediateSuccessorVertex((immediateSuccessVertex) => {
+      const immediatePredecessorVertex = vertex;  ///
+
+      immediateSuccessVertex.removeImmediatePredecessorVertex(immediatePredecessorVertex);
+    });
+
+    vertex.forEachImmediatePredecessorVertex((immediatePredecessorVertex) => {
+      const immediateSuccessVertex = vertex;  ///
+
+      immediatePredecessorVertex.removeImmediateSuccessorVertex(immediateSuccessVertex);
+    });
+
+    this.deleteVertexByVertexName(vertexName);
+
+    const vertexes = this.getVertexes(),
+          deletedVertex = vertex, ///
+          deletedVertexIndex = deletedVertex.getIndex();
+
+    vertexes.forEach((vertex) => {
+      const vertexIndex = vertex.getIndex();
+
+      if (vertexIndex > deletedVertexIndex) {
+        vertex.decrementIndex();
+      }
+    });
+
+    this.filterCyclicEdges();
   }
 
   removeEdge(edge, removeStrandedVertexes = false) {
