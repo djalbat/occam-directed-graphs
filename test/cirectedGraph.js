@@ -226,17 +226,19 @@ describe("DirectedGraph", () => {
         directedGraph = DirectedGraph.fromNothing();
       });
 
-      it("returns true and does not the edge to the cyclic edges", () => {
+      it("leaves the source vertex index less than the target vertex index", () => {
         const sourceVertexName = vertexNameA, ///
               targetVertexName = vertexNameB, ///
-              edge = Edge.fromSourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName),
-              success = directedGraph.addEdge(edge);
+              edge = Edge.fromSourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
 
-        assert.isTrue(success);
+        directedGraph.addEdge(edge);
 
-        const firstCycle = directedGraph.getFirstCycle();
+        const sourceVertex = directedGraph.getVertexByVertexName(sourceVertexName),
+              targetVertex = directedGraph.getVertexByVertexName(targetVertexName),
+              sourceVertexIndex = sourceVertex.getIndex(),
+              targetVertexIndex = targetVertex.getIndex();
 
-        assert.isNull(firstCycle);
+        assert.isTrue(sourceVertexIndex < targetVertexIndex);
       });
     });
 
@@ -251,17 +253,19 @@ describe("DirectedGraph", () => {
         directedGraph = directedGraphFromVertexNamesArray(vertexNameArray);
       });
 
-      it("returns false and does not the edge to the cyclic edges", () => {
+      it("leaves the source vertex index greater than the target vertex index", () => {
         const sourceVertexName = vertexNameA, ///
               targetVertexName = vertexNameB, ///
-              edge = Edge.fromSourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName),
-              success = directedGraph.addEdge(edge);
+              edge = Edge.fromSourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
 
-        assert.isFalse(success);
+        directedGraph.addEdge(edge);
 
-        const firstCycle = directedGraph.getFirstCycle();
+        const sourceVertex = directedGraph.getVertexByVertexName(sourceVertexName),
+              targetVertex = directedGraph.getVertexByVertexName(targetVertexName),
+              sourceVertexIndex = sourceVertex.getIndex(),
+              targetVertexIndex = targetVertex.getIndex();
 
-        assert.isNotNull(firstCycle);
+        assert.isTrue(sourceVertexIndex > targetVertexIndex);
       });
     });
   });
@@ -317,20 +321,19 @@ describe("DirectedGraph", () => {
         directedGraph.removeEdge(edge);
       });
 
-      it("removes the edge and leaves the remaining edge as non-cyclic", () => {
+      it("removes the edge and leaves the remaining edge's source vertex index less than its target vertex index", () => {
         const edgePresent = directedGraph.isEdgePresent(edge);
 
         assert.isFalse(edgePresent);
 
         const sourceVertexName = vertexNameA, ///
-              targetVertexName = vertexNameB; ///
+              targetVertexName = vertexNameB, ///
+              sourceVertex = directedGraph.getVertexByVertexName(sourceVertexName),
+              targetVertex = directedGraph.getVertexByVertexName(targetVertexName),
+              sourceVertexIndex = sourceVertex.getIndex(),
+              targetVertexIndex = targetVertex.getIndex();
 
-        edge = Edge.fromSourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
-
-        const nonCyclicEdge = edge, ///
-              nonCyclicEdgePresent = directedGraph.isNonCyclicEdgePresent(nonCyclicEdge);
-
-        assert.isTrue(nonCyclicEdgePresent);
+        assert.isTrue(sourceVertexIndex < targetVertexIndex);
       });
     });
 
@@ -356,80 +359,19 @@ describe("DirectedGraph", () => {
         directedGraph.removeEdge(edge);
       });
 
-      it("removes the edge and sets the remaining edge to be non-cyclic", () => {
+      it("removes the edge and set the remaining edge's source vertex index to be less than its target vertex index", () => {
         const edgePresent = directedGraph.isEdgePresent(edge);
 
         assert.isFalse(edgePresent);
 
         const sourceVertexName = vertexNameB, ///
-              targetVertexName = vertexNameA; ///
-
-        edge = Edge.fromSourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
-
-        const cyclicEdge = edge,  ///
-              nonCyclicEdge = edge, ///
-              cyclicEdgePresent = directedGraph.isCyclicEdgePresent(cyclicEdge),
-              nonCyclicEdgePresent = directedGraph.isNonCyclicEdgePresent(nonCyclicEdge);
-
-        assert.isFalse(cyclicEdgePresent);
-
-        assert.isTrue(nonCyclicEdgePresent);
-      });
-    });
-  });
-
-  describe("addNonCyclicEdge", () => {
-    describe("it will create a cycle", () => {
-      let directedGraph;
-
-      before(() => {
-        const vertexNamesArray = [
-          [ vertexNameA, vertexNameB ]
-        ];
-
-        directedGraph = directedGraphFromVertexNamesArray(vertexNamesArray);
-      });
-
-      it("returns false", () => {
-        const sourceVertexName = vertexNameB, ///
               targetVertexName = vertexNameA, ///
-              edge = Edge.fromSourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName),
-              nonCyclicEdge = edge, ///
-              success = directedGraph.addNonCyclicEdge(nonCyclicEdge);
-
-        assert.isFalse(success);
-      });
-    });
-
-    describe("it will not create a cycle", () => {
-      let directedGraph;
-
-      before(() => {
-        directedGraph = DirectedGraph.fromNothing();
-      });
-
-      it("set the immediate successor and predecessor vertexes of the relevant vertexes and returns true", () => {
-        const sourceVertexName = vertexNameA, ///
-              targetVertexName = vertexNameB, ///
-              edge = Edge.fromSourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName),
-              nonCyclicEdge = edge, ///
-              success = directedGraph.addNonCyclicEdge(nonCyclicEdge);
-
-        assert.isTrue(success);
-
-        const sourceVertex = directedGraph.getVertexByVertexName(sourceVertexName),
+              sourceVertex = directedGraph.getVertexByVertexName(sourceVertexName),
               targetVertex = directedGraph.getVertexByVertexName(targetVertexName),
-              sourceVertexImmediateSuccessorVertexes = sourceVertex.getImmediateSuccessorVertexes(),
-              targetVertexImmediatePredecessorVertexes = targetVertex.getImmediatePredecessorVertexes();
+              sourceVertexIndex = sourceVertex.getIndex(),
+              targetVertexIndex = targetVertex.getIndex();
 
-        assert.lengthOf(sourceVertexImmediateSuccessorVertexes, 1);
-        assert.lengthOf(targetVertexImmediatePredecessorVertexes, 1);
-
-        const firstSourceVertexImmediateSuccessorVertex = first(sourceVertexImmediateSuccessorVertexes),
-              firstTargetVertexImmediatePredecessorVertex = first(targetVertexImmediatePredecessorVertexes);
-
-        assert.equal(firstSourceVertexImmediateSuccessorVertex, targetVertex);
-        assert.equal(firstTargetVertexImmediatePredecessorVertex, sourceVertex);
+        assert.isTrue(sourceVertexIndex < targetVertexIndex);
       });
     });
   });
@@ -527,14 +469,18 @@ describe("DirectedGraph", () => {
         directedGraph = directedGraphFromVertexNamesArray(vertexNamesArray);
       });
 
-      it("returns false", () => {
+      it("leaves the vertex indexes as-is", () => {
         const sourceVertexName = vertexNameB, ///
               targetVertexName = vertexNameA, ///
               sourceVertex = directedGraph.addVertexByVertexName(sourceVertexName),
-              targetVertex = directedGraph.addVertexByVertexName(targetVertexName),
-              success = directedGraph.reorderVertexesBySourceVertexAndTargetVertex(sourceVertex, targetVertex);
+              targetVertex = directedGraph.addVertexByVertexName(targetVertexName);
 
-        assert.isFalse(success);
+        directedGraph.reorderVertexesBySourceVertexAndTargetVertex(sourceVertex, targetVertex);
+
+        const sourceVertexIndex = sourceVertex.getIndex(),
+              targetVertexIndex = targetVertex.getIndex();
+
+        assert.isTrue(sourceVertexIndex > targetVertexIndex);
       });
     });
 
@@ -546,14 +492,13 @@ describe("DirectedGraph", () => {
           directedGraph = DirectedGraph.fromNothing();
         });
 
-        it("leaves the vertexes in place and returns true", () => {
+        it("leaves the vertex indexes as-is", () => {
           const sourceVertexName = vertexNameA, ///
                 targetVertexName = vertexNameB, ///
                 sourceVertex = directedGraph.addVertexByVertexName(sourceVertexName),
-                targetVertex = directedGraph.addVertexByVertexName(targetVertexName),
-                success = directedGraph.reorderVertexesBySourceVertexAndTargetVertex(sourceVertex, targetVertex);
+                targetVertex = directedGraph.addVertexByVertexName(targetVertexName);
 
-          assert.isTrue(success);
+          directedGraph.reorderVertexesBySourceVertexAndTargetVertex(sourceVertex, targetVertex);
 
           const orderedVertexNames = directedGraph.getOrderedVertexNames(),
                 firstOrderedVertexName = first(orderedVertexNames),
@@ -572,14 +517,13 @@ describe("DirectedGraph", () => {
             directedGraph = DirectedGraph.fromNothing();
           });
 
-          it("swaps the vertexes and returns true", () => {
+          it("swaps the vertex indexes", () => {
             const targetVertexName = vertexNameB, ///
                   sourceVertexName = vertexNameA, ///
                   targetVertex = directedGraph.addVertexByVertexName(targetVertexName),
-                  sourceVertex = directedGraph.addVertexByVertexName(sourceVertexName),
-                  success = directedGraph.reorderVertexesBySourceVertexAndTargetVertex(sourceVertex, targetVertex);
+                  sourceVertex = directedGraph.addVertexByVertexName(sourceVertexName);
 
-            assert.isTrue(success);
+            directedGraph.reorderVertexesBySourceVertexAndTargetVertex(sourceVertex, targetVertex);
 
             const orderedVertexNames = directedGraph.getOrderedVertexNames(),
                   firstOrderedVertexName = first(orderedVertexNames),
@@ -606,10 +550,9 @@ describe("DirectedGraph", () => {
             const sourceVertexName = vertexNameD, ///
                   targetVertexName = vertexNameA, ///
                   sourceVertex = directedGraph.addVertexByVertexName(sourceVertexName),
-                  targetVertex = directedGraph.addVertexByVertexName(targetVertexName),
-                  success = directedGraph.reorderVertexesBySourceVertexAndTargetVertex(sourceVertex, targetVertex);
+                  targetVertex = directedGraph.addVertexByVertexName(targetVertexName);
 
-            assert.isTrue(success);
+            directedGraph.reorderVertexesBySourceVertexAndTargetVertex(sourceVertex, targetVertex);
 
             const orderedVertexNames = directedGraph.getOrderedVertexNames(),
                   firstOrderedVertexName = first(orderedVertexNames),

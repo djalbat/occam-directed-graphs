@@ -13,3 +13,13 @@ export function orderIndexes(indexes) {  ///
     }
   });
 }
+
+export function indexesFromVertexes(vertexes) {
+  const indexes = vertexes.map((vertex) => {
+    const index = vertex.getIndex();
+
+    return index;
+  });
+
+  return indexes;
+}
