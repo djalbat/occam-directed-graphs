@@ -15,10 +15,16 @@ export function orderVertexes(vertexes) {  ///
       return 0;
     }
   });
+}
 
-  const orderedVertexes = vertexes;  ///
+export function indexesFromVertexes(vertexes) {
+  const indexes = vertexes.map((vertex) => {
+    const index = vertex.getIndex();
 
-  return orderedVertexes;
+    return index;
+  });
+
+  return indexes;
 }
 
 export function vertexNamesFromVertexes(vertexes) {

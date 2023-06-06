@@ -33,7 +33,7 @@ export function checkEdgesIncludesEdge(edges, edge) {
   return edgesIncludesEdge;
 }
 
-export function filterEdgesBySourceVertexName(sourceVertexName, edges) {
+export function filterEdgesBySourceVertexName(edges, sourceVertexName) {
   edges = edges.filter((edge) => {  ///
     const matches = edge.matchSourceVertexName(sourceVertexName);
 
@@ -45,7 +45,7 @@ export function filterEdgesBySourceVertexName(sourceVertexName, edges) {
   return edges;
 }
 
-export function filterEdgesByTargetVertexName(targetVertexName, edges) {
+export function filterEdgesByTargetVertexName(edges, targetVertexName) {
   edges = edges.filter((edge) => {  ///
     const matches = edge.matchTargetVertexName(targetVertexName);
 

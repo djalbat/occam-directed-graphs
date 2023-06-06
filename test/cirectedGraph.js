@@ -13,6 +13,211 @@ describe("DirectedGraph", () => {
         vertexNameD = "d",
         vertexNameE = "e";
 
+  describe("getFirstCycle", () => {
+    describe("if there are no cycles", () => {
+      let directedGraph;
+
+      before(() => {
+        directedGraph = DirectedGraph.fromNothing();
+      });
+
+      it("returns null", () => {
+        const firstCycle = directedGraph.getFirstCycle();
+
+        assert.isNull(firstCycle);
+      });
+    });
+
+    describe("if there is a cycle present", () => {
+      let directedGraph;
+
+      before(() => {
+        const vertexNamesArray = [
+          [ vertexNameA, vertexNameB ],
+          [ vertexNameB, vertexNameC ],
+          [ vertexNameC, vertexNameD ],
+          [ vertexNameD, vertexNameE ],
+          [ vertexNameE, vertexNameB ]
+        ];
+
+        directedGraph = directedGraphFromVertexNamesArray(vertexNamesArray);
+      });
+
+      it("returns a cycle", () => {
+        const firstCycle = directedGraph.getFirstCycle();
+
+        assert.instanceOf(firstCycle, Cycle);
+
+        const vertexNames = firstCycle.getVertexNames();
+
+        assert.deepEqual(vertexNames, [
+          vertexNameB,
+          vertexNameC,
+          vertexNameD,
+          vertexNameE
+        ]);
+      });
+    });
+  });
+
+  describe("areCyclesPresent", () => {
+    describe("if there are no cycles", () => {
+      let directedGraph;
+
+      before(() => {
+        directedGraph = DirectedGraph.fromNothing();
+      });
+
+      it("returns false", () => {
+        const cyclesPresent = directedGraph.areCyclesPresent();
+
+        assert.isFalse(cyclesPresent);
+      });
+    });
+
+    describe("if there is a cycle", () => {
+      let directedGraph;
+
+      before(() => {
+        const vertexNamesArray = [
+          [ vertexNameA, vertexNameB ],
+          [ vertexNameB, vertexNameA ]
+        ];
+
+        directedGraph = directedGraphFromVertexNamesArray(vertexNamesArray);
+      });
+
+      it("returns true", () => {
+        const cyclesPresent = directedGraph.areCyclesPresent();
+
+        assert.isTrue(cyclesPresent);
+      });
+    });
+
+    describe("if there is a cycle one edge of which is subsequently removed", () => {
+      let directedGraph;
+
+      before(() => {
+        const vertexNamesArray = [
+          [ vertexNameA, vertexNameB ],
+          [ vertexNameB, vertexNameA ]
+        ];
+
+        directedGraph = directedGraphFromVertexNamesArray(vertexNamesArray);
+      });
+
+      before(() => {
+        const sourceVertexName = vertexNameA, ///
+              targetVertexName = vertexNameB, ////
+              edge = Edge.fromSourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
+
+        directedGraph.removeEdge(edge);
+      });
+
+      it("returns false", () => {
+        const cyclesPresent = directedGraph.areCyclesPresent();
+
+        assert.isFalse(cyclesPresent);
+      });
+    });
+
+    describe("if there is a cycle one vertex of which is subsequently removed", () => {
+      let directedGraph;
+
+      before(() => {
+        const vertexNamesArray = [
+          [ vertexNameA, vertexNameB ],
+          [ vertexNameB, vertexNameA ]
+        ];
+
+        directedGraph = directedGraphFromVertexNamesArray(vertexNamesArray);
+      });
+
+      before(() => {
+        const vertexName = vertexNameA; ///
+
+        directedGraph.removeVertexByVertexName(vertexName);
+      });
+
+      it("returns false", () => {
+        const cyclesPresent = directedGraph.areCyclesPresent();
+
+        assert.isFalse(cyclesPresent);
+      });
+    });
+  });
+
+  describe("getOrderedVertexNames", () => {
+    describe("no vertexes are present", () => {
+      let directedGraph;
+
+      before(() => {
+        directedGraph = DirectedGraph.fromNothing();
+      });
+
+      it("returns an empty array", () => {
+        const orderedVertexNames = directedGraph.getOrderedVertexNames();
+
+        assert.deepEqual(orderedVertexNames, []);
+      });
+    });
+
+    describe("a single vertex is present", () => {
+      let directedGraph;
+
+      before(() => {
+        directedGraph = DirectedGraph.fromNothing();
+      });
+
+      before(() => {
+        directedGraph.addVertexByVertexName(vertexNameA);
+      });
+
+      it("returns an array with the single vertex name", () => {
+        const orderedVertexNames = directedGraph.getOrderedVertexNames();
+
+        assert.deepEqual(orderedVertexNames, [ vertexNameA ]);
+      });
+    });
+
+    describe("a single edge is present", () => {
+      let directedGraph;
+
+      before(() => {
+        const vertexNamesArray = [
+          [ vertexNameA, vertexNameB ]
+        ];
+
+        directedGraph = directedGraphFromVertexNamesArray(vertexNamesArray);
+      });
+
+      it("returns an array with the ordered vertex names", () => {
+        const orderedVertexNames = directedGraph.getOrderedVertexNames();
+
+        assert.deepEqual(orderedVertexNames, [ vertexNameA, vertexNameB ]);
+      });
+    });
+
+    describe("two edges are present", () => {
+      let directedGraph;
+
+      before(() => {
+        const vertexNamesArray = [
+          [ vertexNameA, vertexNameB ],
+          [ vertexNameB, vertexNameC ]
+        ];
+
+        directedGraph = directedGraphFromVertexNamesArray(vertexNamesArray);
+      });
+
+      it("returns an array with the ordered vertex names", () => {
+        const orderedVertexNames = directedGraph.getOrderedVertexNames();
+
+        assert.deepEqual(orderedVertexNames, [ vertexNameA, vertexNameB, vertexNameC ]);
+      });
+    });
+  });
+
   describe("addEdge", () => {
     describe("the edge is not cyclic", () => {
       let directedGraph;
@@ -173,174 +378,8 @@ describe("DirectedGraph", () => {
     });
   });
 
-  describe("getFirstCycle", () => {
-    describe("if there are no cycles", () => {
-      let directedGraph;
-
-      before(() => {
-        directedGraph = DirectedGraph.fromNothing();
-      });
-
-      it("returns null", () => {
-        const firstCycle = directedGraph.getFirstCycle();
-
-        assert.isNull(firstCycle);
-      });
-    });
-
-    describe("if there is a cycle present", () => {
-      let directedGraph;
-
-      before(() => {
-        const vertexNamesArray = [
-          [ vertexNameA, vertexNameB ],
-          [ vertexNameB, vertexNameC ],
-          [ vertexNameC, vertexNameD ],
-          [ vertexNameD, vertexNameE ],
-          [ vertexNameE, vertexNameB ]
-        ];
-
-        directedGraph = directedGraphFromVertexNamesArray(vertexNamesArray);
-      });
-
-      it("returns a cycle", () => {
-        const firstCycle = directedGraph.getFirstCycle();
-
-        assert.instanceOf(firstCycle, Cycle);
-
-        const vertexNames = firstCycle.getVertexNames();
-
-        assert.deepEqual(vertexNames, [
-          vertexNameB,
-          vertexNameC,
-          vertexNameD,
-          vertexNameE
-        ]);
-      });
-    });
-  });
-
-  describe("areCyclesPresent", () => {
-    describe("if there are no cycles", () => {
-      let directedGraph;
-
-      before(() => {
-        directedGraph = DirectedGraph.fromNothing();
-      });
-
-      it("returns false", () => {
-        const cyclesPresent = directedGraph.areCyclesPresent();
-
-        assert.isFalse(cyclesPresent);
-      });
-    });
-
-    describe("if there is a cycle", () => {
-      let directedGraph;
-
-      before(() => {
-        const vertexNamesArray = [
-          [ vertexNameA, vertexNameB ],
-          [ vertexNameB, vertexNameB ]
-        ];
-
-        directedGraph = directedGraphFromVertexNamesArray(vertexNamesArray);
-      });
-
-      it("returns true", () => {
-        const cyclesPresent = directedGraph.areCyclesPresent();
-
-        assert.isTrue(cyclesPresent);
-      });
-    });
-
-    describe("if there is a cycle one edge of which is subsequently removed", () => {
-      let directedGraph;
-
-      before(() => {
-        const vertexNamesArray = [
-          [ vertexNameA, vertexNameB ],
-          [ vertexNameB, vertexNameA ]
-        ];
-
-        directedGraph = directedGraphFromVertexNamesArray(vertexNamesArray);
-      });
-
-      before(() => {
-        const sourceVertexName = vertexNameA, ///
-              targetVertexName = vertexNameB, ////
-              edge = Edge.fromSourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
-
-        directedGraph.removeEdge(edge);
-      });
-
-      it("returns false", () => {
-        const cyclesPresent = directedGraph.areCyclesPresent();
-
-        assert.isFalse(cyclesPresent);
-      });
-    });
-
-    describe("if there is a cycle one vertex of which is subsequently removed", () => {
-      let directedGraph;
-
-      before(() => {
-        const vertexNamesArray = [
-          [ vertexNameA, vertexNameB ],
-          [ vertexNameB, vertexNameA ]
-        ];
-
-        directedGraph = directedGraphFromVertexNamesArray(vertexNamesArray);
-      });
-
-      before(() => {
-        const vertexName = vertexNameA; ///
-
-        directedGraph.removeVertexByVertexName(vertexName);
-      });
-
-      it("returns false", () => {
-        const cyclesPresent = directedGraph.areCyclesPresent();
-
-        assert.isFalse(cyclesPresent);
-      });
-    });
-  });
-
-  describe("getOrderedVertexNames", () => {
-    describe("no vertexes are present", () => {
-      let directedGraph;
-
-      before(() => {
-        directedGraph = DirectedGraph.fromNothing();
-      });
-
-      it("returns an empty array", () => {
-        const orderedVertexNames = directedGraph.getOrderedVertexNames();
-
-        assert.deepEqual(orderedVertexNames, []);
-      });
-    });
-
-    describe("a single vertex is present", () => {
-      let directedGraph;
-
-      before(() => {
-        directedGraph = DirectedGraph.fromNothing();
-      });
-
-      before(() => {
-        directedGraph.addVertexByVertexName(vertexNameA);
-      });
-
-      it("returns an array with the single vertex name", () => {
-        const orderedVertexNames = directedGraph.getOrderedVertexNames();
-
-        assert.deepEqual(orderedVertexNames, [ vertexNameA ]);
-      });
-    });
-
-    describe("a single edge is present", () => {
+  describe("addNonCyclicEdge", () => {
+    describe("if it will create a cycle", () => {
       let directedGraph;
 
       before(() => {
@@ -351,29 +390,66 @@ describe("DirectedGraph", () => {
         directedGraph = directedGraphFromVertexNamesArray(vertexNamesArray);
       });
 
-      it("returns an array with the ordered vertex names", () => {
-        const orderedVertexNames = directedGraph.getOrderedVertexNames();
+      it("returns false", () => {
+        const sourceVertexName = vertexNameB, ///
+              targetVertexName = vertexNameA, ///
+              edge = Edge.fromSourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName),
+              nonCyclicEdge = edge, ///
+              success = directedGraph.addNonCyclicEdge(nonCyclicEdge);
 
-        assert.deepEqual(orderedVertexNames, [ vertexNameA, vertexNameB ]);
+        assert.isFalse(success);
       });
     });
 
-    describe("two edges are present", () => {
+    describe("if it will not create a cycle", () => {
       let directedGraph;
 
       before(() => {
-        const vertexNamesArray = [
-          [ vertexNameA, vertexNameB ],
-          [ vertexNameB, vertexNameC ]
-        ];
-
-        directedGraph = directedGraphFromVertexNamesArray(vertexNamesArray);
+        directedGraph = DirectedGraph.fromNothing();
       });
 
-      it("returns an array with the ordered vertex names", () => {
-        const orderedVertexNames = directedGraph.getOrderedVertexNames();
+      it("set the immediate successor and predecessor vertexes of the relevant vertexes and returns true", () => {
+        const sourceVertexName = vertexNameA, ///
+              targetVertexName = vertexNameB, ///
+              edge = Edge.fromSourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName),
+              nonCyclicEdge = edge, ///
+              success = directedGraph.addNonCyclicEdge(nonCyclicEdge);
 
-        assert.deepEqual(orderedVertexNames, [ vertexNameA, vertexNameB, vertexNameC ]);
+        assert.isTrue(success);
+
+        const sourceVertex = directedGraph.getVertexByVertexName(sourceVertexName),
+              targetVertex = directedGraph.getVertexByVertexName(targetVertexName),
+              sourceVertexImmediateSuccessorVertexes = sourceVertex.getImmediateSuccessorVertexes(),
+              targetVertexImmediatePredecessorVertexes = targetVertex.getImmediatePredecessorVertexes();
+
+        assert.lengthOf(sourceVertexImmediateSuccessorVertexes, 1);
+        assert.lengthOf(targetVertexImmediatePredecessorVertexes, 1);
+
+        const firstSourceVertexImmediateSuccessorVertex = first(sourceVertexImmediateSuccessorVertexes),
+              firstTargetVertexImmediatePredecessorVertex = first(targetVertexImmediatePredecessorVertexes);
+
+        assert.equal(firstSourceVertexImmediateSuccessorVertex, targetVertex);
+        assert.equal(firstTargetVertexImmediatePredecessorVertex, sourceVertex);
+      });
+    });
+  });
+
+  describe("addNonCyclicEdgeByVertexes", () => {
+    describe("if it will not create a cycle", () => {
+      let directedGraph;
+
+      before(() => {
+        directedGraph = DirectedGraph.fromNothing();
+      });
+
+      it("returns true", () => {
+        const sourceVertexName = vertexNameB, ///
+              targetVertexName = vertexNameA, ///
+              sourceVertex = directedGraph.addVertexByVertexName(sourceVertexName),
+              targetVertex = directedGraph.addVertexByVertexName(targetVertexName),
+              success = directedGraph.addNonCyclicEdgeByVertexes(sourceVertex, targetVertex);
+
+        assert.isTrue(success);
       });
     });
   });
