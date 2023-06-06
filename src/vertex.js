@@ -2,9 +2,10 @@
 
 import { arrayUtilities } from "necessary";
 
+import { vertexNamesFromVertexes } from "./utilities/vertex";
 import { forwardsDepthFirstSearch, backwardsDepthFirstSearch } from "./utilities/search";
 
-const { last } = arrayUtilities;
+const { last, tail } = arrayUtilities;
 
 export default class Vertex {
   constructor(name, index, immediateSuccessorVertexes, immediatePredecessorVertexes) {
@@ -60,6 +61,24 @@ export default class Vertex {
     return edgePresent;
   }
 
+  retrieveSuccessorVertexNames() {
+    const forwardsVisitedVertexes = this.retrieveForwardsVisitedVertexes(),
+          forwardsVisitedVertexesTail = tail(forwardsVisitedVertexes),
+          successorVertexes = forwardsVisitedVertexesTail,
+          successorVertexNames = vertexNamesFromVertexes(successorVertexes);
+
+    return successorVertexNames;
+  }
+
+  retrievePredecessorVertexNames() {
+    const backwardsVisitedVertexes = this.retrieveBackwardsVisitedVertexes(),
+          backwardsVisitedVertexesTail = tail(backwardsVisitedVertexes),
+          predecessorVertexes = backwardsVisitedVertexesTail,
+          predecessorVertexNames = vertexNamesFromVertexes(predecessorVertexes);
+
+    return predecessorVertexNames;
+  }
+
   retrieveForwardsVisitedVertexes(vertex = null) {
     const vertexA = vertex, ///
           visitedVertexes = this.forwardsDepthFirstSearch((vertex) => {
@@ -100,6 +119,18 @@ export default class Vertex {
     const vertexImmediatePredecessorVertex = this.immediatePredecessorVertexes.includes(vertex);
 
     return vertexImmediatePredecessorVertex;
+  }
+
+  getImmediateSuccessorVertexNames() {
+    const immediateSuccessorVertexNames = vertexNamesFromVertexes(this.immediateSuccessorVertexes);
+
+    return immediateSuccessorVertexNames;
+  }
+
+  getImmediatePredecessorVertexNames() {
+    const immediatePredecessorVertexNames = vertexNamesFromVertexes(this.immediatePredecessorVertexes);
+
+    return immediatePredecessorVertexNames;
   }
 
   setName(name) {
