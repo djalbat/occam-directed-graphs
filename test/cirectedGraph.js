@@ -4,7 +4,7 @@ const { assert } = require("chai"),
       { arrayUtilities } = require("necessary"),
       { Edge, Cycle, DirectedGraph } = require("../lib/index"); ///
 
-const { first, second } = arrayUtilities;
+const { first, second, third, fourth } = arrayUtilities;
 
 describe("DirectedGraph", () => {
   const vertexNameA = "a",
@@ -14,7 +14,7 @@ describe("DirectedGraph", () => {
         vertexNameE = "e";
 
   describe("getFirstCycle", () => {
-    describe("if there are no cycles", () => {
+    describe("there are no cycles", () => {
       let directedGraph;
 
       before(() => {
@@ -28,7 +28,7 @@ describe("DirectedGraph", () => {
       });
     });
 
-    describe("if there is a cycle present", () => {
+    describe("there is a cycle present", () => {
       let directedGraph;
 
       before(() => {
@@ -61,7 +61,7 @@ describe("DirectedGraph", () => {
   });
 
   describe("areCyclesPresent", () => {
-    describe("if there are no cycles", () => {
+    describe("there are no cycles", () => {
       let directedGraph;
 
       before(() => {
@@ -75,7 +75,7 @@ describe("DirectedGraph", () => {
       });
     });
 
-    describe("if there is a cycle", () => {
+    describe("there is a cycle", () => {
       let directedGraph;
 
       before(() => {
@@ -94,7 +94,7 @@ describe("DirectedGraph", () => {
       });
     });
 
-    describe("if there is a cycle one edge of which is subsequently removed", () => {
+    describe("there is a cycle one edge of which is subsequently removed", () => {
       let directedGraph;
 
       before(() => {
@@ -121,7 +121,7 @@ describe("DirectedGraph", () => {
       });
     });
 
-    describe("if there is a cycle one vertex of which is subsequently removed", () => {
+    describe("there is a cycle one vertex of which is subsequently removed", () => {
       let directedGraph;
 
       before(() => {
@@ -379,7 +379,7 @@ describe("DirectedGraph", () => {
   });
 
   describe("addNonCyclicEdge", () => {
-    describe("if it will create a cycle", () => {
+    describe("it will create a cycle", () => {
       let directedGraph;
 
       before(() => {
@@ -401,7 +401,7 @@ describe("DirectedGraph", () => {
       });
     });
 
-    describe("if it will not create a cycle", () => {
+    describe("it will not create a cycle", () => {
       let directedGraph;
 
       before(() => {
@@ -430,26 +430,6 @@ describe("DirectedGraph", () => {
 
         assert.equal(firstSourceVertexImmediateSuccessorVertex, targetVertex);
         assert.equal(firstTargetVertexImmediatePredecessorVertex, sourceVertex);
-      });
-    });
-  });
-
-  describe("addNonCyclicEdgeByVertexes", () => {
-    describe("if it will not create a cycle", () => {
-      let directedGraph;
-
-      before(() => {
-        directedGraph = DirectedGraph.fromNothing();
-      });
-
-      it("returns true", () => {
-        const sourceVertexName = vertexNameB, ///
-              targetVertexName = vertexNameA, ///
-              sourceVertex = directedGraph.addVertexByVertexName(sourceVertexName),
-              targetVertex = directedGraph.addVertexByVertexName(targetVertexName),
-              success = directedGraph.addNonCyclicEdgeByVertexes(sourceVertex, targetVertex);
-
-        assert.isTrue(success);
       });
     });
   });
@@ -531,6 +511,118 @@ describe("DirectedGraph", () => {
         const cyclicEdges = directedGraph.getCyclicEdges();
 
         assert.isEmpty(cyclicEdges);
+      });
+    });
+  });
+
+  describe("reorderVertexesBySourceVertexAndTargetVertex", () => {
+    describe("it will create a cycle", () => {
+      let directedGraph;
+
+      before(() => {
+        const vertexNamesArray = [
+          [ vertexNameA, vertexNameB ]
+        ];
+
+        directedGraph = directedGraphFromVertexNamesArray(vertexNamesArray);
+      });
+
+      it("returns false", () => {
+        const sourceVertexName = vertexNameB, ///
+              targetVertexName = vertexNameA, ///
+              sourceVertex = directedGraph.addVertexByVertexName(sourceVertexName),
+              targetVertex = directedGraph.addVertexByVertexName(targetVertexName),
+              success = directedGraph.reorderVertexesBySourceVertexAndTargetVertex(sourceVertex, targetVertex);
+
+        assert.isFalse(success);
+      });
+    });
+
+    describe("it will not create a cycle", () => {
+      describe("the source vertex is before the target vertex", () => {
+        let directedGraph;
+
+        before(() => {
+          directedGraph = DirectedGraph.fromNothing();
+        });
+
+        it("leaves the vertexes in place and returns true", () => {
+          const sourceVertexName = vertexNameA, ///
+                targetVertexName = vertexNameB, ///
+                sourceVertex = directedGraph.addVertexByVertexName(sourceVertexName),
+                targetVertex = directedGraph.addVertexByVertexName(targetVertexName),
+                success = directedGraph.reorderVertexesBySourceVertexAndTargetVertex(sourceVertex, targetVertex);
+
+          assert.isTrue(success);
+
+          const orderedVertexNames = directedGraph.getOrderedVertexNames(),
+                firstOrderedVertexName = first(orderedVertexNames),
+                secondOrderedVertexName = second(orderedVertexNames);
+
+          assert.equal(firstOrderedVertexName, vertexNameA);
+          assert.equal(secondOrderedVertexName, vertexNameB);
+        });
+      });
+
+      describe("the source vertex is after the target vertex", () => {
+        describe("there are no other vertexes", () => {
+          let directedGraph;
+
+          before(() => {
+            directedGraph = DirectedGraph.fromNothing();
+          });
+
+          it("swaps the vertexes and returns true", () => {
+            const targetVertexName = vertexNameB, ///
+                  sourceVertexName = vertexNameA, ///
+                  targetVertex = directedGraph.addVertexByVertexName(targetVertexName),
+                  sourceVertex = directedGraph.addVertexByVertexName(sourceVertexName),
+                  success = directedGraph.reorderVertexesBySourceVertexAndTargetVertex(sourceVertex, targetVertex);
+
+            assert.isTrue(success);
+
+            const orderedVertexNames = directedGraph.getOrderedVertexNames(),
+                  firstOrderedVertexName = first(orderedVertexNames),
+                  secondOrderedVertexName = second(orderedVertexNames);
+
+            assert.equal(firstOrderedVertexName, vertexNameA);
+            assert.equal(secondOrderedVertexName, vertexNameB);
+          });
+        });
+
+        describe("there are other vertexes", () => {
+          let directedGraph;
+
+          before(() => {
+            const vertexNamesArray = [
+              [ vertexNameA, vertexNameB ],
+              [ vertexNameC, vertexNameD ]
+            ];
+
+            directedGraph = directedGraphFromVertexNamesArray(vertexNamesArray);
+          });
+
+          it("rearranges the vertexes and returns true", () => {
+            const sourceVertexName = vertexNameD, ///
+                  targetVertexName = vertexNameA, ///
+                  sourceVertex = directedGraph.addVertexByVertexName(sourceVertexName),
+                  targetVertex = directedGraph.addVertexByVertexName(targetVertexName),
+                  success = directedGraph.reorderVertexesBySourceVertexAndTargetVertex(sourceVertex, targetVertex);
+
+            assert.isTrue(success);
+
+            const orderedVertexNames = directedGraph.getOrderedVertexNames(),
+                  firstOrderedVertexName = first(orderedVertexNames),
+                  secondOrderedVertexName = second(orderedVertexNames),
+                  thirdOrderedVertexName = third(orderedVertexNames),
+                  fourthOrderedVertexName = fourth(orderedVertexNames);
+
+            assert.equal(firstOrderedVertexName, vertexNameC);
+            assert.equal(secondOrderedVertexName, vertexNameD);
+            assert.equal(thirdOrderedVertexName, vertexNameA);
+            assert.equal(fourthOrderedVertexName, vertexNameB);
+          });
+        });
       });
     });
   });

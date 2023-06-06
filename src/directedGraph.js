@@ -295,7 +295,7 @@ export default class DirectedGraph {
 
       success = (sourceVertexIndex < targetVertexIndex) ?
                   true :
-                    this.addNonCyclicEdgeByVertexes(sourceVertex, targetVertex);
+                    this.reorderVertexesBySourceVertexAndTargetVertex(sourceVertex, targetVertex);
 
       if (success) {
         const immediatePredecessorVertex = sourceVertex, ///
@@ -310,7 +310,7 @@ export default class DirectedGraph {
     return success;
   }
 
-  addNonCyclicEdgeByVertexes(sourceVertex, targetVertex) {
+  reorderVertexesBySourceVertexAndTargetVertex(sourceVertex, targetVertex) {
     let success = false;
 
     const sourceVertexReachable = targetVertex.isVertexReachable(sourceVertex);

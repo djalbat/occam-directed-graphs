@@ -2,7 +2,6 @@
 
 import { arrayUtilities } from "necessary";
 
-import { orderVertexes, vertexNamesFromVertexes } from "./utilities/vertex";
 import { forwardsDepthFirstSearch, backwardsDepthFirstSearch } from "./utilities/search";
 
 const { last } = arrayUtilities;
