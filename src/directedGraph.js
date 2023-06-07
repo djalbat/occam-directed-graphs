@@ -368,9 +368,17 @@ export default class DirectedGraph {
     const cyclicEdges = this.getCyclicEdges(),
           edges = cyclicEdges;  ///
 
-    this.removeEdges(edges);
+    edges.forEach((edge) => {
+      const sourceVertexName = edge.getSourceVertexName(),
+            targetVertexName = edge.getTargetVertexName(),
+            sourceVertex = this.getVertexByVertexName(sourceVertexName),
+            targetVertex = this.getVertexByVertexName(targetVertexName),
+            sourceVertexReachable = targetVertex.isVertexReachable(sourceVertex);
 
-    this.addEdges(edges);
+      if (!sourceVertexReachable) {
+        this.reorderVertexesBySourceVertexAndTargetVertex(sourceVertex, targetVertex);
+      }
+    });
   }
 
   setVertexByVertexName(vertexName, vertex) {
