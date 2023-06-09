@@ -22,10 +22,15 @@ export function forwardsDepthFirstSearch(vertex, callback, visitedVertexes, pred
 
       terminate = vertex.someImmediateSuccessorVertex((immediateSuccessorVertex) => {
         const vertex = immediateSuccessorVertex,  ///
-              terminate = forwardsDepthFirstSearch(vertex, callback, visitedVertexes, predecessorVertexes);
+              vertexIndex = vertex.getIndex(),
+              predecessorVertexIndex = predecessorVertex.getIndex();
 
-        if (terminate) {
-          return true;
+        if (vertexIndex > predecessorVertexIndex) {
+          const terminate = forwardsDepthFirstSearch(vertex, callback, visitedVertexes, predecessorVertexes);
+
+          if (terminate) {
+            return true;
+          }
         }
       });
     }
@@ -56,10 +61,15 @@ export function backwardsDepthFirstSearch(vertex, callback, visitedVertexes, suc
 
       terminate = vertex.someImmediatePredecessorVertex((immediatePredecessorVertex) => {
         const vertex = immediatePredecessorVertex,  ///
-              terminate = backwardsDepthFirstSearch(vertex, callback, visitedVertexes, successorVertexes);
+              vertexIndex = vertex.getIndex(),
+              successorVertexIndex = successorVertex.getIndex();
 
-        if (terminate) {
-          return true;
+        if (vertexIndex < successorVertexIndex) {
+          const terminate = backwardsDepthFirstSearch(vertex, callback, visitedVertexes, successorVertexes);
+
+          if (terminate) {
+            return true;
+          }
         }
       });
     }
