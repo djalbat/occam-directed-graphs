@@ -3,10 +3,7 @@
 import { arrayUtilities } from "necessary";
 
 import { vertexNamesFromVertexes } from "./utilities/vertex";
-import { forwardsDepthFirstSearch,
-         backwardsDepthFirstSearch,
-         exhaustiveForwardsDepthFirstSearch,
-         exhaustiveBackwardsDepthFirstSearch } from "./utilities/search";
+import { forwardsDepthFirstSearch, backwardsDepthFirstSearch } from "./utilities/search";
 
 const { last, tail } = arrayUtilities;
 
@@ -212,24 +209,6 @@ export default class Vertex {
 
   forEachImmediatePredecessorVertex(callback) {
     this.immediatePredecessorVertexes.forEach(callback);
-  }
-
-  exhaustiveForwardsDepthFirstSearch(callback) {
-    const vertex = this,  ///
-          visitedVertexes = [];
-
-    exhaustiveForwardsDepthFirstSearch(vertex, callback, visitedVertexes);
-
-    return visitedVertexes;
-  }
-
-  exhaustiveBackwardsDepthFirstSearch(callback) {
-    const vertex = this,  ///
-          visitedVertexes = [];
-
-    exhaustiveBackwardsDepthFirstSearch(vertex, callback, visitedVertexes);
-
-    return visitedVertexes;
   }
 
   static fromNameAndIndex(name, index) {
