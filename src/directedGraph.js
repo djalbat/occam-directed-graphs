@@ -105,7 +105,7 @@ export default class DirectedGraph {
             sourceVertex = this.getVertexByVertexName(sourceVertexName),
             targetVertex = this.getVertexByVertexName(targetVertexName);
 
-      targetVertex.forwardsDepthFirstSearch((vertex, predecessorVertexes) => {
+      targetVertex.exhaustiveForwardsDepthFirstSearch((vertex, predecessorVertexes) => {
         let terminate = false;
 
         if (vertex === sourceVertex) {

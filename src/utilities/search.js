@@ -77,3 +77,71 @@ export function backwardsDepthFirstSearch(vertex, callback, visitedVertexes, suc
 
   return terminate;
 }
+
+export function exhaustiveForwardsDepthFirstSearch(vertex, callback, visitedVertexes, predecessorVertexes = []) {
+  let terminate = true;
+
+  const visitedVertexesIncludesVertex = visitedVertexes.includes(vertex);
+
+  if (!visitedVertexesIncludesVertex) {
+    const visitedVertex = vertex; ///
+
+    visitedVertexes.push(visitedVertex);
+
+    terminate = callback(vertex, predecessorVertexes);
+
+    if (!terminate) {
+      const predecessorVertex = vertex;  ///
+
+      predecessorVertexes = [ ///
+        ...predecessorVertexes,
+        predecessorVertex
+      ];
+
+      terminate = vertex.someImmediateSuccessorVertex((immediateSuccessorVertex) => {
+        const vertex = immediateSuccessorVertex,  ///
+              terminate = exhaustiveForwardsDepthFirstSearch(vertex, callback, visitedVertexes, predecessorVertexes);
+
+        if (terminate) {
+          return true;
+        }
+      });
+    }
+  }
+
+  return terminate;
+}
+
+export function exhaustiveBackwardsDepthFirstSearch(vertex, callback, visitedVertexes, successorVertexes = []) {
+  let terminate = true;
+
+  const visitedVertexesIncludesVertex = visitedVertexes.includes(vertex);
+
+  if (!visitedVertexesIncludesVertex) {
+    const visitedVertex = vertex; ///
+
+    visitedVertexes.push(visitedVertex);
+
+    terminate = callback(vertex, successorVertexes);
+
+    if (!terminate) {
+      const successorVertex = vertex;  ///
+
+      successorVertexes = [ ///
+        ...successorVertexes,
+        successorVertex
+      ];
+
+      terminate = vertex.someImmediatePredecessorVertex((immediatePredecessorVertex) => {
+        const vertex = immediatePredecessorVertex,  ///
+              terminate = exhaustiveBackwardsDepthFirstSearch(vertex, callback, visitedVertexes, successorVertexes);
+
+        if (terminate) {
+          return true;
+        }
+      });
+    }
+  }
+
+  return terminate;
+}
