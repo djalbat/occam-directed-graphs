@@ -199,6 +199,27 @@ export default class DirectedGraph {
     return vertexPresent;
   }
 
+  getImmediateSuccessorVertexNamesByVertexName(vertexName) {
+    const vertex = this.getVertexByVertexName(vertexName),
+          immediateSuccessorVertexNames = vertex.getImmediateSuccessorVertexNames();
+
+    return immediateSuccessorVertexNames;
+  }
+
+  getImmediatePredecessorVertexNamesByVertexName(vertexName) {
+    const vertex = this.getVertexByVertexName(vertexName),
+          immediatePredecessorVertexNames = vertex.getImmediatePredecessorVertexNames();
+
+    return immediatePredecessorVertexNames;
+  }
+
+  isEdgePresentBySourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName) {
+    const edge = Edge.fromSourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName),
+          edgePresent = this.isEdgePresent(edge);
+
+    return edgePresent;
+  }
+
   addVertexByVertexName(vertexName) {
     const vertexPresent = this.isVertexPresentByVertexName(vertexName);
 
@@ -253,6 +274,18 @@ export default class DirectedGraph {
     });
 
     this.filterCyclicEdges();
+  }
+
+  addVertexesByVertexNames(vertexNames) {
+    vertexNames.forEach((vertexName) => {
+      this.addVertexByVertexName(vertexName);
+    });
+  }
+
+  removeVertexesByVertexNames(vertexNames) {
+    vertexNames.forEach((vertexName) => {
+      this.removeVertexByVertexName(vertexName);
+    });
   }
 
   addEdge(edge) {
@@ -331,6 +364,12 @@ export default class DirectedGraph {
 
   removeAllEdgesAndVertexes() {
     this.vertexMap = {};
+  }
+
+  addEdgeBySourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName) {
+    const edge = Edge.fromSourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName);
+
+    this.addEdge(edge);
   }
 
   reorderVertexesBySourceVertexAndTargetVertex(sourceVertex, targetVertex) {
