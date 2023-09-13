@@ -1,7 +1,7 @@
 "use strict";
 
 export function forwardsDepthFirstSearch(vertex, callback, visitedVertexes, predecessorVertexes = []) {
-  let terminate = true;
+  let terminate = false;
 
   const visitedVertexesIncludesVertex = visitedVertexes.includes(vertex);
 
@@ -40,7 +40,7 @@ export function forwardsDepthFirstSearch(vertex, callback, visitedVertexes, pred
 }
 
 export function backwardsDepthFirstSearch(vertex, callback, visitedVertexes, successorVertexes = []) {
-  let terminate = true;
+  let terminate = false;
 
   const visitedVertexesIncludesVertex = visitedVertexes.includes(vertex);
 
