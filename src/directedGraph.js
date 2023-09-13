@@ -380,7 +380,7 @@ export default class DirectedGraph {
     }
 
     const forwardsReachableVertexes = targetVertex.retrieveForwardsReachableVertexes(),
-          backwardsReachableVertexes = sourceVertex.retrieveBackwardsReachableertexes();
+          backwardsReachableVertexes = sourceVertex.retrieveBackwardsReachableVertexes();
 
     orderVertexes(backwardsReachableVertexes);
 
