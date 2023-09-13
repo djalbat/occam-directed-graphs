@@ -373,33 +373,33 @@ export default class DirectedGraph {
   }
 
   reorderVertexesBySourceVertexAndTargetVertex(sourceVertex, targetVertex) {
-    const sourceVertexReachable = targetVertex.isVertexReachable(sourceVertex);
+    const sourceVertexForwardsReachable = targetVertex.isVertexForwardsReachable(sourceVertex);
 
-    if (sourceVertexReachable) {
+    if (sourceVertexForwardsReachable) {
       return;
     }
 
-    const forwardsVisitedVertexes = targetVertex.retrieveForwardsVisitedVertexes(),
-          backwardsVisitedVertexes = sourceVertex.retrieveBackwardsVisitedVertexes();
+    const forwardsReachableVertexes = targetVertex.retrieveForwardsReachableVertexes(),
+          backwardsReachableVertexes = sourceVertex.retrieveBackwardsReachableertexes();
 
-    orderVertexes(backwardsVisitedVertexes);
+    orderVertexes(backwardsReachableVertexes);
 
-    orderVertexes(forwardsVisitedVertexes);
+    orderVertexes(forwardsReachableVertexes);
 
-    const visitedVertexes = [
-            ...backwardsVisitedVertexes,
-            ...forwardsVisitedVertexes
+    const reachableVertexes = [
+            ...backwardsReachableVertexes,
+            ...forwardsReachableVertexes
           ],
-          visitedIndexes = indexesFromVertexes(visitedVertexes);
+          reachableIndexes = indexesFromVertexes(reachableVertexes);
 
-    orderIndexes(visitedIndexes);
+    orderIndexes(reachableIndexes);
 
-    visitedVertexes.forEach((visitedVertex, index) => {
-      const visitedIndex = visitedIndexes[index];
+    reachableVertexes.forEach((reachableVertex, index) => {
+      const reachableIndex = reachableIndexes[index];
 
-      index = visitedIndex; ///
+      index = reachableIndex; ///
 
-      visitedVertex.setIndex(index);
+      reachableVertex.setIndex(index);
     });
   }
 
@@ -412,9 +412,9 @@ export default class DirectedGraph {
             targetVertexName = edge.getTargetVertexName(),
             sourceVertex = this.getVertexByVertexName(sourceVertexName),
             targetVertex = this.getVertexByVertexName(targetVertexName),
-            sourceVertexReachable = targetVertex.isVertexReachable(sourceVertex);
+            sourceVertexForwardsReachable = targetVertex.isVertexForwardsReachable(sourceVertex);
 
-      if (!sourceVertexReachable) {
+      if (!sourceVertexForwardsReachable) {
         this.reorderVertexesBySourceVertexAndTargetVertex(sourceVertex, targetVertex);
       }
     });

@@ -39,12 +39,12 @@ export default class Vertex {
     return stranded;
   }
 
-  isVertexReachable(vertex) {
-    const forwardsVisitedVertices = this.retrieveForwardsVisitedVertexes(vertex),
-          lastForwardsVisitedVertex = last(forwardsVisitedVertices),
-          vertexReachable = (vertex === lastForwardsVisitedVertex);
+  isVertexForwardsReachable(vertex) {
+    const forwardsReachableVertexes = this.retrieveForwardsReachableVertexes(vertex),
+          lastForwardsReachableVertex = last(forwardsReachableVertexes),
+          vertexForwardsReachable = (vertex === lastForwardsReachableVertex);
 
-    return vertexReachable;
+    return vertexForwardsReachable;
   }
 
   isEdgePresentBySourceVertex(sourceVertex) {
@@ -62,24 +62,24 @@ export default class Vertex {
   }
 
   retrieveSuccessorVertexNames() {
-    const forwardsVisitedVertexes = this.retrieveForwardsVisitedVertexes(),
-          forwardsVisitedVertexesTail = tail(forwardsVisitedVertexes),
-          successorVertexes = forwardsVisitedVertexesTail,
+    const forwardsReachableVertexes = this.retrieveForwardsReachableVertexes(),
+          forwardsReachableVertexesTail = tail(forwardsReachableVertexes),
+          successorVertexes = forwardsReachableVertexesTail,
           successorVertexNames = vertexNamesFromVertexes(successorVertexes);
 
     return successorVertexNames;
   }
 
   retrievePredecessorVertexNames() {
-    const backwardsVisitedVertexes = this.retrieveBackwardsVisitedVertexes(),
-          backwardsVisitedVertexesTail = tail(backwardsVisitedVertexes),
-          predecessorVertexes = backwardsVisitedVertexesTail,
+    const backwardsReachableVertexes = this.retrieveBackwardsReachableVertexes(),
+          backwardsReachableVertexesTail = tail(backwardsReachableVertexes),
+          predecessorVertexes = backwardsReachableVertexesTail,
           predecessorVertexNames = vertexNamesFromVertexes(predecessorVertexes);
 
     return predecessorVertexNames;
   }
 
-  retrieveForwardsVisitedVertexes(vertex = null) {
+  retrieveForwardsReachableVertexes(vertex = null) {
     const vertexA = vertex, ///
           visitedVertexes = this.forwardsDepthFirstSearch((vertex) => {
             const vertexB = vertex, ///
@@ -89,12 +89,12 @@ export default class Vertex {
               return true;
             }
           }),
-          forwardsVisitedVertexes = visitedVertexes;  ///
+          forwardsReachableVertexes = visitedVertexes;  ///
 
-    return forwardsVisitedVertexes;
+    return forwardsReachableVertexes;
   }
 
-  retrieveBackwardsVisitedVertexes(vertex = null) {
+  retrieveBackwardsReachableVertexes(vertex = null) {
     const vertexA = vertex, ///
           visitedVertexes = this.backwardsDepthFirstSearch((vertex) => {
             const vertexB = vertex, ///
@@ -104,9 +104,9 @@ export default class Vertex {
               return true;
             }
           }),
-          backwardsVisitedVertexes = visitedVertexes;  ///
+          backwardsReachableVertexes = visitedVertexes;  ///
 
-    return backwardsVisitedVertexes;
+    return backwardsReachableVertexes;
   }
 
   isVertexImmediateSuccessorVertex(vertex) {
