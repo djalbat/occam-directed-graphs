@@ -6,6 +6,7 @@
 
 - [Introduction](#introduction)
 - [Installation](#installation)
+- [Example](#example)
 - [Usage](#usage)
 - [Building](#building)
 - [Running the tests](#running-the-tests)
@@ -29,6 +30,24 @@ You can also clone the repository with [Git](https://git-scm.com/)...
 ...and then install the dependencies with npm from within the project's root directory:
 
     npm install
+
+## Example
+
+There is a small development server that can be run from within the project's directory with the following command:
+
+    npm start
+
+The example will then be available at the following URL:
+
+http://localhost:8888
+
+The source for the example can be found in the `src/example.js` file. You are encouraged to try the example whilst reading what follows. You can rebuild it on the fly with the following command:
+
+    npm run watch-debug
+
+The development server will reload the page whenever you make changes.
+
+One last thing to bear in mind is that this package is included by way of a relative rather than a package import. If you are importing it into your own application, however, you should use the standard package import.
 
 ## Usage
     
