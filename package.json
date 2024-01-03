@@ -1,7 +1,7 @@
 {
   "name": "occam-directed-graphs",
   "author": "James Smith",
-  "version": "3.0.59",
+  "version": "3.0.60",
   "license": "MIT, Anti-996",
   "homepage": "https://github.com/djalbat/occam-directed-graphs",
   "description": "Occam's directed graphs.",
@@ -19,7 +19,7 @@
     "lively-cli": "^2.0.46",
     "chai": "^4.1.0",
     "mocha": "^6.0.2",
-    "watchful-cli": "^1.7.39"
+    "watchful-cli": "^1.7.43"
   },
   "scripts": {
     "start": "node ./bin/main.js",
