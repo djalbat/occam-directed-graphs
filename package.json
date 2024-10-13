@@ -1,7 +1,7 @@
 {
   "name": "occam-directed-graphs",
   "author": "James Smith",
-  "version": "3.0.76",
+  "version": "3.0.77",
   "license": "MIT, Anti-996",
   "homepage": "https://github.com/djalbat/occam-directed-graphs",
   "description": "Occam's directed graphs.",
@@ -10,7 +10,7 @@
     "url": "https://github.com/djalbat/occam-directed-graphs"
   },
   "dependencies": {
-    "necessary": "^14.0.1"
+    "necessary": "^14.1.6"
   },
   "devDependencies": {
     "@swc/core": "^1.5.6",
