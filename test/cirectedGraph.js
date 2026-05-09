@@ -1,7 +1,6 @@
 "use strict";
 
-const { assert } = require("chai"),
-      { arrayUtilities } = require("necessary"),
+const { arrayUtilities } = require("necessary"),
       { Edge, Cycle, DirectedGraph } = require("../lib/index"); ///
 
 const { first, second, third, fourth } = arrayUtilities;
