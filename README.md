@@ -15,7 +15,10 @@
 
 ## Introduction
 
-This implementation extends an incremental algorithm for directed graphs, one that returns a topological ordering for the graph. If one or more cyclic edges are added then the extended algorithm handles it gracefully rather than throwing an error. In these cases a cycle can be returned rather than a topological ordering. If all cyclic edges are removed thereafter then the algorithm recovers and a topological ordering can be returned again. 
+This implementation extends an incremental algorithm for directed graphs, one that returns a topological ordering for the graph. 
+If one or more cyclic edges are added then the extended algorithm handles it gracefully rather than throwing an error. 
+In these cases a cycle can be returned rather than a topological ordering. 
+If all cyclic edges are removed thereafter then the algorithm recovers and a topological ordering can be returned again. 
 
 ## Installation
 
@@ -30,24 +33,6 @@ You can also clone the repository with [Git](https://git-scm.com/)...
 ...and then install the dependencies with npm from within the project's root directory:
 
     npm install
-
-## Example
-
-There is a small development server that can be run from within the project's directory with the following command:
-
-    npm start
-
-The example will then be available at the following URL:
-
-http://localhost:8888
-
-The source for the example can be found in the `src/example.js` file. You are encouraged to try the example whilst reading what follows. You can rebuild it on the fly with the following command:
-
-    npm run watch-debug
-
-The development server will reload the page whenever you make changes.
-
-One last thing to bear in mind is that this package is included by way of a relative rather than a package import. If you are importing it into your own application, however, you should use the standard package import.
 
 ## Usage
     
@@ -77,7 +62,8 @@ directedGraph.addEdge(edge);
 
 Note that there is no need to add vertices explicitly, they will be added whenever necessary when edges that reference them are added.
 
-You can also remove vertices and edges. Removing a vertex could result in removing edges. When you remove an edge, you can additionally specify that the any stranded vertices that result are also removed:
+You can also remove vertices and edges. Removing a vertex could result in removing edges. 
+When you remove an edge, you can additionally specify that the any stranded vertices that result are also removed:
 
 ```
 import { Edge } from "occam-directed-graphs";
@@ -108,6 +94,7 @@ if (cyclePresent) {
   ...
 }
 ```
+
 You can get a topologically ordered list of vertices at any time.
 Bear in mind that this is useless information when cycles are present.
 

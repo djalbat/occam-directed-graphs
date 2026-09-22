@@ -1,5 +1,40 @@
 "use strict";
 
+export function depthFirstSearch(vertex, callback, visitedVertexes, predecessorVertexes = []) {
+  let terminate = false;
+
+  const visitedVertexesIncludesVertex = visitedVertexes.includes(vertex);
+
+  if (!visitedVertexesIncludesVertex) {
+    const visitedVertex = vertex; ///
+
+    visitedVertexes.push(visitedVertex);
+
+    terminate = callback(vertex, predecessorVertexes);
+
+    if (!terminate) {
+      const predecessorVertex = vertex;  ///
+
+      predecessorVertexes = [ ///
+        ...predecessorVertexes,
+        predecessorVertex
+      ];
+
+      terminate = vertex.someImmediateSuccessorVertex((immediateSuccessorVertex) => {
+        const vertex = immediateSuccessorVertex;  ///
+
+        const terminate = depthFirstSearch(vertex, callback, visitedVertexes, predecessorVertexes);
+
+        if (terminate) {
+          return true;
+        }
+      });
+    }
+  }
+
+  return terminate;
+}
+
 export function forwardsDepthFirstSearch(vertex, callback, visitedVertexes, predecessorVertexes = []) {
   let terminate = false;
 

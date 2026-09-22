@@ -3,7 +3,7 @@
 import { arrayUtilities } from "necessary";
 
 import { vertexNamesFromVertexes } from "./utilities/vertex";
-import { forwardsDepthFirstSearch, backwardsDepthFirstSearch } from "./utilities/search";
+import { depthFirstSearch, forwardsDepthFirstSearch, backwardsDepthFirstSearch } from "./utilities/search";
 
 const { last, tail } = arrayUtilities;
 
@@ -39,12 +39,28 @@ export default class Vertex {
     return stranded;
   }
 
+  isVertexReachable(vertex) {
+    const reachableVertexes = this.retrieveReachableVertexes(vertex),
+          lastReachableVertex = last(reachableVertexes),
+          vertexReachable = (vertex === lastReachableVertex);
+
+    return vertexReachable;
+  }
+
   isVertexForwardsReachable(vertex) {
     const forwardsReachableVertexes = this.retrieveForwardsReachableVertexes(vertex),
           lastForwardsReachableVertex = last(forwardsReachableVertexes),
           vertexForwardsReachable = (vertex === lastForwardsReachableVertex);
 
     return vertexForwardsReachable;
+  }
+
+  isVertexBackwardsReachable(vertex) {
+    const backwardsReachableVertexes = this.retrieveBackwardsReachableVertexes(vertex),
+          lastBackwardsReachableVertex = last(backwardsReachableVertexes),
+          vertexBackwardsReachable = (vertex === lastBackwardsReachableVertex);
+
+    return vertexBackwardsReachable;
   }
 
   isEdgePresentBySourceVertex(sourceVertex) {
@@ -79,13 +95,26 @@ export default class Vertex {
     return predecessorVertexNames;
   }
 
+  retrieveReachableVertexes(vertex = null) {
+    const vertexA = vertex, ///
+          visitedVertexes = this.depthFirstSearch((vertex) => {
+            const vertexB = vertex; ///
+
+            if (vertexA === vertexB) {
+              return true;
+            }
+          }),
+          reachableVertexes = visitedVertexes;  ///
+
+    return reachableVertexes;
+  }
+
   retrieveForwardsReachableVertexes(vertex = null) {
     const vertexA = vertex, ///
           visitedVertexes = this.forwardsDepthFirstSearch((vertex) => {
-            const vertexB = vertex, ///
-                  terminate = (vertexA === vertexB);
+            const vertexB = vertex; ///
 
-            if (terminate) {
+            if (vertexA === vertexB) {
               return true;
             }
           }),
@@ -97,10 +126,9 @@ export default class Vertex {
   retrieveBackwardsReachableVertexes(vertex = null) {
     const vertexA = vertex, ///
           visitedVertexes = this.backwardsDepthFirstSearch((vertex) => {
-            const vertexB = vertex, ///
-                  terminate = (vertexA === vertexB);
+            const vertexB = vertex; ///
 
-            if (terminate) {
+            if (vertexA === vertexB) {
               return true;
             }
           }),
@@ -175,6 +203,15 @@ export default class Vertex {
           deleteCount = 1;
 
     this.immediatePredecessorVertexes.splice(start, deleteCount);
+  }
+
+  depthFirstSearch(callback) {
+    const vertex = this,  ///
+          visitedVertexes = [];
+
+    depthFirstSearch(vertex, callback, visitedVertexes);
+
+    return visitedVertexes;
   }
 
   forwardsDepthFirstSearch(callback) {

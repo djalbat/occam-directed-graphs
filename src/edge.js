@@ -28,6 +28,12 @@ export default class Edge {
     return matches;
   }
 
+  matchVertexNames(sourceVertexName, targetVertexName) {
+    const matches = ((this.sourceVertexName === sourceVertexName) && (this.targetVertexName === targetVertexName));
+
+    return matches;
+  }
+
   matchSourceVertexName(sourceVertexName) {
     const matches = (this.sourceVertexName === sourceVertexName);
 
@@ -40,10 +46,12 @@ export default class Edge {
     return matches;
   }
 
-  matchVertexNames(sourceVertexName, targetVertexName) {
-    const matches = ((this.sourceVertexName === sourceVertexName) && (this.targetVertexName === targetVertexName));
-    
-    return matches;
+  static fromSourceVertexAndTargetVertex(sourceVertex, targetVertex) {
+    const sourceVertexName = sourceVertex.getName(),
+          targetVertexName = targetVertex.getName(),
+          edge = new Edge(sourceVertexName, targetVertexName);
+
+    return edge;
   }
 
   static fromSourceVertexNameAndTargetVertexName(sourceVertexName, targetVertexName) {
