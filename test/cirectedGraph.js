@@ -1,7 +1,7 @@
 "use strict";
 
 const { arrayUtilities } = require("necessary"),
-      { Edge, Cycle, DirectedGraph } = require("../lib/index"); ///
+      { Edge, Cycle, DirectedGraph } = require("../lib"); ///
 
 const { first, second, third, fourth } = arrayUtilities;
 
